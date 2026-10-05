@@ -1,510 +1,1275 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulasi Interaktif Pengukuran Volume Benda</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulasi Interaktif: Pengukuran Volume Benda Tak Beraturan</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            deepBlue: '#1E3A8A',
+            skyLiquid: '#38BDF8',
+            softGray: '#F0F4F8',
+            emeraldGreen: '#10B981',
+            crimsonRed: '#EF4444',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'deep-blue': '#1E3A8A',
-                        'sky-blue': '#38BDF8',
-                        'soft-gray': '#F0F4F8',
-                        'emerald-green': '#10B981',
-                        'danger-red': '#EF4444',
-                    },
-                    fontFamily: {
-                        sans: ['Segoe UI', 'system-ui', 'sans-serif'],
-                    },
-                    transitionDuration: {
-                        '600': '600ms',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #F0F4F8; overflow-x: hidden; }
-        
-        /* Cylinder Styling */
-        .glass-cylinder {
-            position: relative;
-            width: 100px;
-            height: 350px;
-            border: 4px solid rgba(255, 255, 255, 0.7);
-            border-top: none;
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.4) 15%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.3) 85%, rgba(255,255,255,0.1) 100%);
-            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.1), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-        }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #0b1120;
+      color: #1e293b;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
 
-        /* Tick Marks */
-        .tick-marks {
-            position: absolute;
-            bottom: 20px; /* Start 20px from bottom for 0 */
-            left: 0;
-            width: 100%;
-            height: calc(100% - 40px); /* Usable height for 100mL */
-            pointer-events: none;
-            display: flex;
-            flex-direction: column-reverse;
-            justify-content: space-between;
-        }
-        
-        .tick {
-            position: relative;
-            width: 15px;
-            height: 1px;
-            background-color: rgba(30, 58, 138, 0.5);
-        }
-        
-        .tick.major { width: 30px; background-color: rgba(30, 58, 138, 0.8); height: 2px;}
-        .tick-label {
-            position: absolute;
-            left: 35px;
-            top: -8px;
-            font-size: 12px;
-            color: #1E3A8A;
-            font-weight: bold;
-        }
+    /* Fixed 16:9 Aspect Ratio Viewport Container */
+    #aspect-ratio-viewport {
+      position: relative;
+      width: 100vw;
+      height: 56.25vw; /* 16:9 ratio */
+      max-height: 100vh;
+      max-width: 177.78vh; /* 16:9 ratio */
+      aspect-ratio: 16 / 9;
+      background: #f8fafc;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* Water Styling */
-        .water-body {
-            position: absolute;
-            bottom: 4px;
-            left: 4px;
-            right: 4px;
-            height: 0%; /* Dynamic */
-            background: rgba(56, 189, 248, 0.6);
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-            transition: height 0.6s ease-in-out;
-            z-index: 10;
-            display: flex;
-            align-items: flex-start;
-        }
+    /* Fullscreen adjustments */
+    :fullscreen #aspect-ratio-viewport,
+    :-webkit-full-screen #aspect-ratio-viewport {
+      border-radius: 0;
+      box-shadow: none;
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      max-height: none;
+    }
 
-        .water-surface {
-            width: 100%;
-            height: 15px;
-            background: rgba(14, 165, 233, 0.7);
-            border-radius: 50%;
-            transform: translateY(-50%);
-            position: relative;
-            box-shadow: inset 0 -2px 5px rgba(2, 132, 199, 0.5);
-        }
+    /* Smooth physics liquid & component transition */
+    .liquid-anim {
+      transition: y 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .stone-anim {
+      transition: transform 0.55s cubic-bezier(0.34, 1.25, 0.64, 1);
+    }
 
-        /* Meniscus indicator */
-        .meniscus-line {
-            position: absolute;
-            width: 160%;
-            left: -30%;
-            border-top: 2px dashed #EF4444;
-            top: 50%;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 30;
-        }
-        .show-meniscus .meniscus-line { opacity: 1; }
+    .meniscus-line {
+      stroke-dasharray: 4, 3;
+      filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.7));
+      transition: y1 0.5s cubic-bezier(0.4, 0, 0.2, 1), y2 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        /* Object (Stone) Styling */
-        .stone-object {
-            position: absolute;
-            bottom: 120%; /* Hidden above by default */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 45px;
-            background: radial-gradient(circle at 30% 30%, #9ca3af, #4b5563);
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            transition: bottom 0.6s cubic-bezier(0.5, 0, 0.8, 1);
-            z-index: 5;
-            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.5);
-        }
+    .eye-anim {
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        .stone-object.submerged {
-            bottom: 15px;
-            transition: bottom 0.6s cubic-bezier(0.3, 0.5, 0.2, 1);
-        }
-        
-        .stone-object.varying-size {
-            transform: translateX(-50%) scale(1);
-            transition: bottom 0.6s cubic-bezier(0.3, 0.5, 0.2, 1), transform 0.3s ease;
-        }
+    /* Water splash ripple animation */
+    @keyframes rippleEffect {
+      0% { r: 2px; opacity: 0.9; stroke-width: 2.5; }
+      100% { r: 38px; opacity: 0; stroke-width: 0.5; }
+    }
+    .ripple-active {
+      animation: rippleEffect 0.75s ease-out forwards;
+    }
 
-        /* Splash Animation */
-        .splash {
-            position: absolute;
-            bottom: 50%; /* Adjusted dynamically */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 20;
-        }
+    /* Bubble float animation */
+    @keyframes bubbleRise {
+      0% { transform: translateY(0) scale(0.6); opacity: 0.8; }
+      100% { transform: translateY(-60px) scale(1.1); opacity: 0; }
+    }
+    .animate-bubble-1 {
+      animation: bubbleRise 1.2s ease-out infinite;
+    }
+    .animate-bubble-2 {
+      animation: bubbleRise 1.4s ease-out 0.3s infinite;
+    }
 
-        @keyframes splashAnim {
-            0% { transform: translateX(-50%) scale(1) translateY(0); opacity: 0.8; }
-            100% { transform: translateX(-50%) scale(3) translateY(-30px); opacity: 0; }
-        }
-        
-        .animate-splash { animation: splashAnim 0.5s ease-out; }
-    </style>
+    /* Pulse Glow for Single CTA Button */
+    @keyframes ctaGlow {
+      0%, 100% { box-shadow: 0 0 18px 2px rgba(30, 58, 138, 0.5); }
+      50% { box-shadow: 0 0 32px 7px rgba(56, 189, 248, 0.65); }
+    }
+    .pulse-cta {
+      animation: ctaGlow 2.4s infinite;
+    }
+
+    input[type=range] {
+      accent-color: #1E3A8A;
+    }
+
+    /* Stepper button styling */
+    .step-btn {
+      transition: all 0.15s ease-in-out;
+    }
+    .step-btn:active {
+      transform: scale(0.92);
+    }
+  </style>
 </head>
-<body class="text-slate-800 antialiased h-screen flex flex-col">
+<body>
 
-    <header class="bg-deep-blue text-white shadow-md z-40 relative">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-flask text-2xl text-sky-blue"></i>
-                <h1 class="font-bold text-lg hidden sm:block">Simulasi Fisika: Volume Benda Tak Beraturan</h1>
-                <h1 class="font-bold text-lg sm:hidden">Simulasi Volume</h1>
-            </div>
-            <button onclick="openModal('instructions-modal')" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
-                <i class="fa-solid fa-circle-info"></i> Petunjuk
-            </button>
+  <!-- 16:9 Aspect Ratio Main Viewport Container -->
+  <div id="aspect-ratio-viewport">
+
+    <!-- Top Scientific Header -->
+    <header class="h-12 bg-deepBlue text-white flex items-center justify-between px-5 border-b border-blue-900/60 shadow-md flex-shrink-0 z-20">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="goToStart()">
+        <div class="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center">
+          <svg class="w-4 h-4 text-sky-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M7 2v2M17 2v2M5 4h14v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4Z"/>
+            <path d="M5 8h4M5 12h7M5 16h4"/>
+          </svg>
         </div>
+        <div class="flex items-baseline gap-2">
+          <span class="font-display font-black tracking-tight text-white text-sm sm:text-base">ARCHIMEDES LAB</span>
+          <span class="text-[10px] text-sky-200 hidden sm:inline">| Pengukuran Benda Tak Beraturan</span>
+        </div>
+      </div>
+
+      <!-- Mode & Status Indicator -->
+      <div id="status-pill" class="text-xs px-3 py-1 rounded-full bg-blue-950 border border-blue-700/60 font-mono text-sky-300 flex items-center gap-1.5 shadow-inner">
+        <span class="w-2 h-2 rounded-full bg-emeraldGreen animate-pulse"></span>
+        <span id="status-text">Mode: Eksperimen Terpandu</span>
+      </div>
+
+      <!-- Utilities: Audio Mute, Help, and Fullscreen Button -->
+      <div class="flex items-center space-x-2">
+        <button id="btn-sound-toggle" onclick="toggleAudioMute()" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition" title="Bisu / Nyalakan Suara">
+          <svg id="icon-sound-on" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
+          <svg id="icon-sound-off" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l4-4m0 4l-4-4"/></svg>
+        </button>
+
+        <button onclick="toggleModal(true)" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition" title="Petunjuk & Rumus">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" stroke-linecap="round" d="M12 16v-4M12 8h.01"/></svg>
+        </button>
+
+        <!-- Fullscreen Toggle (16:9 Astro-Explorer style) -->
+        <button onclick="toggleFullscreen()" class="p-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-900 font-bold transition flex items-center gap-1 text-xs px-2 shadow" title="Layar Penuh (16:9)">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+          <span class="hidden sm:inline font-mono">16:9</span>
+        </button>
+      </div>
     </header>
 
-    <main class="flex-grow relative flex overflow-hidden">
+    <!-- Main Content Stage Area -->
+    <main class="flex-1 relative overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100 flex flex-col">
+
+      <!-- ==================== VIEW 1: TITLE SCREEN ==================== -->
+      <section id="view-title" class="absolute inset-0 p-6 flex flex-col justify-center items-center text-center bg-white z-10 transition-opacity duration-300">
+        <div class="max-w-2xl space-y-4">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-deepBlue text-xs font-bold font-mono tracking-wide uppercase">
+            <span class="w-2 h-2 rounded-full bg-emeraldGreen animate-ping"></span>
+            Laboratorium Fisika Virtual (SMP/SMA)
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl font-display font-black text-slate-900 tracking-tight leading-tight">
+            Simulasi Pengukuran Volume <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-sky-600 to-teal-500">
+              Benda Tak Beraturan
+            </span>
+          </h1>
+
+          <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
+            Kuasai konsep perpindahan fluida dan pembacaan <strong>meniskus bawah air</strong> secara presisi dengan tombol pengatur <strong>plus-minus (+ / −)</strong> serta navigasi satu tombol terpandu.
+          </p>
+
+          <div class="flex items-center justify-center gap-3 pt-2">
+            <div class="px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-mono text-slate-600 border border-slate-200">
+              Gelas Ukur: <strong>100 mL</strong>
+            </div>
+            <div class="px-3 py-1.5 rounded-xl bg-slate-100 text-xs font-mono text-slate-600 border border-slate-200">
+              Formula: <strong>V = V₂ − V₁</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== VIEW 2: UNIFIED GUIDED LAB (FRAME 2, 3, 4) ==================== -->
+      <section id="view-lab" class="absolute inset-0 p-4 sm:p-6 flex flex-col justify-between hidden">
         
-        <!-- Frame 1: Halaman Utama / Title Screen (Overlay) -->
-        <div id="frame-1" class="absolute inset-0 bg-soft-gray z-30 flex flex-col items-center justify-center transition-opacity duration-500">
-            <div class="max-w-2xl text-center px-4">
-                <div class="w-32 h-32 mx-auto mb-6 bg-white rounded-full shadow-lg flex items-center justify-center relative overflow-hidden">
-                    <i class="fa-solid fa-flask text-6xl text-sky-blue relative z-10"></i>
-                    <div class="absolute bottom-0 left-0 w-full bg-sky-blue/30 h-1/2"></div>
-                </div>
-                <h2 class="text-4xl font-extrabold text-deep-blue mb-4">Pengukuran Volume Benda</h2>
-                <p class="text-xl text-slate-600 mb-8">Metode Perpindahan Air dengan Gelas Ukur Virtual</p>
-                
-                <div class="flex flex-wrap justify-center gap-4">
-                    <button onclick="startSimulation()" class="bg-deep-blue hover:bg-blue-800 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 flex items-center gap-3">
-                        <i class="fa-solid fa-play"></i> Mulai Eksperimen
-                    </button>
-                    <button onclick="openModal('formula-modal')" class="bg-white hover:bg-gray-50 text-deep-blue border-2 border-deep-blue px-8 py-4 rounded-xl font-bold text-lg shadow hover:shadow-md transition-all flex items-center gap-3">
-                        <i class="fa-solid fa-calculator"></i> Lihat Rumus
-                    </button>
-                </div>
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0">
+          
+          <!-- LEFT: 100 mL Graduated Cylinder Digital Apparatus -->
+          <div class="col-span-5 h-full flex flex-col items-center justify-center bg-white rounded-2xl p-2 sm:p-4 border border-slate-200/90 shadow-sm relative overflow-hidden">
+            <div class="w-full flex items-center justify-between text-[11px] font-mono text-slate-500 px-2">
+              <span class="flex items-center gap-1">
+                <span id="reading-status-dot" class="w-2 h-2 rounded-full bg-blue-600"></span>
+                <span id="reading-status-text">Meniskus Bawah</span>
+              </span>
+              <span class="font-bold text-deepBlue">Kapasitas 100 mL</span>
             </div>
-        </div>
 
-        <!-- Main Workspace (Frames 2-5) -->
-        <div id="workspace" class="w-full h-full flex flex-col md:flex-row hidden opacity-0 transition-opacity duration-500">
+            <!-- SVG Cylinder Apparatus (Scaled dynamically) -->
+            <div class="w-full flex-1 relative flex items-center justify-center max-h-[80%]">
+              <svg id="main-cylinder-svg" viewBox="0 0 220 400" class="h-full w-auto overflow-visible drop-shadow">
+                <defs>
+                  <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.9" />
+                    <stop offset="65%" stop-color="#0284C7" stop-opacity="0.85" />
+                    <stop offset="100%" stop-color="#0369A1" stop-opacity="0.92" />
+                  </linearGradient>
+                  <linearGradient id="glassGloss" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+                    <stop offset="25%" stop-color="#ffffff" stop-opacity="0.05"/>
+                    <stop offset="75%" stop-color="#ffffff" stop-opacity="0.08"/>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0.35"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Cylinder Outer Glass Border (0 mL at Y=340, 100 mL at Y=60. 280px span -> 2.8px/mL) -->
+                <path d="M 40,40 L 32,40 L 32,340 A 18,18 0 0,0 50,358 L 150,358 A 18,18 0 0,0 168,340 L 168,40 L 160,40" fill="none" stroke="#64748B" stroke-width="3"/>
+                <path d="M 20,370 C 20,358 45,358 50,358 L 150,358 C 155,358 180,358 180,370 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+
+                <!-- Water Fill Body -->
+                <rect id="lab-water-rect" class="liquid-anim" x="35" y="200" width="130" height="140" fill="url(#waterGrad)"/>
+                
+                <!-- Concave Meniscus Curve (dip center by ~8px) -->
+                <path id="lab-meniscus-curve" class="liquid-anim" d="M 35,200 Q 100,208 165,200 Z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.5"/>
+
+                <!-- Displaced Water Highlight Zone -->
+                <rect id="lab-displaced-zone" class="liquid-anim opacity-0" x="35" y="158" width="130" height="42" fill="#10B981" fill-opacity="0.32" stroke="#10B981" stroke-width="1" stroke-dasharray="2,2"/>
+
+                <!-- Red Meniscus Alignment Guide Line -->
+                <line id="lab-meniscus-line" class="meniscus-line" x1="16" y1="204" x2="184" y2="204" stroke="#EF4444" stroke-width="2"/>
+
+                <!-- V1 Reference Line (Blue) -->
+                <line id="lab-ref-v1" class="liquid-anim opacity-0" x1="20" y1="200" x2="180" y2="200" stroke="#0284C7" stroke-width="1.8" stroke-dasharray="3,2"/>
+                <text id="lab-ref-v1-txt" class="liquid-anim opacity-0 font-mono font-bold" x="184" y="204" font-size="10" fill="#0284C7">V₁</text>
+
+                <!-- V2 Reference Line (Red) -->
+                <line id="lab-ref-v2" class="liquid-anim opacity-0" x1="20" y1="158" x2="180" y2="158" stroke="#EF4444" stroke-width="2" stroke-dasharray="3,2"/>
+                <text id="lab-ref-v2-txt" class="liquid-anim opacity-0 font-mono font-bold" x="184" y="162" font-size="10" fill="#EF4444">V₂</text>
+
+                <!-- Water splash ripple circle -->
+                <circle id="lab-ripple" cx="100" cy="200" r="0" fill="none" stroke="#38BDF8" stroke-width="2" class="opacity-0 pointer-events-none"/>
+
+                <!-- Rising Bubbles -->
+                <g id="lab-bubbles" class="opacity-0 pointer-events-none">
+                  <circle cx="95" cy="270" r="3" fill="#ffffff" fill-opacity="0.75" class="animate-bubble-1"/>
+                  <circle cx="107" cy="280" r="2" fill="#ffffff" fill-opacity="0.8" class="animate-bubble-2"/>
+                </g>
+
+                <!-- Suspended Irregular Stone -->
+                <g id="lab-stone-group" class="stone-anim" transform="translate(0, 0)">
+                  <line x1="100" y1="0" x2="100" y2="70" stroke="#64748B" stroke-width="1.8" stroke-dasharray="3,2"/>
+                  <g id="lab-stone-scaler" transform="translate(100, 85) scale(1)">
+                    <path d="M -16,-12 C -24,-5 -26,8 -15,17 C -5,24 15,21 20,10 C 24,0 18,-16 5,-17 C -6,-18 -11,-20 -16,-12 Z" fill="#475569" stroke="#1E293B" stroke-width="2"/>
+                    <path d="M -9,-3 Q -3,3 5,-2 M -7,7 Q 3,11 11,5" stroke="#64748B" stroke-width="1.2" fill="none"/>
+                  </g>
+                </g>
+
+                <!-- Eye Marker (Aligned with active meniscus level) -->
+                <g id="lab-eye-marker" class="eye-anim" transform="translate(190, 204)">
+                  <path d="M -10,0 Q 0,-7 10,0 Q 0,7 -10,0 Z" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.8"/>
+                  <circle cx="0" cy="0" r="3.5" fill="#38BDF8" stroke="#1E3A8A" stroke-width="1"/>
+                  <circle cx="0" cy="0" r="1.5" fill="#1E3A8A"/>
+                </g>
+
+                <!-- Scale Graduation Ticks -->
+                <g id="lab-ticks-group" class="text-[9px] font-mono select-none" fill="#1E293B"></g>
+
+                <!-- Glass Tube Reflection -->
+                <rect x="35" y="40" width="130" height="300" fill="url(#glassGloss)" pointer-events="none"/>
+              </svg>
+            </div>
+
+            <!-- Reading readout banner -->
+            <div class="mt-1 w-full bg-slate-100 rounded-lg p-1.5 flex justify-around text-xs font-mono font-bold">
+              <span class="text-blue-700">V₁: <span id="tag-read-v1">50</span> mL</span>
+              <span class="text-slate-400">|</span>
+              <span class="text-slate-700">Benda: <span id="tag-read-stone">15</span> cm³</span>
+              <span class="text-slate-400">|</span>
+              <span class="text-crimsonRed">V₂: <span id="tag-read-v2">65</span> mL</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: Interactive Stepper Guidance & Dynamic Controls -->
+          <div class="col-span-7 h-full flex flex-col justify-between p-2 sm:p-3">
             
-            <!-- Left Panel: Virtual Environment (Canvas) -->
-            <div class="w-full md:w-1/2 bg-white flex flex-col items-center justify-center p-8 border-r border-gray-200 relative">
-                
-                <h3 class="absolute top-6 left-6 font-bold text-slate-400 uppercase tracking-widest text-sm">Area Eksperimen</h3>
-                
-                <!-- 3D-ish Cylinder Structure -->
-                <div class="glass-cylinder mt-8" id="cylinder-container">
-                    
-                    <!-- Dynamic Water -->
-                    <div class="water-body" id="water">
-                        <div class="water-surface">
-                            <div class="meniscus-line"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Dynamic Stone Object -->
-                    <div class="stone-object varying-size" id="stone"></div>
-                    
-                    <!-- Splash Effect Element -->
-                    <div class="splash" id="splash-effect"></div>
+            <!-- Step Breadcrumb Header -->
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+              <div class="flex items-center gap-2">
+                <span id="step-number-badge" class="w-6 h-6 rounded-full bg-deepBlue text-white font-mono font-bold text-xs flex items-center justify-center">1</span>
+                <span id="step-title" class="font-display font-bold text-slate-800 text-sm sm:text-base">Tahap 1: Atur Volume Awal Air (V₁)</span>
+              </div>
+              <span id="step-counter" class="text-xs font-mono text-slate-500">Langkah 1/3</span>
+            </div>
 
-                    <!-- Ticks (0 to 100mL) -->
-                    <div class="tick-marks">
-                        <!-- Generated via JS for exact spacing, but conceptually here -->
-                        <!-- 0 -->
-                        <div class="tick major"><span class="tick-label"></span></div>
-                        <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
-                        <div class="tick major"><span class="tick-label">50</span></div>
-                        <div class="tick"></div><div class="tick"></div><div class="tick"></div><div class="tick"></div>
-                        <div class="tick major"><span class="tick-label">100</span></div>
-                    </div>
+            <!-- Contextual Stage Content -->
+            <div class="flex-1 flex flex-col justify-center py-2 space-y-3">
+              
+              <!-- STEP 1 CONTENT: Set V1 with Plus/Minus -->
+              <div id="step-content-1" class="space-y-3">
+                <div class="bg-blue-50/80 rounded-xl p-3 border border-blue-200/80 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  <strong>Aturan Meniskus Bawah:</strong> Gunakan slider atau tombol <strong>− / +</strong> di samping untuk menentukan ketinggian air awal. Amati garis merah putus-putus dan ikon mata yang berada tepat di lekukan dasar air.
+                </div>
+                
+                <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700">Volume Awal Air (V₁):</span>
+                    <span class="px-3 py-0.5 bg-deepBlue text-white font-mono font-bold text-base rounded-lg shadow-sm">
+                      <span id="slider-v1-val">50</span> mL
+                    </span>
+                  </div>
+
+                  <!-- Controls: Minus Button, Range Slider, Plus Button -->
+                  <div class="flex items-center gap-3">
+                    <button type="button" onclick="adjustV1(-1)" class="step-btn w-9 h-9 rounded-xl bg-slate-100 hover:bg-blue-100 border border-slate-300 hover:border-blue-400 text-slate-800 font-mono font-extrabold text-lg flex items-center justify-center shadow-sm" title="Kurangi 1 mL">
+                      −
+                    </button>
+                    <input type="range" id="slider-v1" min="20" max="70" value="50" step="1" 
+                           class="flex-1 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                           oninput="onV1Input(this.value)">
+                    <button type="button" onclick="adjustV1(1)" class="step-btn w-9 h-9 rounded-xl bg-slate-100 hover:bg-blue-100 border border-slate-300 hover:border-blue-400 text-slate-800 font-mono font-extrabold text-lg flex items-center justify-center shadow-sm" title="Tambah 1 mL">
+                      +
+                    </button>
+                  </div>
+
+                  <div class="flex justify-between text-[10px] font-mono text-slate-400">
+                    <span>20 mL</span>
+                    <span class="text-blue-700 font-semibold">Rekomendasi: 40–50 mL</span>
+                    <span>70 mL</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 2 CONTENT: Set Stone Volume with Plus/Minus -->
+              <div id="step-content-2" class="space-y-3 hidden">
+                <div class="bg-amber-50/80 rounded-xl p-3 border border-amber-200/80 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  <strong>Pilih Ukuran Benda:</strong> Atur volume batu tak beraturan menggunakan slider atau tombol <strong>− / +</strong> sebelum dicelupkan ke dalam air.
                 </div>
 
-                <!-- Display values below cylinder -->
-                <div class="mt-8 bg-slate-50 px-6 py-3 rounded-xl border border-slate-200 shadow-sm text-center w-64">
-                    <p class="text-sm text-slate-500 font-medium">Pembacaan Volume Air</p>
-                    <p class="text-3xl font-bold text-deep-blue" id="live-volume-display">50 <span class="text-lg">mL</span></p>
+                <div class="bg-white rounded-xl p-3 border border-slate-200 shadow-sm space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-700">Volume Benda Padat (V_benda):</span>
+                    <span class="px-3 py-0.5 bg-slate-800 text-white font-mono font-bold text-base rounded-lg shadow-sm">
+                      <span id="slider-stone-val">15</span> cm³
+                    </span>
+                  </div>
+
+                  <!-- Controls: Minus Button, Range Slider, Plus Button -->
+                  <div class="flex items-center gap-3">
+                    <button type="button" onclick="adjustStone(-1)" class="step-btn w-9 h-9 rounded-xl bg-slate-100 hover:bg-amber-100 border border-slate-300 hover:border-amber-400 text-slate-800 font-mono font-extrabold text-lg flex items-center justify-center shadow-sm" title="Kurangi 1 cm³">
+                      −
+                    </button>
+                    <input type="range" id="slider-stone" min="5" max="30" value="15" step="1" 
+                           class="flex-1 h-2 bg-slate-200 rounded-lg cursor-pointer"
+                           oninput="onStoneInput(this.value)">
+                    <button type="button" onclick="adjustStone(1)" class="step-btn w-9 h-9 rounded-xl bg-slate-100 hover:bg-amber-100 border border-slate-300 hover:border-amber-400 text-slate-800 font-mono font-extrabold text-lg flex items-center justify-center shadow-sm" title="Tambah 1 cm³">
+                      +
+                    </button>
+                  </div>
+
+                  <div class="flex justify-between text-[10px] font-mono text-slate-400">
+                    <span>5 cm³</span>
+                    <span class="text-slate-700 font-semibold">15 cm³</span>
+                    <span>30 cm³</span>
+                  </div>
                 </div>
+              </div>
+
+              <!-- STEP 3 CONTENT: Submersion Result & Mathematical Proof -->
+              <div id="step-content-3" class="space-y-2 hidden">
+                <div class="bg-slate-900 text-white rounded-xl p-3 shadow border border-slate-800">
+                  <div class="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-wider mb-1">
+                    Pembuktian Hukum Archimedes
+                  </div>
+                  <div class="text-lg font-mono font-bold text-sky-200 mb-2">
+                    V<sub class="text-xs">benda</sub> = V₂ − V₁
+                  </div>
+                  <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono">
+                    <div class="p-1.5 rounded bg-slate-800/80 border border-slate-700">
+                      <span class="text-slate-400 block text-[10px]">V₁ Awal</span>
+                      <span id="calc-v1" class="font-bold text-sky-300">50 mL</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-slate-800/80 border border-slate-700">
+                      <span class="text-slate-400 block text-[10px]">V₂ Akhir</span>
+                      <span id="calc-v2" class="font-bold text-crimsonRed">65 mL</span>
+                    </div>
+                    <div class="p-1.5 rounded bg-emerald-950/70 border border-emerald-500/40">
+                      <span class="text-emerald-300 block text-[10px]">Hasil (V_benda)</span>
+                      <span id="calc-stone" class="font-bold text-emerald-400">15 cm³</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 leading-snug flex items-center gap-2">
+                  <span class="w-5 h-5 rounded-full bg-emeraldGreen text-white flex items-center justify-center font-bold text-xs flex-shrink-0">✓</span>
+                  <span><strong>Kesimpulan:</strong> Kenaikan zat cair (area hijau) tepat sebesar volume batu yang dimasukkan ke dalam gelas ukur!</span>
+                </div>
+              </div>
 
             </div>
 
-            <!-- Right Panel: Controls & Flow -->
-            <div class="w-full md:w-1/2 bg-soft-gray p-6 md:p-10 flex flex-col h-full overflow-y-auto relative">
-                
-                <!-- Progress Indicator -->
-                <div class="flex justify-between items-center mb-8 relative">
-                    <div class="absolute left-0 top-1/2 w-full h-1 bg-gray-200 -z-10 transform -translate-y-1/2"></div>
-                    <div class="w-full absolute left-0 top-1/2 h-1 bg-deep-blue -z-10 transform -translate-y-1/2 transition-all duration-500" id="progress-bar" style="width: 25%"></div>
-                    
-                    <div class="w-8 h-8 rounded-full bg-deep-blue text-white flex items-center justify-center font-bold shadow-md step-dot" data-step="2">1</div>
-                    <div class="w-8 h-8 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold shadow-md step-dot transition-colors" data-step="3">2</div>
-                    <div class="w-8 h-8 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold shadow-md step-dot transition-colors" data-step="4">3</div>
-                    <div class="w-8 h-8 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold shadow-md step-dot transition-colors" data-step="5">4</div>
-                </div>
-
-                <!-- Step Containers -->
-                <div id="step-container" class="flex-grow flex flex-col justify-center relative">
-                    
-                    <!-- Frame 2: Volume Awal -->
-                    <div id="frame-2" class="step-panel transition-all duration-300">
-                        <h2 class="text-2xl font-bold text-deep-blue mb-2">Langkah 1: Tentukan Volume Awal (V₁)</h2>
-                        <p class="text-slate-600 mb-6">Atur volume awal air di dalam gelas ukur. Pastikan jumlahnya cukup untuk merendam benda seluruhnya.</p>
-                        
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
-                            <label for="v1-slider" class="block text-sm font-semibold text-slate-700 mb-4 flex justify-between">
-                                <span>Volume Air (V₁)</span>
-                                <span id="v1-label" class="text-sky-blue font-bold">50 mL</span>
-                            </label>
-                            <input type="range" id="v1-slider" min="20" max="70" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-sky-blue">
-                        </div>
-
-                        <div class="bg-blue-50 border-l-4 border-sky-blue p-4 rounded-r-lg flex items-start gap-3">
-                            <i class="fa-solid fa-eye text-sky-blue mt-1"></i>
-                            <p class="text-sm text-slate-700"><strong>Petunjuk:</strong> Posisikan mata sejajar dengan permukaan air untuk membaca <em>meniskus bawah</em> secara tepat.</p>
-                        </div>
-                    </div>
-
-                    <!-- Frame 3: Pencelupan Benda -->
-                    <div id="frame-3" class="step-panel hidden transition-all duration-300">
-                        <h2 class="text-2xl font-bold text-deep-blue mb-2">Langkah 2: Celupkan Benda (V₂)</h2>
-                        <p class="text-slate-600 mb-6">Pilih ukuran batu dan celupkan ke dalam air. Amati perubahan ketinggian air.</p>
-                        
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
-                            <label for="vobj-slider" class="block text-sm font-semibold text-slate-700 mb-4 flex justify-between">
-                                <span>Volume Benda (Kunci Jawaban)</span>
-                                <span id="vobj-label" class="text-slate-500 font-bold">15 cm³</span>
-                            </label>
-                            <input type="range" id="vobj-slider" min="5" max="30" value="15" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-slate-600 mb-6">
-                            
-                            <label class="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition">
-                                <input type="checkbox" id="submerge-check" class="w-5 h-5 text-deep-blue rounded focus:ring-deep-blue">
-                                <span class="font-medium text-lg select-none">Celupkan Benda Padat</span>
-                            </label>
-                        </div>
-                        <div class="bg-blue-50 border-l-4 border-sky-blue p-4 rounded-r-lg">
-                            <p class="text-sm text-slate-700">Perhatikan ketinggian air naik! Air terdesak oleh ruang yang kini ditempati benda padat.</p>
-                        </div>
-                    </div>
-
-                    <!-- Frame 4: Kalkulasi -->
-                    <div id="frame-4" class="step-panel hidden transition-all duration-300">
-                        <h2 class="text-2xl font-bold text-deep-blue mb-2">Langkah 3: Perhitungan</h2>
-                        <p class="text-slate-600 mb-6">Mari kita hitung volume benda menggunakan rumus perpindahan.</p>
-                        
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-slate-500">Volume Akhir (V₂)</span>
-                                <span class="font-bold text-xl text-deep-blue" id="calc-v2">- mL</span>
-                            </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100">
-                                <span class="text-slate-500">Volume Awal (V₁)</span>
-                                <span class="font-bold text-xl text-sky-blue" id="calc-v1">- mL</span>
-                            </div>
-                            <div class="flex justify-between items-center pt-4">
-                                <span class="font-bold text-lg">Volume Benda</span>
-                                <div class="text-right">
-                                    <span class="text-sm text-gray-400 block mb-1">V₂ - V₁</span>
-                                    <span class="font-extrabold text-2xl text-emerald-green" id="calc-vobj">- cm³</span>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="text-center text-xs text-slate-400 mt-4">* Catatan: 1 mL air setara dengan ruang 1 cm³.</p>
-                    </div>
-
-                    <!-- Frame 5: Kuis Evaluasi -->
-                    <div id="frame-5" class="step-panel hidden transition-all duration-300">
-                        <div class="flex justify-between items-center mb-2">
-                            <h2 class="text-2xl font-bold text-deep-blue">Uji Pemahaman</h2>
-                            <button onclick="generateQuiz()" class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded text-slate-700 transition">
-                                <i class="fa-solid fa-rotate"></i> Acak Soal
-                            </button>
-                        </div>
-                        <p class="text-slate-600 mb-6">Perhatikan simulasi di samping. Sebuah benda tidak beraturan telah dimasukkan. Berapakah volume benda tersebut?</p>
-                        
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6 text-center">
-                            <p class="text-sm text-slate-500 mb-2">Diketahui Volume Awal (V₁): <strong id="quiz-v1-text" class="text-deep-blue text-lg">-- mL</strong></p>
-                            <p class="text-sm text-slate-500 mb-4">Volume Akhir (V₂) saat ini ditunjukkan pada gelas ukur.</p>
-                            
-                            <div class="flex items-center justify-center gap-3">
-                                <input type="number" id="quiz-input" placeholder="0" class="w-24 text-center text-2xl font-bold p-3 border-2 border-gray-300 rounded-xl focus:border-sky-blue focus:outline-none focus:ring-4 focus:ring-sky-blue/20">
-                                <span class="text-xl font-bold text-slate-500">cm³</span>
-                            </div>
-                            
-                            <button onclick="checkQuiz()" class="mt-6 w-full bg-deep-blue hover:bg-blue-800 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-check"></i> Periksa Jawaban
-                            </button>
-                        </div>
-
-                        <!-- Feedback Message -->
-                        <div id="quiz-feedback" class="hidden p-4 rounded-xl flex items-center gap-3 font-medium"></div>
-                    </div>
-
-                </div>
-
-                <!-- Navigation Buttons -->
-                <div class="mt-auto pt-6 border-t border-gray-200 flex justify-between">
-                    <button id="btn-prev" onclick="prevStep()" class="px-6 py-3 rounded-xl font-bold text-slate-600 bg-white border border-slate-300 hover:bg-slate-50 transition opacity-0 pointer-events-none">
-                        <i class="fa-solid fa-arrow-left mr-2"></i> Kembali
-                    </button>
-                    <button id="btn-next" onclick="nextStep()" class="px-6 py-3 rounded-xl font-bold text-white bg-deep-blue hover:bg-blue-800 shadow-md transition ml-auto">
-                        Lanjut <i class="fa-solid fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
+            <!-- Mini Progress Dots -->
+            <div class="flex items-center justify-center gap-2 py-1">
+              <span id="dot-1" class="w-2.5 h-2.5 rounded-full bg-deepBlue transition-all"></span>
+              <span id="dot-2" class="w-2.5 h-2.5 rounded-full bg-slate-300 transition-all"></span>
+              <span id="dot-3" class="w-2.5 h-2.5 rounded-full bg-slate-300 transition-all"></span>
             </div>
+
+          </div>
+
         </div>
+
+      </section>
+
+      <!-- ==================== VIEW 3: QUIZ EVALUATION ==================== -->
+      <section id="view-quiz" class="absolute inset-0 p-4 sm:p-6 flex flex-col justify-between hidden">
+        
+        <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-deepBlue font-mono font-bold text-xs">Evaluasi Mandiri</span>
+            <h2 class="font-display font-bold text-slate-800 text-sm sm:text-base">Kuis: Tentukan Volume Benda Tak Beraturan</h2>
+          </div>
+          <!-- Score Stats -->
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-bold">
+              Skor: <span id="quiz-score">0</span>/<span id="quiz-total">0</span>
+            </span>
+            <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-bold">
+              Beruntun: <span id="quiz-streak">0</span> 🔥
+            </span>
+          </div>
+        </div>
+
+        <!-- Quiz Main Body (Comparison of Cylinder A & Cylinder B) -->
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 py-2">
+          
+          <!-- Dual Cylinders Comparison Display -->
+          <div class="col-span-7 h-full flex items-center justify-center gap-4 bg-white rounded-2xl p-2 sm:p-3 border border-slate-200">
+            <!-- Cylinder A -->
+            <div class="flex-1 h-full flex flex-col items-center justify-between">
+              <span class="text-[11px] font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                Gelas A (Sebelum V₁)
+              </span>
+              <div class="w-full flex-1 max-h-[75%] flex justify-center">
+                <svg id="quiz-cyl-a-svg" viewBox="0 0 160 320" class="h-full w-auto">
+                  <path d="M 30,30 L 24,30 L 24,280 A 15,15 0 0,0 39,295 L 121,295 A 15,15 0 0,0 136,280 L 136,30 L 130,30" fill="none" stroke="#64748B" stroke-width="2.5"/>
+                  <path d="M 15,305 C 15,295 35,295 39,295 L 121,295 C 125,295 145,295 145,305 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+                  <rect id="quiz-water-a" x="26" y="190" width="108" height="90" fill="url(#waterGrad)"/>
+                  <path id="quiz-meniscus-a" d="M 26,190 Q 80,197 134,190 Z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.2"/>
+                  <line id="quiz-line-a" x1="16" y1="193" x2="144" y2="193" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="3,2"/>
+                  <g id="quiz-ticks-a" class="text-[8px] font-mono select-none" fill="#334155"></g>
+                  <rect x="26" y="30" width="108" height="250" fill="url(#glassGloss)" pointer-events="none"/>
+                </svg>
+              </div>
+              <div class="text-[11px] font-mono font-bold text-slate-700">V₁ = <span id="quiz-lbl-v1">40</span> mL</div>
+            </div>
+
+            <!-- Cylinder B -->
+            <div class="flex-1 h-full flex flex-col items-center justify-between">
+              <span class="text-[11px] font-mono font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-200">
+                Gelas B (Sesudah V₂)
+              </span>
+              <div class="w-full flex-1 max-h-[75%] flex justify-center">
+                <svg id="quiz-cyl-b-svg" viewBox="0 0 160 320" class="h-full w-auto">
+                  <path d="M 30,30 L 24,30 L 24,280 A 15,15 0 0,0 39,295 L 121,295 A 15,15 0 0,0 136,280 L 136,30 L 130,30" fill="none" stroke="#64748B" stroke-width="2.5"/>
+                  <path d="M 15,305 C 15,295 35,295 39,295 L 121,295 C 125,295 145,295 145,305 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+                  <rect id="quiz-water-b" x="26" y="130" width="108" height="150" fill="url(#waterGrad)"/>
+                  <path id="quiz-meniscus-b" d="M 26,130 Q 80,137 134,130 Z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.2"/>
+                  <line id="quiz-line-b" x1="16" y1="133" x2="144" y2="133" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="3,2"/>
+                  
+                  <!-- Submerged Stone -->
+                  <g transform="translate(80, 250)">
+                    <path d="M -14,-10 C -20,-5 -22,8 -12,14 C -3,20 12,18 16,9 C 20,0 14,-14 3,-15 C -5,-16 -10,-17 -14,-10 Z" fill="#475569" stroke="#1E293B" stroke-width="1.8"/>
+                  </g>
+                  <line x1="80" y1="30" x2="80" y2="240" stroke="#64748B" stroke-width="1.2" stroke-dasharray="3,2"/>
+
+                  <g id="quiz-ticks-b" class="text-[8px] font-mono select-none" fill="#334155"></g>
+                  <rect x="26" y="30" width="108" height="250" fill="url(#glassGloss)" pointer-events="none"/>
+                </svg>
+              </div>
+              <div class="text-[11px] font-mono font-bold text-slate-700">V₂ = <span id="quiz-lbl-v2">65</span> mL</div>
+            </div>
+          </div>
+
+          <!-- Quiz Interactive Input Card with Plus/Minus -->
+          <div class="col-span-5 h-full flex flex-col justify-center space-y-3 p-2">
+            <div class="bg-blue-50/80 rounded-xl p-3 border border-blue-200/80 text-xs text-slate-700 leading-snug">
+              Berdasarkan pembacaan meniskus bawah kedua gelas ukur, berapakah <strong>volume benda tak beraturan</strong>?
+            </div>
+
+            <div class="space-y-2">
+              <label for="quiz-input-field" class="block text-xs font-bold text-slate-700 uppercase tracking-wide">
+                Volume Benda (V_benda):
+              </label>
+
+              <!-- Answer Input Field with Stepper Buttons -->
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="adjustQuizInput(-1)" class="step-btn w-10 h-10 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-mono font-bold text-lg flex items-center justify-center shadow-sm" title="Kurangi 1">
+                  −
+                </button>
+                <div class="relative flex-1">
+                  <input type="number" id="quiz-input-field" min="1" max="100" placeholder="Ketik atau + / −"
+                         class="w-full pr-16 pl-3 py-2 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-deepBlue font-mono text-base font-bold text-slate-800 text-center"
+                         onkeydown="if(event.key === 'Enter') checkQuizAnswer()">
+                  <span class="absolute right-3 inset-y-0 flex items-center font-mono text-xs font-bold text-slate-400 pointer-events-none">
+                    cm³
+                  </span>
+                </div>
+                <button type="button" onclick="adjustQuizInput(1)" class="step-btn w-10 h-10 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-mono font-bold text-lg flex items-center justify-center shadow-sm" title="Tambah 1">
+                  +
+                </button>
+              </div>
+            </div>
+
+            <!-- Quiz Feedback Alert -->
+            <div id="quiz-feedback" class="hidden p-2.5 rounded-xl border text-xs transition-all">
+              <div id="quiz-feedback-title" class="font-bold mb-0.5"></div>
+              <div id="quiz-feedback-desc" class="text-[11px] leading-tight"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
     </main>
 
-    <!-- Modal: Petunjuk -->
-    <div id="instructions-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center opacity-0 transition-opacity">
-        <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl transform scale-95 transition-transform" id="instructions-modal-inner">
-            <div class="bg-deep-blue p-4 flex justify-between items-center text-white">
-                <h3 class="font-bold text-lg"><i class="fa-solid fa-circle-info mr-2"></i> Petunjuk Penggunaan</h3>
-                <button onclick="closeModal('instructions-modal')" class="text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 space-y-4 text-slate-700">
-                <ul class="list-disc pl-5 space-y-2">
-                    <li>Simulasi ini menggunakan gelas ukur bervolume total 100 mL.</li>
-                    <li>Gunakan slider untuk mengatur volume air awal (V₁) pada rentang 20-70 mL.</li>
-                    <li>Saat membaca skala, posisikan pandangan sejajar dengan garis merah putus-putus yang mewakili meniskus bawah.</li>
-                    <li>Centang kotak 'Celupkan Benda' untuk melihat perubahan ketinggian air menjadi V₂.</li>
-                    <li>Pada tahap akhir (Kuis), sistem akan mengacak volume, dan Anda diminta menghitung manual volume benda tersebut.</li>
-                </ul>
-            </div>
-            <div class="p-4 bg-gray-50 text-right border-t border-gray-100">
-                <button onclick="closeModal('instructions-modal')" class="px-6 py-2 bg-deep-blue text-white rounded-lg font-medium hover:bg-blue-800 transition">Tutup</button>
-            </div>
+    <!-- UNIFIED SINGLE ACTION CONTROLLER BAR (Bottom Dock) -->
+    <footer class="h-16 bg-slate-900 border-t border-slate-800 px-6 flex items-center justify-between flex-shrink-0 z-30">
+      
+      <!-- Left Utility or Back Anchor -->
+      <button id="btn-secondary-action" onclick="onSecondaryActionClick()" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+        <span id="btn-secondary-icon">↺</span>
+        <span id="btn-secondary-label">Ulangi</span>
+      </button>
+
+      <!-- THE SINGLE PRIMARY ACTION BUTTON ("SATU TOMBOL PANDUAN") -->
+      <button id="btn-primary-action" onclick="onPrimaryActionClick()" 
+              class="pulse-cta px-6 sm:px-10 py-2.5 rounded-2xl bg-gradient-to-r from-deepBlue to-blue-600 hover:from-blue-700 hover:to-sky-500 text-white font-display font-extrabold text-sm sm:text-base tracking-wide shadow-xl active:scale-95 transition-all flex items-center gap-2 border border-sky-400/30">
+        <span id="primary-btn-icon">🚀</span>
+        <span id="primary-btn-label">Mulai Eksperimen</span>
+      </button>
+
+      <!-- Right Indicator / Quick Mode Switcher -->
+      <button id="btn-mode-toggle" onclick="toggleQuizMode()" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-sky-400 bg-sky-950/60 border border-sky-800/60 hover:bg-sky-900 transition flex items-center gap-1">
+        <span id="mode-toggle-icon">📝</span>
+        <span id="mode-toggle-label">Mode Kuis</span>
+      </button>
+
+    </footer>
+
+  </div>
+
+  <!-- MODAL PETUNJUK & FORMULA -->
+  <div id="modal-petunjuk" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-blue-100 text-deepBlue flex items-center justify-center font-bold text-sm">
+            💡
+          </div>
+          <h3 class="text-base font-bold text-slate-800">Petunjuk Pembacaan & Formula</h3>
         </div>
-    </div>
+        <button onclick="toggleModal(false)" class="text-slate-400 hover:text-slate-600 p-1">
+          ✕
+        </button>
+      </div>
 
-    <!-- Modal: Rumus -->
-    <div id="formula-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center opacity-0 transition-opacity">
-        <div class="bg-white rounded-2xl w-full max-w-sm mx-4 overflow-hidden shadow-2xl transform scale-95 transition-transform" id="formula-modal-inner">
-            <div class="bg-sky-blue p-4 flex justify-between items-center text-white">
-                <h3 class="font-bold text-lg"><i class="fa-solid fa-calculator mr-2"></i> Rumus Pengukuran</h3>
-                <button onclick="closeModal('formula-modal')" class="text-white/70 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 text-center">
-                <p class="text-slate-600 mb-4">Volume benda padat tak beraturan dapat dicari dengan selisih volume air.</p>
-                <div class="bg-blue-50 p-4 rounded-xl border border-sky-blue/30 inline-block">
-                    <p class="font-bold text-2xl text-deep-blue">V<span class="text-sm">benda</span> = V₂ - V₁</p>
-                </div>
-                <div class="text-left mt-6 text-sm text-slate-700 bg-gray-50 p-3 rounded-lg">
-                    <p><strong>Keterangan:</strong></p>
-                    <p>V₁ = Volume awal cairan (mL)</p>
-                    <p>V₂ = Volume akhir cairan setelah benda dimasukkan (mL)</p>
-                    <p>1 mL = 1 cm³</p>
-                </div>
-            </div>
+      <div class="space-y-3 text-xs text-slate-600">
+        <div>
+          <h4 class="font-bold text-slate-800 text-blue-700 mb-0.5">1. Pembacaan Meniskus Bawah</h4>
+          <p>Permukaan air dalam pipa kaca membentuk kelengkungan cekung. Bacalah skala pada garis batas paling bawah (meniskus bawah) dengan mata sejajar tegak lurus.</p>
         </div>
+        <div>
+          <h4 class="font-bold text-slate-800 text-blue-700 mb-0.5">2. Formula Perpindahan Air (Archimedes)</h4>
+          <div class="bg-slate-100 p-2 rounded-lg font-mono text-center font-bold text-deepBlue text-sm my-1 border border-slate-200">
+            V_benda = V₂ − V₁
+          </div>
+          <p>Volume cairan yang terdesak naik sama dengan volume fisik benda padat yang dicelupkan ke dalamnya (1 mL = 1 cm³).</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-800 text-blue-700 mb-0.5">3. Tombol Presisi Plus-Minus (+ / −)</h4>
+          <p>Gunakan tombol <strong>+</strong> atau <strong>−</strong> di samping setiap slider atau kolom isian kuis untuk mengubah nilai sebesar 1 satuan dengan akurat.</p>
+        </div>
+      </div>
+
+      <div class="mt-5 pt-3 border-t border-slate-100 flex justify-end">
+        <button onclick="toggleModal(false)" class="px-4 py-2 bg-deepBlue text-white font-bold rounded-xl text-xs hover:bg-blue-800">
+          Tutup Panduan
+        </button>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // DOM Elements
-        const DOM = {
-            cylinder: document.getElementById('cylinder-container'),
-            water: document.getElementById('water'),
-            stone: document.getElementById('stone'),
-            splash: document.getElementById('splash-effect'),
-            liveVolume: document.getElementById('live-volume-display'),
-            v1Slider: document.getElementById('v1-slider'),
-            v1Label: document.getElementById('v1-label'),
-            vObjSlider: document.getElementById('vobj-slider'),
-            vObjLabel: document.getElementById('vobj-label'),
-            submergeCheck: document.getElementById('submerge-check'),
-            calcV1: document.getElementById('calc-v1'),
-            calcV2: document.getElementById('calc-v2'),
-            calcVObj: document.getElementById('calc-vobj'),
-            btnPrev: document.getElementById('btn-prev'),
-            btnNext: document.getElementById('btn-next'),
-            progressBar: document.getElementById('progress-bar'),
-            tickContainer: document.querySelector('.tick-marks')
-        };
+  <script>
+    /* =========================================================================
+       AUDIO SYNTHESIZER: Pure Web Audio API (No External Audio Files)
+       ========================================================================= */
+    let audioCtx = null;
+    let isMuted = false;
 
-        // Application State
-        const state = {
-            currentStep: 1, // 1: Home, 2: V1 setup, 3: V2 setup, 4: Calc, 5: Quiz
-            v1: 50,
-            vObject: 15,
-            isSubmerged: false,
-            audioCtx: null,
-            quiz: { v1: 0, vObject: 0, v2: 0 }
-        };
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
 
-        // Initialize Tick Marks for Cylinder (0 to 100mL)
-        function initTicks() {
-            DOM.tickContainer.innerHTML = '';
-            for(let i=0; i<=100; i+=2) {
-                const tick = document.createElement('div');
-                tick.className = 'tick';
-                
-                if(i % 10 === 0) {
-                    tick.classList.add('major');
-                    const label = document.createElement('span');
-                    label.className = 'tick-label';
-                    label.innerText = i === 0 ? '' : i; // Don't show 0
-                    tick.appendChild(label);
-                }
-                
-                // Position logic: 0 is at bottom (20px off base), 100 is near top.
-                // Using flex column-reverse handles layout gracefully, we just append them.
-                DOM.tickContainer.appendChild(tick);
-            }
-        }
-        initTicks();
+    function toggleAudioMute() {
+      isMuted = !isMuted;
+      document.getElementById('icon-sound-on').classList.toggle('hidden', isMuted);
+      document.getElementById('icon-sound-off').classList.toggle('hidden', !isMuted);
+      if (!isMuted) playClickSound();
+    }
 
-        // Audio Synthesis Functions (No external files)
-        function initAudio() {
-            if (!state.audioCtx) {
-                state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (state.audioCtx.state === 'suspended') {
-                state.audioCtx.resume();
-            }
+    function playClickSound() {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.045);
+      } catch (e) {}
+    }
+
+    function playSplashSound() {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const bufferSize = ctx.sampleRate * 0.35;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
         }
 
-        function playClick() {
-            if(!state.audioCtx) return;
-            const osc = state.audioCtx.createOscillator();
-            const gain = state.audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(600, state.audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, state.audioCtx.currentTime + 0.05);
-            gain.gain.setValueAtTime(0.3, state.audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, state.audioCtx.currentTime + 0.05);
-            osc.connect(gain);
-            gain.connect(state.audioCtx.destination);
-            osc.start();
-            osc.stop(state.audioCtx.currentTime + 0.05);
-        }
+        const whiteNoise = ctx.createBufferSource();
+        whiteNoise.buffer = buffer;
 
-        function playSplash() {
-            if(!state.audioCtx) return;
-            
-            // "Plop" tone
-            const osc = state.audioCtx.createOscillator();
-            const gain = state.audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(300, state.audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, state.audioCtx.currentTime + 0.2);
-            gain.gain.setValueAtTime(0.6, state.audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, state.audioCtx.currentTime + 0.2);
-            osc.connect(gain);
-            gain.connect(state.audio
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1200, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(240, ctx.currentTime + 0.35);
+
+        const gainNode = ctx.createGain();
+        gainNode.gain.setValueAtTime(0.35, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+
+        whiteNoise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        whiteNoise.start();
+      } catch (e) {}
+    }
+
+    function playSuccessChord() {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
+          gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.08);
+          gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + i * 0.08 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.08 + 0.5);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + i * 0.08);
+          osc.stop(ctx.currentTime + i * 0.08 + 0.52);
+        });
+      } catch (e) {}
+    }
+
+    function playBuzzerSound() {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(105, ctx.currentTime + 0.28);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.28);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.28);
+      } catch (e) {}
+    }
+
+    // Screen Modes: 'TITLE', 'LAB_STEP_1', 'LAB_STEP_2', 'LAB_STEP_3', 'QUIZ'
+    const appState = {
+      mode: 'TITLE',
+      v1: 50,
+      vStone: 15,
+      isSubmerged: false,
+      quiz: {
+        v1: 40,
+        vStone: 25,
+        v2: 65,
+        score: 0,
+        total: 0,
+        streak: 0,
+        answered: false
+      }
+    };
+
+    function renderTicks(containerId, startY, spanHeight, xPos, maxVal = 100) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      let ticksHTML = '';
+      
+      for (let ml = 10; ml <= maxVal; ml += 2) {
+        const y = startY + spanHeight - (ml / maxVal) * spanHeight;
+        const isMajor = (ml % 10 === 0);
+        const isHalf = (ml % 5 === 0 && !isMajor);
+        const len = isMajor ? 24 : (isHalf ? 16 : 8);
+        const strokeW = isMajor ? 2 : (isHalf ? 1.4 : 0.9);
+        const color = isMajor ? '#1E293B' : '#64748B';
+
+        ticksHTML += `<line x1="${xPos}" y1="${y}" x2="${xPos + len}" y2="${y}" stroke="${color}" stroke-width="${strokeW}"/>`;
+        if (isMajor) {
+          ticksHTML += `<text x="${xPos + len + 3}" y="${y + 3.5}" font-size="9" font-weight="700" fill="#1E293B">${ml}</text>`;
+        }
+      }
+      container.innerHTML = ticksHTML;
+    }
+
+    function initCylinderApparatus() {
+      // Main Lab Cylinder: 0 mL = 340, 100 mL = 60, span = 280 (2.8px/mL)
+      renderTicks('lab-ticks-group', 60, 280, 35);
+      // Quiz Cylinders: 0 mL = 280, 100 mL = 40, span = 240 (2.4px/mL)
+      renderTicks('quiz-ticks-a', 40, 240, 26);
+      renderTicks('quiz-ticks-b', 40, 240, 26);
+    }
+
+    function updateButtonUI() {
+      const pBtn = document.getElementById('btn-primary-action');
+      const pIcon = document.getElementById('primary-btn-icon');
+      const pLabel = document.getElementById('primary-btn-label');
+      const sIcon = document.getElementById('btn-secondary-icon');
+      const sLabel = document.getElementById('btn-secondary-label');
+      const mIcon = document.getElementById('mode-toggle-icon');
+      const mLabel = document.getElementById('mode-toggle-label');
+      const statusPill = document.getElementById('status-text');
+
+      switch (appState.mode) {
+        case 'TITLE':
+          pIcon.textContent = '🚀';
+          pLabel.textContent = 'Mulai Eksperimen';
+          sIcon.textContent = '💡';
+          sLabel.textContent = 'Petunjuk';
+          mIcon.textContent = '📝';
+          mLabel.textContent = 'Mode Kuis';
+          statusPill.textContent = 'Beranda';
+          break;
+
+        case 'LAB_STEP_1':
+          pIcon.textContent = '🔒';
+          pLabel.textContent = 'Kunci V₁ & Pilih Benda';
+          sIcon.textContent = '←';
+          sLabel.textContent = 'Beranda';
+          mIcon.textContent = '📝';
+          mLabel.textContent = 'Kuis';
+          statusPill.textContent = 'Langkah 1: Kalibrasi V₁';
+          break;
+
+        case 'LAB_STEP_2':
+          pIcon.textContent = '💧';
+          pLabel.textContent = 'Celupkan Benda Sekarang!';
+          sIcon.textContent = '←';
+          sLabel.textContent = 'Ubah V₁';
+          mIcon.textContent = '📝';
+          mLabel.textContent = 'Kuis';
+          statusPill.textContent = 'Langkah 2: Celupkan Benda';
+          break;
+
+        case 'LAB_STEP_3':
+          pIcon.textContent = '✨';
+          pLabel.textContent = 'Eksperimen Baru';
+          sIcon.textContent = '↺';
+          sLabel.textContent = 'Angkat Benda';
+          mIcon.textContent = '📝';
+          mLabel.textContent = 'Uji di Kuis!';
+          statusPill.textContent = 'Langkah 3: Pembuktian Rumus';
+          break;
+
+        case 'QUIZ':
+          if (!appState.quiz.answered) {
+            pIcon.textContent = '✓';
+            pLabel.textContent = 'Periksa Jawaban';
+          } else {
+            pIcon.textContent = '🎲';
+            pLabel.textContent = 'Soal Berikutnya';
+          }
+          sIcon.textContent = '🔬';
+          sLabel.textContent = 'Ke Lab';
+          mIcon.textContent = '↺';
+          mLabel.textContent = 'Reset Skor';
+          statusPill.textContent = 'Mode: Evaluasi Mandiri';
+          break;
+      }
+    }
+
+    // PRIMARY "ONE BUTTON" CLICK HANDLER
+    function onPrimaryActionClick() {
+      playClickSound();
+
+      if (appState.mode === 'TITLE') {
+        setMode('LAB_STEP_1');
+      } else if (appState.mode === 'LAB_STEP_1') {
+        setMode('LAB_STEP_2');
+      } else if (appState.mode === 'LAB_STEP_2') {
+        executeSubmersion();
+        setMode('LAB_STEP_3');
+      } else if (appState.mode === 'LAB_STEP_3') {
+        resetStonePosition();
+        setMode('LAB_STEP_1');
+      } else if (appState.mode === 'QUIZ') {
+        if (!appState.quiz.answered) {
+          checkQuizAnswer();
+        } else {
+          generateQuizProblem();
+        }
+      }
+    }
+
+    // SECONDARY BUTTON HANDLER (Contextual back/reset)
+    function onSecondaryActionClick() {
+      playClickSound();
+      if (appState.mode === 'TITLE') {
+        toggleModal(true);
+      } else if (appState.mode === 'LAB_STEP_1') {
+        setMode('TITLE');
+      } else if (appState.mode === 'LAB_STEP_2') {
+        setMode('LAB_STEP_1');
+      } else if (appState.mode === 'LAB_STEP_3') {
+        resetStonePosition();
+        setMode('LAB_STEP_2');
+      } else if (appState.mode === 'QUIZ') {
+        setMode('LAB_STEP_1');
+      }
+    }
+
+    // TOGGLE QUIZ / LAB MODE
+    function toggleQuizMode() {
+      playClickSound();
+      if (appState.mode === 'QUIZ') {
+        resetQuizScore();
+      } else {
+        setMode('QUIZ');
+      }
+    }
+
+    function resetQuizScore() {
+      appState.quiz.score = 0;
+      appState.quiz.total = 0;
+      appState.quiz.streak = 0;
+      updateQuizScoreDisplay();
+      generateQuizProblem();
+    }
+
+    function setMode(newMode) {
+      appState.mode = newMode;
+
+      const viewTitle = document.getElementById('view-title');
+      const viewLab = document.getElementById('view-lab');
+      const viewQuiz = document.getElementById('view-quiz');
+
+      viewTitle.classList.add('hidden');
+      viewLab.classList.add('hidden');
+      viewQuiz.classList.add('hidden');
+
+      if (newMode === 'TITLE') {
+        viewTitle.classList.remove('hidden');
+      } else if (newMode.startsWith('LAB_')) {
+        viewLab.classList.remove('hidden');
+        renderLabStage();
+      } else if (newMode === 'QUIZ') {
+        viewQuiz.classList.remove('hidden');
+        generateQuizProblem();
+      }
+
+      updateButtonUI();
+    }
+
+    function goToStart() {
+      playClickSound();
+      resetStonePosition();
+      setMode('TITLE');
+    }
+
+    // Adjust V1 with +/- buttons
+    function adjustV1(delta) {
+      playClickSound();
+      const slider = document.getElementById('slider-v1');
+      let newVal = appState.v1 + delta;
+      const min = parseInt(slider.min, 10);
+      const max = parseInt(slider.max, 10);
+
+      if (newVal < min) newVal = min;
+      if (newVal > max) newVal = max;
+
+      slider.value = newVal;
+      onV1Input(newVal);
+    }
+
+    // Adjust Stone Volume with +/- buttons
+    function adjustStone(delta) {
+      playClickSound();
+      const slider = document.getElementById('slider-stone');
+      let newVal = appState.vStone + delta;
+      const min = parseInt(slider.min, 10);
+      const max = parseInt(slider.max, 10);
+
+      if (newVal < min) newVal = min;
+      if (newVal > max) newVal = max;
+
+      slider.value = newVal;
+      onStoneInput(newVal);
+    }
+
+    // Adjust Quiz Answer with +/- buttons
+    function adjustQuizInput(delta) {
+      playClickSound();
+      const input = document.getElementById('quiz-input-field');
+      if (input.disabled) return;
+      let currentVal = parseInt(input.value, 10);
+      if (isNaN(currentVal)) {
+        currentVal = appState.quiz.vStone || 15;
+      } else {
+        currentVal += delta;
+      }
+      if (currentVal < 1) currentVal = 1;
+      if (currentVal > 100) currentVal = 100;
+      input.value = currentVal;
+    }
+
+    function renderLabStage() {
+      const stepBadge = document.getElementById('step-number-badge');
+      const stepTitle = document.getElementById('step-title');
+      const stepCounter = document.getElementById('step-counter');
+
+      const content1 = document.getElementById('step-content-1');
+      const content2 = document.getElementById('step-content-2');
+      const content3 = document.getElementById('step-content-3');
+
+      const dot1 = document.getElementById('dot-1');
+      const dot2 = document.getElementById('dot-2');
+      const dot3 = document.getElementById('dot-3');
+
+      content1.classList.add('hidden');
+      content2.classList.add('hidden');
+      content3.classList.add('hidden');
+
+      dot1.className = 'w-2.5 h-2.5 rounded-full bg-slate-300 transition-all';
+      dot2.className = 'w-2.5 h-2.5 rounded-full bg-slate-300 transition-all';
+      dot3.className = 'w-2.5 h-2.5 rounded-full bg-slate-300 transition-all';
+
+      // Hide extra lines by default
+      document.getElementById('lab-ref-v1').classList.add('opacity-0');
+      document.getElementById('lab-ref-v1-txt').classList.add('opacity-0');
+      document.getElementById('lab-ref-v2').classList.add('opacity-0');
+      document.getElementById('lab-ref-v2-txt').classList.add('opacity-0');
+      document.getElementById('lab-displaced-zone').classList.add('opacity-0');
+
+      if (appState.mode === 'LAB_STEP_1') {
+        stepBadge.textContent = '1';
+        stepTitle.textContent = 'Tahap 1: Atur Volume Awal Air (V₁)';
+        stepCounter.textContent = 'Langkah 1/3';
+        content1.classList.remove('hidden');
+        dot1.className = 'w-4 h-2.5 rounded-full bg-deepBlue transition-all';
+        resetStonePosition();
+        updateLabLiquidGraphic(appState.v1);
+
+      } else if (appState.mode === 'LAB_STEP_2') {
+        stepBadge.textContent = '2';
+        stepTitle.textContent = 'Tahap 2: Tentukan Ukuran Benda & Celupkan';
+        stepCounter.textContent = 'Langkah 2/3';
+        content2.classList.remove('hidden');
+        dot2.className = 'w-4 h-2.5 rounded-full bg-deepBlue transition-all';
+        resetStonePosition();
+        updateLabLiquidGraphic(appState.v1);
+
+      } else if (appState.mode === 'LAB_STEP_3') {
+        stepBadge.textContent = '3';
+        stepTitle.textContent = 'Tahap 3: Pembuktian Rumus V_benda = V₂ − V₁';
+        stepCounter.textContent = 'Langkah 3/3';
+        content3.classList.remove('hidden');
+        dot3.className = 'w-4 h-2.5 rounded-full bg-emeraldGreen transition-all';
+
+        // Reveal V1, V2 guides and displaced highlight zone
+        const v2 = appState.v1 + appState.vStone;
+        updateLabLiquidGraphic(v2);
+
+        document.getElementById('lab-ref-v1').classList.remove('opacity-0');
+        document.getElementById('lab-ref-v1-txt').classList.remove('opacity-0');
+        document.getElementById('lab-ref-v2').classList.remove('opacity-0');
+        document.getElementById('lab-ref-v2-txt').classList.remove('opacity-0');
+        document.getElementById('lab-displaced-zone').classList.remove('opacity-0');
+
+        // Populate math card
+        document.getElementById('calc-v1').textContent = `${appState.v1} mL`;
+        document.getElementById('calc-v2').textContent = `${v2} mL`;
+        document.getElementById('calc-stone').textContent = `${appState.vStone} cm³`;
+      }
+    }
+
+    function onV1Input(val) {
+      appState.v1 = parseInt(val, 10);
+      document.getElementById('slider-v1-val').textContent = appState.v1;
+      document.getElementById('slider-v1').value = appState.v1;
+      updateLabLiquidGraphic(appState.v1);
+    }
+
+    function onStoneInput(val) {
+      appState.vStone = parseInt(val, 10);
+      document.getElementById('slider-stone-val').textContent = appState.vStone;
+      document.getElementById('slider-stone').value = appState.vStone;
+      
+      // Scale visual irregular stone
+      const scale = 0.65 + (appState.vStone / 30) * 0.7;
+      document.getElementById('lab-stone-scaler').setAttribute('transform', `translate(100, 85) scale(${scale.toFixed(2)})`);
+
+      document.getElementById('tag-read-stone').textContent = appState.vStone;
+      document.getElementById('tag-read-v2').textContent = appState.v1 + appState.vStone;
+    }
+
+    function executeSubmersion() {
+      playSplashSound();
+      appState.isSubmerged = true;
+
+      // Drop stone down into cylinder
+      document.getElementById('lab-stone-group').style.transform = 'translateY(215px)';
+
+      // Trigger splash ripple & bubbles
+      const ripple = document.getElementById('lab-ripple');
+      ripple.classList.remove('ripple-active', 'opacity-0');
+      void ripple.offsetWidth;
+      ripple.classList.add('ripple-active');
+
+      const bubbles = document.getElementById('lab-bubbles');
+      bubbles.classList.remove('opacity-0');
+
+      setTimeout(() => {
+        ripple.classList.add('opacity-0');
+        ripple.classList.remove('ripple-active');
+      }, 750);
+    }
+
+    function resetStonePosition() {
+      appState.isSubmerged = false;
+      document.getElementById('lab-stone-group').style.transform = 'translateY(0px)';
+      document.getElementById('lab-bubbles').classList.add('opacity-0');
+    }
+
+    function updateLabLiquidGraphic(currentVolume) {
+      // 0 mL = 340, 100 mL = 60 (280px span -> 2.8px/mL)
+      const currentY = 340 - (currentVolume * 2.8);
+      const currentH = 340 - currentY;
+
+      const waterRect = document.getElementById('lab-water-rect');
+      const meniscus = document.getElementById('lab-meniscus-curve');
+      const meniscusLine = document.getElementById('lab-meniscus-line');
+      const eyeMarker = document.getElementById('lab-eye-marker');
+      const ripple = document.getElementById('lab-ripple');
+
+      waterRect.setAttribute('y', currentY);
+      waterRect.setAttribute('height', currentH);
+      meniscus.setAttribute('d', `M 35,${currentY} Q 100,${currentY + 8} 165,${currentY} Z`);
+
+      // Alignment Guide and Eye follows lowest meniscus point (+4px)
+      const readY = currentY + 4;
+      meniscusLine.setAttribute('y1', readY);
+      meniscusLine.setAttribute('y2', readY);
+      eyeMarker.setAttribute('transform', `translate(190, ${readY})`);
+      ripple.setAttribute('cy', currentY);
+
+      // Synchronize indicators
+      const v1 = appState.v1;
+      const v2 = v1 + appState.vStone;
+      const yV1 = 340 - (v1 * 2.8);
+      const yV2 = 340 - (v2 * 2.8);
+
+      document.getElementById('lab-ref-v1').setAttribute('y1', yV1);
+      document.getElementById('lab-ref-v1').setAttribute('y2', yV1);
+      document.getElementById('lab-ref-v1-txt').setAttribute('y', yV1 + 3.5);
+
+      document.getElementById('lab-ref-v2').setAttribute('y1', yV2);
+      document.getElementById('lab-ref-v2').setAttribute('y2', yV2);
+      document.getElementById('lab-ref-v2-txt').setAttribute('y', yV2 + 3.5);
+
+      // Displaced water green highlight
+      const displacedH = yV1 - yV2;
+      const displacedZone = document.getElementById('lab-displaced-zone');
+      displacedZone.setAttribute('y', yV2);
+      displacedZone.setAttribute('height', displacedH);
+
+      // Readout tags
+      document.getElementById('tag-read-v1').textContent = v1;
+      document.getElementById('tag-read-stone').textContent = appState.vStone;
+      document.getElementById('tag-read-v2').textContent = v2;
+    }
+
+    function generateQuizProblem() {
+      appState.quiz.answered = false;
+
+      // Random V1 between 20 and 60 mL, V_benda between 10 and 35 mL
+      const randV1 = Math.floor(Math.random() * (60 - 20 + 1)) + 20;
+      const randStone = Math.floor(Math.random() * (35 - 10 + 1)) + 10;
+      const randV2 = randV1 + randStone;
+
+      appState.quiz.v1 = randV1;
+      appState.quiz.vStone = randStone;
+      appState.quiz.v2 = randV2;
+
+      document.getElementById('quiz-lbl-v1').textContent = randV1;
+      document.getElementById('quiz-lbl-v2').textContent = randV2;
+
+      const input = document.getElementById('quiz-input-field');
+      input.value = '';
+      input.disabled = false;
+      input.focus();
+
+      const feedback = document.getElementById('quiz-feedback');
+      feedback.className = 'hidden';
+
+      // Render Cylinders: 0 mL = 280, 100 mL = 40 (240px span -> 2.4px/mL)
+      // Gelas A
+      const yA = 280 - (randV1 * 2.4);
+      const hA = 280 - yA;
+      document.getElementById('quiz-water-a').setAttribute('y', yA);
+      document.getElementById('quiz-water-a').setAttribute('height', hA);
+      document.getElementById('quiz-meniscus-a').setAttribute('d', `M 26,${yA} Q 80,${yA + 7} 134,${yA} Z`);
+      document.getElementById('quiz-line-a').setAttribute('y1', yA + 3);
+      document.getElementById('quiz-line-a').setAttribute('y2', yA + 3);
+
+      // Gelas B
+      const yB = 280 - (randV2 * 2.4);
+      const hB = 280 - yB;
+      document.getElementById('quiz-water-b').setAttribute('y', yB);
+      document.getElementById('quiz-water-b').setAttribute('height', hB);
+      document.getElementById('quiz-meniscus-b').setAttribute('d', `M 26,${yB} Q 80,${yB + 7} 134,${yB} Z`);
+      document.getElementById('quiz-line-b').setAttribute('y1', yB + 3);
+      document.getElementById('quiz-line-b').setAttribute('y2', yB + 3);
+
+      updateButtonUI();
+    }
+
+    function checkQuizAnswer() {
+      const input = document.getElementById('quiz-input-field');
+      const val = parseInt(input.value, 10);
+      if (isNaN(val)) {
+        input.focus();
+        return;
+      }
+
+      appState.quiz.answered = true;
+      appState.quiz.total++;
+
+      const feedback = document.getElementById('quiz-feedback');
+      const title = document.getElementById('quiz-feedback-title');
+      const desc = document.getElementById('quiz-feedback-desc');
+      feedback.classList.remove('hidden');
+
+      if (val === appState.quiz.vStone) {
+        playSuccessChord();
+        appState.quiz.score++;
+        appState.quiz.streak++;
+
+        feedback.className = "p-2.5 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-900 transition-all";
+        title.innerHTML = "✓ Tepat Sekali!";
+        desc.innerHTML = `V_benda = V₂ − V₁ = ${appState.quiz.v2} mL − ${appState.quiz.v1} mL = <strong>${appState.quiz.vStone} cm³</strong>. Jawaban Anda benar!`;
+      } else {
+        playBuzzerSound();
+        appState.quiz.streak = 0;
+
+        feedback.className = "p-2.5 rounded-xl border bg-red-50 border-red-300 text-red-900 transition-all";
+        title.innerHTML = "✕ Belum Tepat";
+        desc.innerHTML = `V_benda = ${appState.quiz.v2} mL − ${appState.quiz.v1} mL = <strong>${appState.quiz.vStone} cm³</strong> (Anda menjawab ${val} cm³).`;
+      }
+
+      input.disabled = true;
+      updateQuizScoreDisplay();
+      updateButtonUI();
+    }
+
+    function updateQuizScoreDisplay() {
+      document.getElementById('quiz-score').textContent = appState.quiz.score;
+      document.getElementById('quiz-total').textContent = appState.quiz.total;
+      document.getElementById('quiz-streak').textContent = appState.quiz.streak;
+    }
+
+    function toggleFullscreen() {
+      playClickSound();
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    function toggleModal(show) {
+      playClickSound();
+      const modal = document.getElementById('modal-petunjuk');
+      if (show) modal.classList.remove('hidden');
+      else modal.classList.add('hidden');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initCylinderApparatus();
+      updateLabLiquidGraphic(50);
+      updateButtonUI();
+    });
+  </script>
+</body>
+</html>
