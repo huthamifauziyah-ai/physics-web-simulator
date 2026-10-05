@@ -34,6 +34,11 @@
         .animate-blob2 {
             animation: floatBlob2 10s ease-in-out infinite;
         }
+        
+        /* Kustom scrollbar untuk modal */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen relative overflow-x-hidden flex flex-col">
@@ -51,7 +56,7 @@
         <!-- HEADER / NAVBAR -->
         <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
-                <div class="flex items-center space-x-3 cursor-pointer w-full md:w-auto justify-between md:justify-start" onclick="switchTab('home')">
+                <div class="flex items-center space-x-3 cursor-pointer w-full justify-center md:justify-start" onclick="switchTab('home')">
                     <div class="flex items-center space-x-3">
                         <div class="bg-blue-600 p-2 rounded-xl text-white shadow-lg shadow-blue-500/30">
                             <i class="fa-solid fa-scale-balanced text-xl"></i>
@@ -62,28 +67,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- MENU NAVIGASI -->
-                <nav class="flex flex-wrap items-center justify-center gap-1.5 md:gap-2 w-full md:w-auto">
-                    <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-medium transition bg-blue-600 text-white shadow-md shadow-blue-600/30">
-                        <i class="fa-solid fa-house mr-1"></i> Beranda
-                    </button>
-                    <button onclick="switchTab('ohaus')" id="nav-ohaus" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">
-                        <i class="fa-solid fa-sliders mr-1"></i> Ohaus
-                    </button>
-                    <button onclick="switchTab('digital')" id="nav-digital" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">
-                        <i class="fa-solid fa-desktop mr-1"></i> Digital
-                    </button>
-                    <button onclick="switchTab('tuas')" id="nav-tuas" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">
-                        <i class="fa-solid fa-weight-scale mr-1"></i> Tuas
-                    </button>
-                    <button onclick="switchTab('materi')" id="nav-materi" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">
-                        <i class="fa-solid fa-book-open mr-1"></i> Materi
-                    </button>
-                    <button onclick="switchTab('kuis')" id="nav-kuis" class="nav-btn px-3 py-2 rounded-lg text-xs md:text-sm font-medium transition bg-slate-800 text-slate-300 hover:bg-slate-700">
-                        <i class="fa-solid fa-award mr-1"></i> Kuis
-                    </button>
-                </nav>
             </div>
         </header>
 
@@ -91,47 +74,96 @@
         <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6">
 
             <!-- 1. TAB BERANDA -->
-            <section id="tab-home" class="tab-content space-y-6">
-                <div class="bg-gradient-to-r from-blue-900/40 via-indigo-900/30 to-slate-900/50 border border-blue-500/20 p-6 md:p-10 rounded-2xl backdrop-blur-sm shadow-2xl">
-                    <div class="max-w-3xl">
-                        <span class="bg-blue-500/20 text-blue-400 text-xs font-semibold px-3 py-1 rounded-full border border-blue-500/30 uppercase tracking-wider">Laboratorium Virtual Fisika</span>
-                        <h2 class="text-2xl md:text-4xl font-extrabold text-white mt-4 tracking-tight">Kuasai Konsep Pengukuran Massa & Timbangan</h2>
-                        <p class="text-slate-300 mt-3 text-sm md:text-base leading-relaxed">
-                            Pelajari cara kerja berbagai alat ukur massa mulai dari Neraca Ohaus 3 lengan, Neraca Digital presisi, hingga prinsip kesetimbangan tuas secara interaktif.
-                        </p>
-                        <div class="mt-6 flex flex-wrap gap-3">
-                            <button onclick="switchTab('ohaus')" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition text-sm flex items-center space-x-2">
-                                <span>Mulai Simulasi Ohaus</span> <i class="fa-solid fa-arrow-right ml-1"></i>
-                            </button>
-                            <button onclick="switchTab('materi')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium px-5 py-2.5 rounded-xl border border-slate-700 transition text-sm">
-                                Baca Materi Teori
-                            </button>
+            <section id="tab-home" class="tab-content flex flex-col items-center justify-center min-h-[75vh] py-8 w-full relative">
+                
+                <!-- TAMPILAN 1: LAYAR AWAL (START SCREEN) -->
+                <div id="home-start-view" class="flex flex-col items-center justify-center space-y-12 w-full transition-all duration-300 opacity-100 scale-100">
+                    <!-- HEADER UTAMA BERANDA -->
+                    <div class="text-center space-y-6 z-10 w-full max-w-4xl mx-auto px-4">
+                        <div class="bg-blue-500/20 text-blue-400 text-xs md:text-sm font-semibold px-4 py-2 rounded-full border border-blue-500/30 inline-block uppercase tracking-widest mb-2 animate-pulse">
+                            Simulator Interaktif
                         </div>
+                        <h2 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight drop-shadow-xl">
+                            Laboratorium Virtual <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Fisika</span>
+                        </h2>
+                        <p class="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
+                            Kuasai konsep pengukuran massa menggunakan berbagai jenis timbangan secara interaktif, akurat, dan mudah dipahami.
+                        </p>
+                    </div>
+
+                    <!-- TOMBOL MENU UTAMA -->
+                    <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 w-full px-4 z-10">
+                        <button onclick="showHomeMenu()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3.5 rounded-xl shadow-[0_0_20px_rgba(37,99,235,0.4)] transition hover:-translate-y-1 flex items-center justify-center gap-3 text-base md:text-lg min-w-[200px]">
+                            <i class="fa-solid fa-play"></i> Mulai
+                        </button>
+                        <button onclick="openModal('pengembang-modal')" class="bg-slate-800/80 hover:bg-slate-700 backdrop-blur-md text-white font-medium px-6 py-3.5 rounded-xl border border-slate-600 transition hover:-translate-y-1 flex items-center justify-center gap-3 min-w-[200px]">
+                            <i class="fa-solid fa-user-graduate"></i> Profil Pengembang
+                        </button>
                     </div>
                 </div>
 
-                <!-- KARTU FITUR UTAMA -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    <div onclick="switchTab('ohaus')" class="bg-slate-950/70 border border-slate-800 hover:border-blue-500/50 p-5 rounded-2xl cursor-pointer transition group hover:shadow-xl">
-                        <div class="w-10 h-10 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center text-lg font-bold group-hover:scale-110 transition mb-3">
-                            <i class="fa-solid fa-sliders"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white group-hover:text-blue-400 transition">Neraca Ohaus 3 Lengan</h3>
-                        <p class="text-slate-400 text-xs md:text-sm mt-1.5 leading-relaxed">Geser beban geser pada lengan ratusan, puluhan, dan satuan untuk menyeimbangkan jarum.</p>
+                <!-- TAMPILAN 2: MENU PEMBELAJARAN (Awalnya Disembunyikan) -->
+                <div id="home-menu-view" class="hidden flex-col items-center justify-start w-full transition-all duration-300 opacity-0 scale-95 z-10">
+                    
+                    <!-- KEPALA MENU (Tengah) -->
+                    <div class="w-full max-w-5xl flex flex-col items-center justify-center mb-8 border-b border-slate-800/60 pb-4">
+                        <h3 class="text-2xl md:text-3xl font-bold text-white mb-1">Pilih Menu</h3>
+                        <p class="text-slate-400 text-xs md:text-sm">Silakan pilih materi atau alat ukur yang ingin dipelajari</p>
                     </div>
-                    <div onclick="switchTab('digital')" class="bg-slate-950/70 border border-slate-800 hover:border-emerald-500/50 p-5 rounded-2xl cursor-pointer transition group hover:shadow-xl">
-                        <div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-lg font-bold group-hover:scale-110 transition mb-3">
-                            <i class="fa-solid fa-desktop"></i>
+                    
+                    <!-- 5 KARTU MENU UTAMA (Simetris: 3 di atas, 2 di bawah tengah) -->
+                    <div class="flex flex-wrap justify-center gap-5 w-full max-w-5xl">
+                        <!-- Menu 1: Ohaus -->
+                        <div onclick="switchTab('ohaus')" class="w-full sm:w-[47%] lg:w-[31%] bg-slate-900/80 backdrop-blur-sm border border-slate-700 hover:border-blue-500 p-6 rounded-2xl cursor-pointer transition group hover:shadow-[0_0_25px_rgba(59,130,246,0.2)] hover:-translate-y-2 flex flex-col">
+                            <div class="w-14 h-14 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition mb-4 shadow-inner">
+                                <i class="fa-solid fa-sliders"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-blue-400 transition mb-2">Neraca Ohaus</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed flex-grow">Simulator Neraca Ohaus 3 lengan. Geser beban untuk menyeimbangkan jarum.</p>
                         </div>
-                        <h3 class="text-lg font-semibold text-white group-hover:text-emerald-400 transition">Neraca Digital Presisi</h3>
-                        <p class="text-slate-400 text-xs md:text-sm mt-1.5 leading-relaxed">Timbang berbagai benda uji dengan layar LCD instan lengkap dengan fitur Tare.</p>
+                        
+                        <!-- Menu 2: Digital -->
+                        <div onclick="switchTab('digital')" class="w-full sm:w-[47%] lg:w-[31%] bg-slate-900/80 backdrop-blur-sm border border-slate-700 hover:border-emerald-500 p-6 rounded-2xl cursor-pointer transition group hover:shadow-[0_0_25px_rgba(16,185,129,0.2)] hover:-translate-y-2 flex flex-col">
+                            <div class="w-14 h-14 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition mb-4 shadow-inner">
+                                <i class="fa-solid fa-desktop"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-emerald-400 transition mb-2">Neraca Digital</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed flex-grow">Simulator Neraca presisi dengan layar LCD instan lengkap dengan fitur Tare.</p>
+                        </div>
+                        
+                        <!-- Menu 3: Tuas -->
+                        <div onclick="switchTab('tuas')" class="w-full sm:w-[47%] lg:w-[31%] bg-slate-900/80 backdrop-blur-sm border border-slate-700 hover:border-purple-500 p-6 rounded-2xl cursor-pointer transition group hover:shadow-[0_0_25px_rgba(168,85,247,0.2)] hover:-translate-y-2 flex flex-col">
+                            <div class="w-14 h-14 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition mb-4 shadow-inner">
+                                <i class="fa-solid fa-weight-scale"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-purple-400 transition mb-2">Neraca Tuas</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed flex-grow">Praktikum kesetimbangan momen gaya dengan membandingkan anak timbangan.</p>
+                        </div>
+
+                        <!-- Menu 4: Materi -->
+                        <div onclick="switchTab('materi')" class="w-full sm:w-[47%] lg:w-[31%] bg-slate-900/80 backdrop-blur-sm border border-slate-700 hover:border-indigo-500 p-6 rounded-2xl cursor-pointer transition group hover:shadow-[0_0_25px_rgba(99,102,241,0.2)] hover:-translate-y-2 flex flex-col">
+                            <div class="w-14 h-14 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition mb-4 shadow-inner">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-indigo-400 transition mb-2">Materi Teori</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed flex-grow">Pelajari konsep dasar fisika mengenai massa, berat, dan jenis alat ukurnya.</p>
+                        </div>
+
+                        <!-- Menu 5: Kuis -->
+                        <div onclick="switchTab('kuis')" class="w-full sm:w-[47%] lg:w-[31%] bg-slate-900/80 backdrop-blur-sm border border-slate-700 hover:border-amber-500 p-6 rounded-2xl cursor-pointer transition group hover:shadow-[0_0_25px_rgba(245,158,11,0.2)] hover:-translate-y-2 flex flex-col">
+                            <div class="w-14 h-14 bg-amber-500/10 text-amber-400 rounded-xl flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition mb-4 shadow-inner">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white group-hover:text-amber-400 transition mb-2">Kuis Evaluasi</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed flex-grow">Uji pemahaman Anda melalui kuis interaktif setelah mencoba semua simulator.</p>
+                        </div>
                     </div>
-                    <div onclick="switchTab('tuas')" class="bg-slate-950/70 border border-slate-800 hover:border-purple-500/50 p-5 rounded-2xl cursor-pointer transition group hover:shadow-xl">
-                        <div class="w-10 h-10 bg-purple-500/10 text-purple-400 rounded-xl flex items-center justify-center text-lg font-bold group-hover:scale-110 transition mb-3">
-                            <i class="fa-solid fa-weight-scale"></i>
-                        </div>
-                        <h3 class="text-lg font-semibold text-white group-hover:text-purple-400 transition">Neraca Dua Lengan</h3>
-                        <p class="text-slate-400 text-xs md:text-sm mt-1.5 leading-relaxed">Praktikum perbandingan massa objek dengan anak timbangan standar pada tuas.</p>
+
+                    <!-- TOMBOL KEMBALI KIRI BAWAH (Untuk Menu) -->
+                    <div class="w-full max-w-5xl flex justify-start mt-8">
+                        <button onclick="showHomeStart()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-5 py-2.5 rounded-xl transition border border-slate-600 flex items-center gap-3 shadow-lg group">
+                            <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Kembali ke Awal
+                        </button>
                     </div>
                 </div>
             </section>
@@ -205,6 +237,13 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- TOMBOL KEMBALI KIRI BAWAH (Untuk Halaman Ohaus) -->
+                <div class="flex justify-start">
+                    <button onclick="switchTab('home')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-5 py-2.5 rounded-xl transition border border-slate-600 flex items-center gap-3 shadow-lg group">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Kembali ke Menu Utama
+                    </button>
+                </div>
             </section>
 
             <!-- 3. TAB NERACA DIGITAL -->
@@ -273,6 +312,13 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- TOMBOL KEMBALI KIRI BAWAH (Untuk Halaman Digital) -->
+                <div class="flex justify-start">
+                    <button onclick="switchTab('home')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-5 py-2.5 rounded-xl transition border border-slate-600 flex items-center gap-3 shadow-lg group">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Kembali ke Menu Utama
+                    </button>
+                </div>
             </section>
 
             <!-- 4. TAB NERACA DUA LENGAN -->
@@ -319,6 +365,13 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- TOMBOL KEMBALI KIRI BAWAH (Untuk Halaman Tuas) -->
+                <div class="flex justify-start">
+                    <button onclick="switchTab('home')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-5 py-2.5 rounded-xl transition border border-slate-600 flex items-center gap-3 shadow-lg group">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Kembali ke Menu Utama
+                    </button>
+                </div>
             </section>
 
             <!-- 5. TAB MATERI & TEORI -->
@@ -356,6 +409,13 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- TOMBOL KEMBALI KIRI BAWAH (Untuk Halaman Materi) -->
+                <div class="flex justify-start">
+                    <button onclick="switchTab('home')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-5 py-2.5 rounded-xl transition border border-slate-600 flex items-center gap-3 shadow-lg group">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Kembali ke Menu Utama
+                    </button>
+                </div>
             </section>
 
             <!-- 6. TAB KUIS -->
@@ -372,7 +432,86 @@
                         <!-- Kuis dimuat dinamis -->
                     </div>
                 </div>
+
+                <!-- TOMBOL KEMBALI KIRI BAWAH (Untuk Halaman Kuis) -->
+                <div class="flex justify-start max-w-3xl mx-auto">
+                    <button onclick="switchTab('home')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white px-5 py-2.5 rounded-xl transition border border-slate-600 flex items-center gap-3 shadow-lg group">
+                        <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Kembali ke Menu Utama
+                    </button>
+                </div>
             </section>
+
+            <!-- MODAL PETUNJUK -->
+            <div id="petunjuk-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+                <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 shadow-2xl transform transition-all scale-95 opacity-0 duration-300 relative" id="petunjuk-content">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-4">
+                        <h3 class="text-xl font-bold text-white flex items-center"><i class="fa-solid fa-book text-blue-400 mr-2"></i> Petunjuk Penggunaan</h3>
+                        <button onclick="closeModal('petunjuk-modal')" class="text-slate-400 hover:text-white transition bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="space-y-4 text-slate-300 text-sm md:text-base max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+                        <p class="font-medium text-white">Selamat datang di Laboratorium Virtual Fisika. Berikut panduan menggunakan simulator ini:</p>
+                        <ol class="list-decimal pl-5 space-y-3 mt-3">
+                            <li><strong>Navigasi:</strong> Gunakan tombol di Beranda atau menu navigasi di bagian atas untuk berpindah antar simulasi.</li>
+                            <li><strong>Neraca Ohaus 3 Lengan:</strong>
+                                <ul class="list-disc pl-5 mt-1 space-y-1 text-slate-400">
+                                    <li>Klik tombol 'Acak' untuk mendapatkan target massa baru.</li>
+                                    <li>Geser slider lengan 100g, 10g, dan 0.1g untuk menyeimbangkan beban.</li>
+                                    <li>Perhatikan jarum penunjuk, pastikan status menunjukkan "Seimbang Sempurna".</li>
+                                    <li>Klik tombol 'Periksa' untuk memvalidasi jawaban Anda.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Neraca Digital Presisi:</strong>
+                                <ul class="list-disc pl-5 mt-1 space-y-1 text-slate-400">
+                                    <li>Pilih salah satu 'Benda Uji' untuk ditimbang.</li>
+                                    <li>Gunakan kotak centang 'Wadah Gelas' jika benda diletakkan dalam wadah.</li>
+                                    <li>Klik tombol 'Tekan TARE' untuk mengenolkan massa wadah, sehingga hanya massa benda yang terukur.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Neraca Dua Lengan (Tuas):</strong>
+                                <ul class="list-disc pl-5 mt-1 space-y-1 text-slate-400">
+                                    <li>Terdapat beban misterius di piringan kiri.</li>
+                                    <li>Tambahkan anak timbangan (100g, 50g, 10g, dll.) ke piringan kanan dengan mengklik tombol nilai beban.</li>
+                                    <li>Terus tambah atau kurangi hingga lengan tuas berada pada posisi mendatar (seimbang).</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <p class="mt-4 pt-4 border-t border-slate-800">Jangan lupa untuk membaca bagian <strong>Materi</strong> dan mencoba <strong>Kuis Evaluasi</strong> untuk menguji pemahaman Anda!</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800 flex justify-end">
+                        <button onclick="closeModal('petunjuk-modal')" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-5 py-2 rounded-xl transition shadow-lg shadow-blue-500/30">Mengerti</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODAL PENGEMBANG -->
+            <div id="pengembang-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+                <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-6 shadow-2xl transform transition-all scale-95 opacity-0 duration-300 relative" id="pengembang-content">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-4 mb-5">
+                        <h3 class="text-xl font-bold text-white flex items-center"><i class="fa-solid fa-info-circle text-emerald-400 mr-2"></i> Info Pengembang</h3>
+                        <button onclick="closeModal('pengembang-modal')" class="text-slate-400 hover:text-white transition bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="flex flex-col items-center text-center space-y-4">
+                        <div class="w-24 h-24 bg-gradient-to-tr from-blue-500 to-emerald-500 rounded-full flex items-center justify-center text-4xl text-white shadow-lg shadow-blue-500/20">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-white">Laboratorium Virtual Fisika</h4>
+                            <p class="text-slate-400 text-sm mt-1">Versi 1.1.0 &bull; EduTech</p>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed px-2 border-y border-slate-800 py-4 my-2">
+                            Aplikasi web interaktif ini dikembangkan khusus untuk memfasilitasi pembelajaran fisika secara digital, mempermudah siswa memahami materi pengukuran massa melalui simulasi alat ukur laboratorium.
+                        </p>
+                        <div class="flex justify-center gap-5 mt-2">
+                            <a href="#" class="text-slate-400 hover:text-white transition text-xl bg-slate-800 p-2 rounded-lg hover:bg-slate-700"><i class="fa-brands fa-github"></i></a>
+                            <a href="#" class="text-slate-400 hover:text-blue-400 transition text-xl bg-slate-800 p-2 rounded-lg hover:bg-slate-700"><i class="fa-solid fa-globe"></i></a>
+                            <a href="#" class="text-slate-400 hover:text-emerald-400 transition text-xl bg-slate-800 p-2 rounded-lg hover:bg-slate-700"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800">
+                        <button onclick="closeModal('pengembang-modal')" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-medium px-5 py-2.5 rounded-xl transition">Tutup</button>
+                    </div>
+                </div>
+            </div>
 
         </main>
 
@@ -385,35 +524,71 @@
 
     <!-- SCRIPT JAVASCRIPT -->
     <script>
-        // EFEK SUARA CENTANG (Tick Sound via Web Audio API)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // MODAL HANDLERS
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            // Trigger reflow untuk mengaktifkan animasi CSS
+            void modal.offsetWidth; 
+            const content = modal.querySelector('div[id$="-content"]');
+            if(content) {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }
+        }
 
-        function playTickSound() {
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            const content = modal.querySelector('div[id$="-content"]');
+            if(content) {
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+            }
+            // Tunggu animasi CSS selesai sebelum menyembunyikan div utama
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // EFEK SUARA INTERAKSI (Web Audio API)
+        let audioCtx;
+
+        function initAudio() {
+            // Inisialisasi audio hanya saat interaksi pertama agar tidak diblokir browser
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
+        }
+
+        function playClickSound() {
+            initAudio();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             
-            // Menggunakan gelombang 'triangle' dengan frekuensi tinggi yang sangat pendek untuk suara 'tick' centang
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.03);
+            // Efek suara 'Pop/Click' UI yang lebih empuk dan jelas
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
             
-            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
             
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.03);
+            osc.stop(audioCtx.currentTime + 0.06);
         }
 
-        // Pasang pendengar klik otomatis ke semua tombol dan elemen interaktif
+        // Tangkap SEMUA interaksi (Tombol, Input, Menu Kartu, dan Elemen yang bisa diklik)
         document.addEventListener('click', function(e) {
-            if (e.target.closest('button, input[type="range"], input[type="checkbox"]')) {
-                playTickSound();
+            // Menambahkan selector .cursor-pointer dan [onclick] untuk mendeteksi div/menu
+            if (e.target.closest('button, input[type="range"], input[type="checkbox"], .cursor-pointer, [onclick]')) {
+                playClickSound();
             }
         });
 
@@ -470,6 +645,55 @@
 
         initParticles();
         animateParticles();
+
+        // TRANSISI MENU BERANDA (TOMBOL MULAI & KEMBALI)
+        function showHomeMenu() {
+            const startView = document.getElementById('home-start-view');
+            const menuView = document.getElementById('home-menu-view');
+
+            // Fade out tampilan awal
+            startView.classList.replace('opacity-100', 'opacity-0');
+            startView.classList.replace('scale-100', 'scale-95');
+
+            setTimeout(() => {
+                startView.classList.add('hidden');
+                startView.classList.remove('flex');
+
+                menuView.classList.remove('hidden');
+                menuView.classList.add('flex');
+
+                // Memicu reflow browser agar animasi CSS berjalan
+                void menuView.offsetWidth; 
+
+                // Fade in tampilan menu
+                menuView.classList.replace('opacity-0', 'opacity-100');
+                menuView.classList.replace('scale-95', 'scale-100');
+            }, 300);
+        }
+
+        function showHomeStart() {
+            const startView = document.getElementById('home-start-view');
+            const menuView = document.getElementById('home-menu-view');
+
+            // Fade out tampilan menu
+            menuView.classList.replace('opacity-100', 'opacity-0');
+            menuView.classList.replace('scale-100', 'scale-95');
+
+            setTimeout(() => {
+                menuView.classList.add('hidden');
+                menuView.classList.remove('flex');
+
+                startView.classList.remove('hidden');
+                startView.classList.add('flex');
+
+                // Memicu reflow browser
+                void startView.offsetWidth;
+
+                // Fade in tampilan awal
+                startView.classList.replace('opacity-0', 'opacity-100');
+                startView.classList.replace('scale-95', 'scale-100');
+            }, 300);
+        }
 
         // NAVIGASI TAB
         function switchTab(tabId) {
@@ -645,6 +869,7 @@
         function loadQuiz() {
             const container = document.getElementById('quiz-container');
             container.innerHTML = '';
+            
             quizData.forEach((q, idx) => {
                 let optionsHtml = '';
                 q.options.forEach((opt, optIdx) => {
@@ -654,6 +879,7 @@
                         </button>
                     `;
                 });
+                
                 container.innerHTML += `
                     <div class="bg-slate-950/40 border border-slate-800 p-4 rounded-xl space-y-2.5">
                         <h3 class="font-semibold text-white text-xs md:text-sm">Pertanyaan ${idx + 1}: ${q.question}</h3>
@@ -675,6 +901,7 @@
                 btnElement.className = "w-full text-left bg-red-500/20 border border-red-500 text-red-300 p-3 rounded-xl text-xs md:text-sm font-semibold mb-2";
                 buttons[quizData[qIdx].answer].className = "w-full text-left bg-emerald-500/20 border border-emerald-500 text-emerald-300 p-3 rounded-xl text-xs md:text-sm font-semibold mb-2";
             }
+            
             document.getElementById('quiz-score-badge').innerText = `Skor: ${quizScore}`;
         }
 
@@ -685,3 +912,4 @@
     </script>
 </body>
 </html>
+
