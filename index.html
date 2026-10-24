@@ -710,9 +710,9 @@
                   <path id="quiz-meniscus-b" d="M 26,130 Q 80,137 134,130 Z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.2"/>
                   <line id="quiz-line-b" x1="16" y1="133" x2="144" y2="133" stroke="#EF4444" stroke-width="1.5" stroke-dasharray="3,2"/>
                   
-                  <!-- Dynamic Irregular Item in Quiz -->
-                  <g id="quiz-stone-container" transform="translate(80, 245)"></g>
-                  <line x1="80" y1="30" x2="80" y2="235" stroke="#64748B" stroke-width="1.2" stroke-dasharray="3,2"/>
+                  <!-- Dynamic Irregular Item in Quiz (Dinaikkan posisinya di atas dasar tabung agar terlihat utuh) -->
+                  <g id="quiz-stone-container" transform="translate(80, 230)"></g>
+                  <line x1="80" y1="30" x2="80" y2="205" stroke="#475569" stroke-width="1.2" stroke-dasharray="3,2"/>
 
                   <g id="quiz-ticks-b" class="text-[8px] font-mono select-none" fill="#334155"></g>
                   <rect x="26" y="30" width="108" height="250" fill="url(#glassGloss)" pointer-events="none"/>
@@ -1201,28 +1201,74 @@
       {
         id: 0,
         name: 'Batu Karang',
-        desc: 'Batu karang alam berpori',
+        desc: 'Batu karang alam asimetris berpori & berlekuk tajam',
         minV: 15,
         maxV: 35,
-        svg: `<path d="M -16,-12 C -24,-5 -26,8 -15,17 C -5,24 15,21 20,10 C 24,0 18,-16 5,-17 C -6,-18 -11,-20 -16,-12 Z" fill="#64748B" stroke="#1E293B" stroke-width="1.8"/>
-              <path d="M -9,-3 Q -3,3 5,-2 M -7,7 Q 3,11 11,5" stroke="#94A3B8" stroke-width="1.2" fill="none"/>`
+        // Batu karang sangat tak beraturan: banyak tonjolan, celah runcing, tekstur pori, dan shading kontur alami
+        svg: `<g transform="scale(1.15)">
+                <!-- Bayangan Dasar Benda -->
+                <ellipse cx="0" cy="20" rx="20" ry="4" fill="#0f172a" opacity="0.35"/>
+                <!-- Badan Utama Batu Karang Tak Beraturan (Multifaceted jagged contour) -->
+                <path d="M -18,-14 C -25,-10 -27,-2 -24,6 C -29,12 -23,19 -16,21 C -10,22 -3,17 3,21 C 12,23 21,18 24,10 C 27,2 24,-7 17,-13 C 12,-18 5,-15 0,-19 C -7,-22 -13,-18 -18,-14 Z" 
+                      fill="#475569" stroke="#0f172a" stroke-width="2.2" stroke-linejoin="round"/>
+                <!-- Lekukan Faset & Retakan Sudut Bebatuan -->
+                <path d="M -18,-14 L -6,-4 L -11,8 L -16,21" stroke="#334155" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <path d="M 0,-19 L -1,-7 L 11,-2 L 24,10" stroke="#334155" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <path d="M -6,-4 L 11,-2 L 7,12 L 3,21" stroke="#1e293b" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                <!-- Highlight Sinar Permukaan Kasar -->
+                <path d="M -15,-10 C -12,-14 -5,-16 0,-15 C -2,-11 -5,-7 -7,-5 Z" fill="#94a3b8" opacity="0.8"/>
+                <path d="M 4,-12 C 10,-10 14,-6 15,-1 C 10,-1 6,-5 4,-12 Z" fill="#94a3b8" opacity="0.75"/>
+                <!-- Pori-pori dan Rongga Alami Batu Karang -->
+                <circle cx="-13" cy="2" r="2.2" fill="#1e293b"/>
+                <circle cx="-12" cy="12" r="1.8" fill="#1e293b"/>
+                <circle cx="1" cy="4" r="2.4" fill="#1e293b"/>
+                <circle cx="14" cy="5" r="2" fill="#1e293b"/>
+                <circle cx="7" cy="-7" r="1.6" fill="#1e293b"/>
+                <circle cx="-3" cy="-11" r="1.5" fill="#1e293b"/>
+                <!-- Gantungan Tali Spesimen Lab -->
+                <ellipse cx="0" cy="-19" rx="2.5" ry="3.5" fill="none" stroke="#e2e8f0" stroke-width="1.5"/>
+              </g>`
       },
       {
         id: 1,
         name: 'Kunci Logam',
-        desc: 'Kunci kuningan bergerigi kuno',
+        desc: 'Kunci kuningan antik bergerigi tak beraturan',
         minV: 8,
         maxV: 20,
-        svg: `<path d="M -8,-16 C -14,-16 -16,-10 -16,-4 C -16,4 -10,8 -5,8 L -5,18 L 0,18 L 0,14 L 4,14 L 4,10 L -1,10 L -1,7 C 4,6 7,2 7,-4 C 7,-10 3,-16 -8,-16 Z M -8,-6 C -10,-6 -12,-8 -12,-10 C -12,-12 -10,-14 -8,-14 C -6,-14 -4,-12 -4,-10 C -4,-8 -6,-6 -8,-6 Z" fill="#D97706" stroke="#78350F" stroke-width="1.6"/>`
+        // Kunci kuningan asimetris antik dengan gigi bertingkat dan lubang dekoratif
+        svg: `<g transform="scale(1.1) rotate(-8)">
+                <ellipse cx="0" cy="24" rx="16" ry="3.5" fill="#0f172a" opacity="0.3"/>
+                <!-- Gagang Lingkar Berornamen -->
+                <path d="M -11,-18 C -18,-18 -20,-10 -20,-3 C -20,6 -13,11 -6,11 L -6,22 L 0,22 L 0,18 L 4,18 L 4,14 L 0,14 L 0,10 L 6,10 L 6,6 L -2,6 C 4,5 7,1 7,-3 C 7,-10 2,-18 -11,-18 Z" 
+                      fill="#d97706" stroke="#78350f" stroke-width="2" stroke-linejoin="round"/>
+                <!-- Lubang Gagang Kunci -->
+                <circle cx="-11" cy="-3" r="4.5" fill="#0284c7" stroke="#78350f" stroke-width="1.5"/>
+                <!-- Shading & Highlight Kuningan Berkilau -->
+                <path d="M -11,-15 C -15,-15 -17,-10 -17,-4" stroke="#fde68a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <line x1="-3" y1="8" x2="-3" y2="20" stroke="#fde68a" stroke-width="1.4"/>
+                <circle cx="-11" cy="-18" r="1.5" fill="#fef08a"/>
+              </g>`
       },
       {
         id: 2,
         name: 'Patung Giok',
-        desc: 'Miniatur patung giok tak simetris',
+        desc: 'Miniatur ukiran giok oriental asimetris',
         minV: 12,
         maxV: 28,
-        svg: `<path d="M -10,-15 C -18,-5 -14,10 -8,18 C 0,22 14,18 16,8 C 18,-4 10,-8 5,-8 C 2,-16 -5,-20 -10,-15 Z" fill="#059669" stroke="#064E3B" stroke-width="1.8"/>
-              <circle cx="0" cy="-2" r="3" fill="#34D399" opacity="0.6"/>`
+        // Patung giok asimetris lengkap dengan lekukan organik, transisi gradien warna, dan highlight giok halus
+        svg: `<g transform="scale(1.15)">
+                <ellipse cx="0" cy="22" rx="18" ry="4" fill="#0f172a" opacity="0.32"/>
+                <!-- Siluet Asimetris Giok -->
+                <path d="M -12,-16 C -20,-7 -18,6 -10,18 C -2,24 15,22 18,12 C 21,1 15,-8 7,-9 C 4,-17 -4,-22 -12,-16 Z" 
+                      fill="#059669" stroke="#064e3b" stroke-width="2.2" stroke-linejoin="round"/>
+                <!-- Lekukan Detail Pola Ukir Giok -->
+                <path d="M -9,-6 C -4,-12 4,-10 6,-3 C 7,4 1,12 -4,15" stroke="#34d399" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M -12,2 C -7,5 -2,5 2,12" stroke="#10b981" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+                <!-- Kilau Karakteristik Batu Giok -->
+                <path d="M -8,-14 C -5,-16 0,-15 3,-12" stroke="#a7f3d0" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+                <circle cx="-4" cy="-4" r="2.5" fill="#6ee7b7" opacity="0.8"/>
+                <circle cx="8" cy="8" r="1.8" fill="#a7f3d0" opacity="0.7"/>
+              </g>`
       }
     ];
 
