@@ -1,36 +1,115 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Background Larutan & Benda Mengapung</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archimedes Lab: Laboratorium IPA Kelas VII SMP</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            deepBlue: '#1E3A8A',
+            skyLiquid: '#38BDF8',
+            emeraldGreen: '#10B981',
+            crimsonRed: '#EF4444',
+          }
+        }
+      }
+    };
+  </script>
+
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      min-height: 100vh;
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #0b1120;
+      color: #1e293b;
       overflow: hidden;
-      font-family: system-ui, -apple-system, sans-serif;
-      color: #f8fafc;
-      background: #061326;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', system-ui, sans-serif;
     }
 
-    /* Container Background Larutan */
-    .liquid-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
+    /* Locked 16:9 Horizontal Landscape Ratio Viewport */
+    #aspect-ratio-viewport {
+      position: relative;
+      width: 100vw;
+      height: 56.25vw;
+      max-height: 100vh;
+      max-width: 177.78vh;
+      aspect-ratio: 16 / 9;
+      background: #0f172a;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
       overflow: hidden;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.22), transparent 45%),
-        radial-gradient(circle at 80% 30%, rgba(20, 184, 166, 0.18), transparent 50%),
-        linear-gradient(180deg, #071933 0%, #0b294d 55%, #06152b 100%);
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Gelombang / lapisan larutan bergerak */
+    /* Shake Animation for Wrong Feedback */
+    @keyframes shakeFeedback {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake-active {
+      animation: shakeFeedback 0.45s ease-in-out;
+    }
+
+    /* Dynamic Multi-Theme Decorative Background Styles */
+    .bg-grid-lab {
+      background-size: 28px 28px;
+      background-image: 
+        linear-gradient(to right, rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+    }
+    
+    .bg-dots-lab {
+      background-size: 20px 20px;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.18) 1.2px, transparent 1.2px);
+    }
+
+    /* Floating Bubbles & Fluid Simulation Animations */
+    @keyframes floatParticle {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(6deg); }
+    }
+    .float-slow { animation: floatParticle 6s ease-in-out infinite; }
+    .float-med  { animation: floatParticle 4.5s ease-in-out 1s infinite; }
+    .float-fast { animation: floatParticle 3.5s ease-in-out 0.5s infinite; }
+
+    /* Aurora Glow Shimmer */
+    @keyframes auroraShimmer {
+      0%, 100% { opacity: 0.45; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(1.08); }
+    }
+    .aurora-glow { animation: auroraShimmer 8s ease-in-out infinite; }
+
+    /* ======================================================== */
+    /* LARUTAN BERGERAK, GELEMBUNG & BENDA MENGAPUNG (#ambient-bg-layer) */
+    /* ======================================================== */
     .fluid-wave {
       position: absolute;
       left: -25%;
@@ -38,12 +117,12 @@
       height: 55%;
       border-radius: 42% 58% 48% 52% / 35% 45% 55% 65%;
       filter: blur(28px);
-      opacity: 0.45;
+      opacity: 0.42;
       will-change: transform;
     }
 
     .wave-1 {
-      top: 12%;
+      top: 10%;
       background: radial-gradient(circle at 30% 40%, #38bdf8, #0284c7 65%, transparent);
       animation: driftWave1 14s ease-in-out infinite alternate;
     }
@@ -54,22 +133,20 @@
       animation: driftWave2 18s ease-in-out infinite alternate;
     }
 
-    /* Permukaan atas larutan (meniskus halus) */
     .liquid-surface {
       position: absolute;
-      top: 26%;
+      top: 24%;
       left: -10%;
       width: 120%;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, rgba(186, 230, 253, 0.45), rgba(125, 211, 252, 0.7), rgba(186, 230, 253, 0.45), transparent);
-      filter: blur(0.6px);
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(186, 230, 253, 0.4), rgba(125, 211, 252, 0.65), rgba(186, 230, 253, 0.4), transparent);
+      filter: blur(0.5px);
       animation: surfaceRipple 7s ease-in-out infinite;
     }
 
-    /* Gelembung larutan naik */
     .bubble {
       position: absolute;
-      bottom: -40px;
+      bottom: -36px;
       border-radius: 9999px;
       background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.65), rgba(125, 211, 252, 0.18) 60%, rgba(56, 189, 248, 0.05));
       border: 1px solid rgba(224, 242, 254, 0.35);
@@ -78,11 +155,11 @@
       animation: riseBubble var(--dur, 10s) linear var(--delay, 0s) infinite;
     }
 
-    /* Benda yang mengapung di larutan */
     .floater {
       position: absolute;
-      top: var(--top, 28%);
+      top: var(--top, 22%);
       left: var(--left, 20%);
+      opacity: 0.72;
       will-change: transform;
       animation: floatBob var(--bob-dur, 5.5s) ease-in-out var(--delay, 0s) infinite;
     }
@@ -103,8 +180,8 @@
     }
 
     @keyframes surfaceRipple {
-      0%, 100% { transform: translateY(0px) scaleY(1); opacity: 0.55; }
-      50%      { transform: translateY(6px) scaleY(1.4); opacity: 0.9; }
+      0%, 100% { transform: translateY(0px) scaleY(1); opacity: 0.45; }
+      50%      { transform: translateY(5px) scaleY(1.35); opacity: 0.8; }
     }
 
     @keyframes riseBubble {
@@ -113,24 +190,24 @@
         opacity: 0;
       }
       12% {
-        opacity: 0.75;
+        opacity: 0.7;
       }
       50% {
-        transform: translate3d(var(--sway, 18px), -50vh, 0) scale(1);
-        opacity: 0.65;
+        transform: translate3d(var(--sway, 18px), -50%, 0) scale(1);
+        opacity: 0.6;
       }
       88% {
-        opacity: 0.35;
+        opacity: 0.3;
       }
       100% {
-        transform: translate3d(calc(var(--sway, 18px) * -0.6), -108vh, 0) scale(0.9);
+        transform: translate3d(calc(var(--sway, 18px) * -0.6), -110%, 0) scale(0.9);
         opacity: 0;
       }
     }
 
     @keyframes floatBob {
       0%, 100% { transform: translate3d(0, 0, 0); }
-      50%      { transform: translate3d(10px, -14px, 0); }
+      50%      { transform: translate3d(10px, -12px, 0); }
     }
 
     @keyframes floatTilt {
@@ -139,76 +216,153 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .fluid-wave, .liquid-surface, .bubble, .floater, .floater-body {
+      .fluid-wave, .liquid-surface, .bubble, .floater, .floater-body,
+      .float-slow, .float-med, .float-fast, .aurora-glow {
         animation: none !important;
       }
     }
 
-    /* Contoh konten di atas background */
-    .demo-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 24px 32px;
-      border-radius: 20px;
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(186, 230, 253, 0.2);
+    :fullscreen #aspect-ratio-viewport,
+    :-webkit-full-screen #aspect-ratio-viewport {
+      border-radius: 0;
+      box-shadow: none;
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      max-height: none;
     }
-    .demo-content h1 { font-size: 1.5rem; margin-bottom: 6px; }
-    .demo-content p { font-size: 0.9rem; color: #bae6fd; }
+
+    .liquid-anim {
+      transition: y 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .object-anim {
+      transition: transform 0.6s cubic-bezier(0.34, 1.25, 0.64, 1), opacity 0.3s;
+    }
+
+    .meniscus-line {
+      stroke-dasharray: 4, 3;
+      filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.7));
+      transition: y1 0.5s cubic-bezier(0.4, 0, 0.2, 1), y2 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes ctaGlow {
+      0%, 100% { box-shadow: 0 0 14px 2px rgba(30, 58, 138, 0.45); }
+      50% { box-shadow: 0 0 26px 5px rgba(56, 189, 248, 0.6); }
+    }
+    .pulse-cta {
+      animation: ctaGlow 2.2s infinite;
+    }
+
+    /* Animasi Goyang (Shake Effect) Saat Jawaban Salah */
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .shake-anim {
+      animation: shakeError 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    .step-btn {
+      transition: all 0.15s ease-in-out;
+    }
+    .step-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* Equalizer Bar for BGM */
+    @keyframes eqBar {
+      0%, 100% { height: 3px; }
+      50% { height: 11px; }
+    }
+    .eq-1 { animation: eqBar 0.6s ease-in-out infinite; }
+    .eq-2 { animation: eqBar 0.8s ease-in-out 0.15s infinite; }
+    .eq-3 { animation: eqBar 0.5s ease-in-out 0.3s infinite; }
+
+    /* Custom scrollbar for modal */
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
-  <div class="liquid-bg" id="liquid-bg" aria-hidden="true">
-    <div class="fluid-wave wave-1"></div>
-    <div class="fluid-wave wave-2"></div>
-    <div class="liquid-surface"></div>
 
-    <!-- Contoh Benda Mengapung (Gabus, Kapsul/Pelampung, Kubus) -->
-    <div class="floater" style="--top: 23%; --left: 16%; --bob-dur: 5.2s; --tilt-dur: 6.8s; --delay: 0s;">
-      <svg class="floater-body" width="54" height="32" viewBox="0 0 54 32">
-        <rect x="4" y="6" width="46" height="20" rx="6" fill="#d97706" stroke="#fbbf24" stroke-width="1.5" />
-        <ellipse cx="27" cy="6" rx="23" ry="3.5" fill="#f59e0b" opacity="0.7" />
-      </svg>
-    </div>
+  <div id="aspect-ratio-viewport">
 
-    <div class="floater" style="--top: 25%; --left: 74%; --bob-dur: 6.4s; --tilt-dur: 8s; --delay: -1.8s;">
-      <svg class="floater-body" width="46" height="46" viewBox="0 0 46 46">
-        <circle cx="23" cy="23" r="16" fill="#38bdf8" fill-opacity="0.28" stroke="#7dd3fc" stroke-width="1.5" />
-        <circle cx="18" cy="18" r="4" fill="#ffffff" fill-opacity="0.45" />
-      </svg>
-    </div>
+    <!-- Top Scientific Header -->
+    <header class="h-11 bg-deepBlue/95 backdrop-blur-md text-white flex items-center justify-between px-4 border-b border-blue-900/60 shadow-md flex-shrink-0 z-20">
+      <div class="flex items-center space-x-2.5 cursor-pointer" onclick="goToStart()">
+        <div class="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sm shadow">
+          🧪
+        </div>
+        <div class="flex items-baseline gap-2">
+          <span class="font-display font-black tracking-tight text-white text-xs sm:text-sm">ARCHIMEDES LAB</span>
+          <span class="text-[10px] text-sky-200 hidden sm:inline">| Zat &amp; Karakteristiknya (Kelas VII)</span>
+        </div>
+      </div>
 
-    <div class="floater" style="--top: 22%; --left: 48%; --bob-dur: 7.1s; --tilt-dur: 6.2s; --delay: -3.2s;">
-      <svg class="floater-body" width="44" height="44" viewBox="0 0 44 44">
-        <rect x="10" y="10" width="24" height="24" rx="5" fill="#34d399" fill-opacity="0.75" stroke="#a7f3d0" stroke-width="1.5" />
-      </svg>
-    </div>
-  </div>
+      <!-- Header Action Controls -->
+      <div class="flex items-center space-x-1.5 sm:space-x-2">
+        <button id="btn-theme-toggle" onclick="cycleThemeBg()" class="p-1 px-2 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-200 border border-blue-700/60 transition flex items-center gap-1.5 text-[11px] font-mono whitespace-nowrap" title="Ganti Suasana Latar Belakang">
+          <span id="theme-icon">🎨</span>
+          <span id="theme-label" class="hidden md:inline">Tema: Blue Lab</span>
+        </button>
 
-  <main class="demo-content">
-    <h1>Simulasi Larutan Mengapung</h1>
-    <p>Lapisan cairan, gelembung, dan benda terapung berjalan halus di latar belakang.</p>
-  </main>
+        <button id="btn-bgm-toggle" onclick="toggleBgmMusic()" class="p-1 px-2 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition flex items-center gap-1.5 text-[11px] font-mono whitespace-nowrap">
+          <div id="eq-container" class="flex items-end gap-0.5 h-2.5">
+            <span class="w-0.5 bg-sky-400 eq-1"></span>
+            <span class="w-0.5 bg-sky-300 eq-2"></span>
+            <span class="w-0.5 bg-sky-400 eq-3"></span>
+          </div>
+          <span id="bgm-label" class="hidden sm:inline">BGM: ON</span>
+        </button>
 
-  <script>
-    // Menghasilkan gelembung larutan secara ringan
-    const bg = document.getElementById("liquid-bg");
-    const bubbleCount = 16;
+        <button id="btn-sound-toggle" onclick="toggleAudioMute()" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition" title="Bisu / Nyalakan Efek Suara">
+          <svg id="icon-sound-on" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
+          <svg id="icon-sound-off" class="w-3.5 h-3.5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l4-4m0 4l-4-4"/></svg>
+        </button>
 
-    for (let i = 0; i < bubbleCount; i++) {
-      const b = document.createElement("span");
-      b.className = "bubble";
-      const size = Math.round(8 + Math.random() * 18);
-      b.style.width = `${size}px`;
-      b.style.height = `${size}px`;
-      b.style.left = `${Math.round(Math.random() * 96)}%`;
-      b.style.setProperty("--dur", `${(7 + Math.random() * 8).toFixed(1)}s`);
-      b.style.setProperty("--delay", `${(-Math.random() * 12).toFixed(1)}s`);
-      b.style.setProperty("--sway", `${Math.round((Math.random() - 0.5) * 44)}px`);
-      bg.appendChild(b);
-    }
-  </script>
-</body>
-</html>
+        <button onclick="toggleModal('petunjuk', true)" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition flex items-center gap-1 text-[11px] whitespace-nowrap" title="Petunjuk Praktikum">
+          <span>📖</span>
+          <span class="hidden sm:inline">Panduan</span>
+        </button>
+
+        <button onclick="toggleModal('penjelasan', true)" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-amber-300 border border-blue-700/60 transition flex items-center gap-1 text-[11px] whitespace-nowrap" title="Penjelasan Materi &amp; Rumus">
+          <span>💡</span>
+          <span class="hidden sm:inline">Materi</span>
+        </button>
+
+        <button onclick="toggleFullscreen()" class="p-1 px-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-900 font-bold transition flex items-center gap-1 text-[11px] shadow whitespace-nowrap" title="Layar Penuh (16:9)">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+          <span class="hidden sm:inline font-mono">16:9</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Stage -->
+    <main id="main-stage-container" class="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex flex-col transition-colors duration-700">
+
+      <!-- Ambient Dynamic Background Layers + Larutan Bergerak & Benda Mengapung -->
+      <div id="ambient-bg-layer" class="absolute inset-0 pointer-events-none overflow-hidden z-0 transition-opacity duration-700" aria-hidden="true">
+        <div id="blob-1" class="absolute -top-24 -left-20 w-80 h-80 rounded-full bg-sky-500/15 blur-3xl aurora-glow"></div>
+        <div id="blob-2" class="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-blue-600/15 blur-3xl aurora-glow" style="animation-delay: -3s;"></div>
+        <div id="blob-3" class="absolute top-1/3 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full bg-teal-400/10 blur-3xl aurora-glow" style="animation-delay: -5s;"></div>
+
+        <!-- Lapisan Konveksi Larutan & Permukaan Halus -->
+        <div class="fluid-wave wave-1"></div>
+        <div class="fluid-wave wave-2"></div>
+        <div class="liquid-surface"></div>
+
+        <!-- Benda Mengapung di Larutan (Bobbing & Tilt) -->
+        <div class="floater" style="--top: 14%; --left: 8%; --bob-dur: 5.2s; --tilt-dur: 6.8s; --delay: 0s;">
+          <svg class="floater-body" width="46" height="28" viewBox="0 0 54 32">
+            <rect x="4" y="6" width="46" height="20" rx="6" fill="#d97706" stroke="#fbbf24" stroke-width="1.5" />
