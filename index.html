@@ -68,6 +68,10 @@
       flex-direction: column;
     }
 
+    #main-stage-container {
+      isolation: isolate;
+    }
+
     /* Shake Animation for Wrong Feedback */
     @keyframes shakeFeedback {
       0%, 100% { transform: translateX(0); }
@@ -246,14 +250,6 @@
       transition: y1 0.5s cubic-bezier(0.4, 0, 0.2, 1), y2 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    @keyframes ctaGlow {
-      0%, 100% { box-shadow: 0 0 14px 2px rgba(30, 58, 138, 0.45); }
-      50% { box-shadow: 0 0 26px 5px rgba(56, 189, 248, 0.6); }
-    }
-    .pulse-cta {
-      animation: ctaGlow 2.2s infinite;
-    }
-
     /* Animasi Goyang (Shake Effect) Saat Jawaban Salah */
     @keyframes shakeError {
       0%, 100% { transform: translateX(0); }
@@ -262,13 +258,6 @@
     }
     .shake-anim {
       animation: shakeError 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-    }
-
-    .step-btn {
-      transition: all 0.15s ease-in-out;
-    }
-    .step-btn:active {
-      transform: scale(0.92);
     }
 
     /* Equalizer Bar for BGM */
@@ -280,7 +269,6 @@
     .eq-2 { animation: eqBar 0.8s ease-in-out 0.15s infinite; }
     .eq-3 { animation: eqBar 0.5s ease-in-out 0.3s infinite; }
 
-    /* Custom scrollbar for modal */
     .custom-scroll::-webkit-scrollbar {
       width: 5px;
     }
@@ -333,7 +321,7 @@
 
         <button onclick="toggleModal('petunjuk', true)" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition flex items-center gap-1 text-[11px] whitespace-nowrap" title="Petunjuk Praktikum">
           <span>📖</span>
-          <span class="hidden sm:inline">Panduan</span>
+          <span class="hidden sm:inline">Petunjuk</span>
         </button>
 
         <button onclick="toggleModal('penjelasan', true)" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-amber-300 border border-blue-700/60 transition flex items-center gap-1 text-[11px] whitespace-nowrap" title="Penjelasan Materi &amp; Rumus">
@@ -406,63 +394,60 @@
       </div>
 
       <!-- ======================================================== -->
-      <!-- VIEW 0: BERANDA DASHBOARD (MINIMALIS & SEJAJAR)          -->
+      <!-- VIEW 0: BERANDA DASHBOARD (JUDUL BESAR & MINIMALIS)       -->
       <!-- ======================================================== -->
-      <section id="view-title" class="absolute inset-0 px-6 py-4 flex flex-col justify-between items-center z-10 transition-opacity duration-300 overflow-hidden">
+      <section id="view-title" class="absolute inset-0 px-6 py-4 flex flex-col justify-between items-center z-20 transition-opacity duration-300 overflow-hidden">
         
-        <!-- Header Dashboard Minimalis -->
-        <div class="text-center space-y-1">
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-900/75 border border-sky-400/35 text-sky-300 text-[10px] font-bold font-mono uppercase backdrop-blur-md">
+        <!-- Header Dashboard Judul Besar -->
+        <div class="text-center space-y-1.5 pt-1">
+          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-900/75 border border-sky-400/35 text-sky-300 text-[10px] font-bold font-mono uppercase backdrop-blur-md">
             <span class="w-1.5 h-1.5 rounded-full bg-emeraldGreen animate-pulse"></span>
             Lab Fisika Virtual · SMP Kelas VII
           </div>
 
-          <h1 class="text-lg sm:text-2xl font-display font-extrabold text-white tracking-tight leading-tight drop-shadow">
-            Laboratorium Interaktif <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-300 to-blue-300">Archimedes Lab</span>
+          <h1 class="text-2xl sm:text-4xl lg:text-5xl font-display font-black text-white tracking-tight leading-none drop-shadow-lg">
+            Laboratorium <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-300 to-blue-300">Archimedes Lab</span>
           </h1>
-          <p class="text-[11px] text-slate-200/90 max-w-md mx-auto leading-snug">
+          <p class="text-xs sm:text-sm text-slate-200/90 max-w-lg mx-auto leading-snug">
             Eksperimen volume benda tak beraturan, hukum Archimedes, dan lapisan massa jenis zat cair.
           </p>
         </div>
 
-        <!-- 3 Kartu Modul Utama -->
+        <!-- 3 Kartu Modul Minimalis -->
         <div class="w-full max-w-3xl grid grid-cols-3 gap-3.5 my-auto py-1">
-          <!-- Modul 1 -->
           <div onclick="setTabMode('lab1')" class="cursor-pointer group bg-slate-900/80 hover:bg-slate-800/90 backdrop-blur-md rounded-xl p-3.5 border border-slate-700/80 hover:border-sky-400 transition-all flex flex-col items-center text-center justify-between shadow-lg">
             <div class="w-11 h-11 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
               📏
             </div>
             <div class="my-2">
-              <h3 class="font-display font-bold text-xs sm:text-sm text-white group-hover:text-sky-300">Lab 1: Volume Benda</h3>
-              <p class="text-[10px] text-slate-400 leading-tight mt-0.5">Tak Beraturan &amp; Meniskus</p>
+              <h2 class="font-display font-bold text-sm sm:text-base text-white group-hover:text-sky-300">Lab 1: Volume</h2>
+              <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Benda Tak Beraturan</p>
             </div>
             <span class="text-[10px] font-mono font-semibold text-sky-300 bg-sky-950/70 border border-sky-800/50 px-2.5 py-0.5 rounded-md w-full truncate">
               V₂ − V₁
             </span>
           </div>
 
-          <!-- Modul 2 -->
           <div onclick="setTabMode('lab2')" class="cursor-pointer group bg-slate-900/80 hover:bg-slate-800/90 backdrop-blur-md rounded-xl p-3.5 border border-slate-700/80 hover:border-emerald-400 transition-all flex flex-col items-center text-center justify-between shadow-lg">
             <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
               ⚖️
             </div>
             <div class="my-2">
-              <h3 class="font-display font-bold text-xs sm:text-sm text-white group-hover:text-emerald-300">Lab 2: Archimedes</h3>
-              <p class="text-[10px] text-slate-400 leading-tight mt-0.5">Apung, Melayang, Tenggelam</p>
+              <h2 class="font-display font-bold text-sm sm:text-base text-white group-hover:text-emerald-300">Lab 2: Archimedes</h2>
+              <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Apung, Melayang, Tenggelam</p>
             </div>
             <span class="text-[10px] font-mono font-semibold text-emerald-300 bg-emerald-950/70 border border-emerald-800/50 px-2.5 py-0.5 rounded-md w-full truncate">
               ρ_b vs ρ_air
             </span>
           </div>
 
-          <!-- Modul 3 -->
           <div onclick="setTabMode('lab3')" class="cursor-pointer group bg-slate-900/80 hover:bg-slate-800/90 backdrop-blur-md rounded-xl p-3.5 border border-slate-700/80 hover:border-amber-400 transition-all flex flex-col items-center text-center justify-between shadow-lg">
             <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-300 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
               🌈
             </div>
             <div class="my-2">
-              <h3 class="font-display font-bold text-xs sm:text-sm text-white group-hover:text-amber-300">Lab 3: Pelangi Cair</h3>
-              <p class="text-[10px] text-slate-400 leading-tight mt-0.5">4 Lapisan Zat Cair Berbeda ρ</p>
+              <h2 class="font-display font-bold text-sm sm:text-base text-white group-hover:text-amber-300">Lab 3: Lapisan Cair</h2>
+              <p class="text-[11px] text-slate-400 leading-tight mt-0.5">4 Cairan Berbeda ρ</p>
             </div>
             <span class="text-[10px] font-mono font-semibold text-amber-300 bg-amber-950/70 border border-amber-800/50 px-2.5 py-0.5 rounded-md w-full truncate">
               20 mL / Layer
@@ -470,49 +455,48 @@
           </div>
         </div>
 
-        <!-- Baris Bawah Sejajar (Anti-Numpuk) -->
+        <!-- Baris Bawah Sejajar -->
         <div class="w-full max-w-3xl flex items-center justify-between gap-3 text-[11px] text-slate-200 font-mono">
           <button onclick="setTabMode('quiz')" class="px-3.5 py-1.5 rounded-lg bg-slate-900/85 hover:bg-slate-800 backdrop-blur-md border border-purple-500/40 hover:border-purple-400 text-purple-200 hover:text-white transition flex items-center gap-2 whitespace-nowrap shadow">
             <span>📝</span>
-            <span class="font-bold">Evaluasi Kuis (18 Soal)</span>
-            <span class="text-[9px] bg-purple-900/80 text-purple-200 px-1.5 py-0.5 rounded hidden sm:inline">Level 1–3 🔥</span>
+            <span class="font-bold">Kuis (18 Soal)</span>
+            <span class="text-[9px] bg-purple-900/80 text-purple-200 px-1.5 py-0.5 rounded hidden sm:inline">Level 1–3</span>
           </button>
 
           <div class="flex items-center gap-3 whitespace-nowrap bg-slate-900/65 backdrop-blur-md px-3 py-1 rounded-lg border border-slate-700/60">
             <button onclick="toggleModal('petunjuk', true)" class="hover:text-sky-300 transition flex items-center gap-1">
               <span>📖</span>
-              <span>Petunjuk Praktikum</span>
+              <span>Petunjuk</span>
             </button>
             <span class="text-slate-600">•</span>
             <button onclick="toggleModal('penjelasan', true)" class="hover:text-amber-300 transition flex items-center gap-1">
               <span>💡</span>
-              <span>Penjelasan Materi &amp; Rumus</span>
+              <span>Materi</span>
             </button>
           </div>
         </div>
       </section>
 
       <!-- ======================================================== -->
-      <!-- VIEW 1: LAB 1 - PENGUKURAN VOLUME & MASSA JENIS BENDA   -->
+      <!-- VIEW 1: LAB 1 - PENGUKURAN VOLUME & MASSA JENIS BENDA (MINIMALIS) -->
       <!-- ======================================================== -->
-      <section id="view-lab1" class="absolute inset-0 p-3 sm:p-4 flex flex-col justify-between z-10 hidden">
-        <div class="flex-1 grid grid-cols-12 gap-3 items-center min-h-0">
-          
-          <!-- LEFT: Aparatus Gelas Ukur / Berpancuran (Eureka Can) -->
-          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-2 sm:p-3 border border-white/60 shadow-lg relative overflow-hidden">
-            <div class="w-full flex items-center justify-between text-[11px] font-mono text-slate-500 px-2">
-              <span class="flex items-center gap-1 font-semibold text-deepBlue">
-                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-                <span id="lab1-apparatus-name">Gelas Ukur Linier (100 mL)</span>
-              </span>
-              <div class="flex gap-1">
-                <button onclick="switchLab1Method('ukur')" id="btn-method-ukur" class="px-2 py-0.5 text-[10px] rounded bg-deepBlue text-white font-bold">Gelas Ukur</button>
-                <button onclick="switchLab1Method('pancur')" id="btn-method-pancur" class="px-2 py-0.5 text-[10px] rounded bg-slate-100 text-slate-700 hover:bg-slate-200">Gelas Berpancuran</button>
-              </div>
-            </div>
+      <section id="view-lab1" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+        <div class="flex items-center justify-between flex-shrink-0">
+          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+            Lab 1: <span class="text-sky-300">Volume &amp; Massa Jenis</span>
+          </h2>
+          <div class="flex gap-1 bg-slate-900/75 p-1 rounded-lg border border-slate-700/70 backdrop-blur-md font-mono text-[11px]">
+            <button onclick="switchLab1Method('ukur')" id="btn-method-ukur" class="px-2.5 py-1 rounded bg-sky-500 text-slate-950 font-bold">Gelas Ukur</button>
+            <button onclick="switchLab1Method('pancur')" id="btn-method-pancur" class="px-2.5 py-1 rounded text-slate-300 hover:text-white">Pancuran</button>
+          </div>
+        </div>
 
-            <!-- SVG Cylinder -->
-            <div class="w-full flex-1 relative flex items-center justify-center max-h-[78%]">
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+          <!-- LEFT: Apparatus -->
+          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
+            <span id="lab1-apparatus-name" class="text-[11px] font-mono font-bold text-deepBlue">Gelas Ukur (100 mL)</span>
+
+            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
               <svg viewBox="0 0 220 400" class="h-full w-auto overflow-visible drop-shadow">
                 <defs>
                   <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -560,114 +544,96 @@
               </svg>
             </div>
 
-            <div class="w-full bg-slate-100 rounded-lg p-1.5 flex justify-around text-xs font-mono font-bold">
+            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-xs font-mono font-bold">
               <span class="text-blue-700">V₁: <span id="lab1-tag-v1">50</span> mL</span>
-              <span class="text-slate-400">|</span>
-              <span class="text-slate-700">Benda: <span id="lab1-tag-stone" class="text-amber-600">Batu</span></span>
-              <span class="text-slate-400">|</span>
+              <span class="text-slate-300">|</span>
+              <span class="text-slate-700"><span id="lab1-tag-stone" class="text-amber-600">Batu</span></span>
+              <span class="text-slate-300">|</span>
               <span class="text-crimsonRed">V₂: <span id="lab1-tag-v2" class="text-slate-400">?</span></span>
             </div>
           </div>
 
-          <!-- RIGHT: Controls, Timbangan, & Tabel Pengamatan (Lab 1) -->
-          <div class="col-span-7 h-full flex flex-col justify-between gap-2">
-            
-            <div class="bg-white/95 backdrop-blur-md rounded-xl p-2.5 border border-white/60 shadow-lg">
-              <div class="text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
-                <span>1. Pilih Benda Tak Beraturan:</span>
-                <span class="text-[11px] font-mono text-slate-400" id="lab1-volume-info">Massa: 75 g | Vol: ? cm³</span>
+          <!-- RIGHT: Minimalist Controls & Output -->
+          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg space-y-3">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                <span>Pilih Benda</span>
+                <span id="lab1-volume-info" class="font-mono text-[11px] text-slate-500">m = 75 g · V = ? cm³</span>
               </div>
-              <div class="grid grid-cols-4 gap-1.5">
-                <button onclick="setLab1Object('batu')" id="btn-obj-batu" class="p-1.5 rounded-lg border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue flex items-center justify-center gap-1">
-                  <span>🪨</span> Batu (75g)
-                </button>
-                <button onclick="setLab1Object('kunci')" id="btn-obj-kunci" class="p-1.5 rounded-lg border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:border-blue-400 flex items-center justify-center gap-1">
-                  <span>🔑</span> Kunci (85g)
-                </button>
-                <button onclick="setLab1Object('aluminium')" id="btn-obj-aluminium" class="p-1.5 rounded-lg border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:border-blue-400 flex items-center justify-center gap-1">
-                  <span>⚙️</span> Logam Al (54g)
-                </button>
-                <button onclick="setLab1Object('mahkota')" id="btn-obj-mahkota" class="p-1.5 rounded-lg border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:border-blue-400 flex items-center justify-center gap-1">
-                  <span>👑</span> Mahkota (286g)
-                </button>
+              <div class="grid grid-cols-4 gap-2">
+                <button onclick="setLab1Object('batu')" id="btn-obj-batu" class="p-2 rounded-xl border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue">🪨 Batu</button>
+                <button onclick="setLab1Object('kunci')" id="btn-obj-kunci" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">🔑 Kunci</button>
+                <button onclick="setLab1Object('aluminium')" id="btn-obj-aluminium" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">⚙️ Logam</button>
+                <button onclick="setLab1Object('mahkota')" id="btn-obj-mahkota" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">👑 Mahkota</button>
+              </div>
+
+              <div class="pt-1 space-y-2">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                  <span id="lab1-v1-label-title">Volume Awal (V₁)</span>
+                  <span class="px-2 py-0.5 bg-deepBlue text-white font-mono rounded"><span id="lab1-v1-label">50</span> mL</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="range" id="slider-lab1-v1" min="30" max="65" value="50" step="1" 
+                         class="flex-1 h-2 bg-slate-200 rounded-lg cursor-pointer accent-blue-900"
+                         oninput="onLab1V1Input(this.value)">
+                  <button onclick="toggleLab1Submersion()" id="btn-submerge-lab1" class="px-4 py-2 rounded-xl bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition whitespace-nowrap">
+                    💧 Celupkan
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md rounded-xl p-2.5 border border-white/60 shadow-lg space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-700" id="lab1-v1-label-title">Volume Awal Air (V₁):</span>
-                <span class="px-2.5 py-0.5 bg-deepBlue text-white font-mono font-bold text-xs rounded">
-                  <span id="lab1-v1-label">50</span> mL
-                </span>
-              </div>
-              <div class="flex items-center gap-2">
-                <input type="range" id="slider-lab1-v1" min="30" max="65" value="50" step="1" 
-                       class="flex-1 h-2 bg-slate-200 rounded-lg cursor-pointer accent-blue-900"
-                       oninput="onLab1V1Input(this.value)">
-                <button onclick="toggleLab1Submersion()" id="btn-submerge-lab1" class="px-3.5 py-1.5 rounded-lg bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition flex items-center gap-1">
-                  💧 Masukkan Benda
-                </button>
-              </div>
-            </div>
-
-            <div class="bg-slate-900/95 backdrop-blur-md text-white rounded-xl p-2.5 shadow-lg border border-slate-700/80 font-mono">
-              <div class="flex justify-between items-center text-[10px] text-sky-400 font-bold uppercase mb-1">
-                <span>Perhitungan Massa Jenis Zat Padat</span>
-                <span>ρ = m / V</span>
-              </div>
-              <div class="grid grid-cols-4 gap-1.5 text-center text-xs">
-                <div class="p-1 bg-slate-800 rounded border border-slate-700">
-                  <span class="text-slate-400 block text-[9px]">Massa (m)</span>
+            <div class="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-3.5 shadow-lg border border-slate-700/80 font-mono">
+              <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                <div class="p-2 bg-slate-800/90 rounded-xl border border-slate-700">
+                  <span class="text-slate-400 block text-[10px]">Massa (m)</span>
                   <span id="lab1-calc-m" class="font-bold text-amber-300">75 g</span>
                 </div>
-                <div class="p-1 bg-slate-800 rounded border border-slate-700">
-                  <span class="text-slate-400 block text-[9px]">Vol (V = V₂−V₁)</span>
+                <div class="p-2 bg-slate-800/90 rounded-xl border border-slate-700">
+                  <span class="text-slate-400 block text-[10px]">Volume (V)</span>
                   <span id="lab1-calc-v" class="font-bold text-sky-300">? cm³</span>
                 </div>
-                <div class="p-1 bg-emerald-950 rounded border border-emerald-500/40">
-                  <span class="text-emerald-300 block text-[9px]">ρ (m / V)</span>
+                <div class="p-2 bg-emerald-950/90 rounded-xl border border-emerald-500/40">
+                  <span class="text-emerald-300 block text-[10px]">ρ = m / V</span>
                   <span id="lab1-calc-rho" class="font-bold text-emerald-400">? g/cm³</span>
                 </div>
-                <div class="p-1 bg-blue-950 rounded border border-blue-500/40">
-                  <span class="text-blue-300 block text-[9px]">Identifikasi</span>
-                  <span id="lab1-calc-ident" class="font-bold text-blue-200 text-[10px]">–</span>
+                <div class="p-2 bg-blue-950/90 rounded-xl border border-blue-500/40 flex flex-col justify-center">
+                  <span class="text-blue-300 block text-[10px]">Bahan</span>
+                  <span id="lab1-calc-ident" class="font-bold text-blue-200 text-[10px] truncate">–</span>
                 </div>
               </div>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md rounded-xl p-2 border border-white/60 shadow-lg overflow-hidden">
-              <div class="text-[10px] font-bold text-slate-700 uppercase mb-1 flex justify-between">
-                <span>Tabel 3.1 Hasil Pengamatan Lab 1</span>
-                <button onclick="resetLab1Table()" class="text-blue-600 hover:underline">Reset Data</button>
-              </div>
-              <table class="w-full text-left font-mono text-[10px] border border-slate-200">
-                <thead class="bg-slate-100 text-slate-600">
-                  <tr><th class="p-1">Benda</th><th class="p-1">Metode</th><th class="p-1">m (g)</th><th class="p-1">V (cm³)</th><th class="p-1">ρ (g/cm³)</th><th class="p-1">Cocokan Tabel</th></tr>
-                </thead>
-                <tbody id="lab1-table-body" class="divide-y divide-slate-100 text-slate-700">
-                  <tr><td class="p-1 font-bold">Batu</td><td class="p-1">Gelas Ukur</td><td class="p-1">75</td><td class="p-1 font-bold text-blue-600">30</td><td class="p-1 font-bold text-emerald-600">2,5</td><td class="p-1 text-slate-600">Batu (2.500 kg/m³)</td></tr>
-                </tbody>
-              </table>
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-600">Rumus: <strong class="text-deepBlue">V = V₂ − V₁</strong> · <strong class="text-deepBlue">ρ = m / V</strong></span>
+              <button onclick="resetLab1Table()" class="text-[11px] text-slate-500 hover:text-deepBlue font-bold">Reset</button>
             </div>
-
           </div>
         </div>
       </section>
 
       <!-- ======================================================== -->
-      <!-- VIEW 2: LAB 2 - MENGAPUNG, MELAYANG, TENGGELAM          -->
+      <!-- VIEW 2: LAB 2 - MENGAPUNG, MELAYANG, TENGGELAM (MINIMALIS) -->
       <!-- ======================================================== -->
-      <section id="view-lab2" class="absolute inset-0 p-3 sm:p-4 flex flex-col justify-between z-10 hidden">
-        <div class="flex-1 grid grid-cols-12 gap-3 items-center min-h-0">
-          
-          <!-- LEFT: Beaker Kimia 250 mL -->
-          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-2 sm:p-3 border border-white/60 shadow-lg relative overflow-hidden">
-            <div class="w-full flex items-center justify-between text-[11px] font-mono text-slate-500 px-2">
-              <span class="font-bold text-deepBlue">Gelas Kimia (Fluida Air: ρ = 1,00 g/cm³)</span>
-              <span id="lab2-result-pill" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold">Siap Uji</span>
+      <section id="view-lab2" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+        <div class="flex items-center justify-between flex-shrink-0">
+          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+            Lab 2: <span class="text-emerald-300">Hukum Archimedes</span>
+          </h2>
+          <span class="text-xs font-mono px-3 py-1 rounded-full bg-slate-900/75 text-emerald-200 border border-emerald-500/30 backdrop-blur-md">
+            Fluida Air: ρ = 1,00 g/cm³
+          </span>
+        </div>
+
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+          <!-- LEFT: Beaker -->
+          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
+            <div class="w-full flex items-center justify-between text-[11px] font-mono">
+              <span class="font-bold text-deepBlue">Gelas Kimia</span>
+              <span id="lab2-result-pill" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold">Siap Uji</span>
             </div>
 
-            <div class="w-full flex-1 relative flex items-center justify-center max-h-[78%]">
+            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
               <svg viewBox="0 0 240 320" class="h-full w-auto overflow-visible drop-shadow">
                 <path d="M 25,40 L 30,50 L 30,280 A 20,20 0 0,0 50,300 L 190,300 A 20,20 0 0,0 210,280 L 210,50 L 215,40" fill="none" stroke="#64748B" stroke-width="3"/>
                 <line x1="30" y1="110" x2="55" y2="110" stroke="#94A3B8" stroke-width="1.5"/>
@@ -688,60 +654,56 @@
               </svg>
             </div>
 
-            <div class="w-full bg-slate-100 rounded-lg p-1.5 flex justify-around text-xs font-mono font-bold">
-              <span>Bahan: <strong id="lab2-tag-name" class="text-blue-700">Kayu</strong></span>
-              <span class="text-slate-400">|</span>
-              <span>ρ Benda: <strong id="lab2-tag-rho" class="text-amber-600">0.65 g/cm³</strong></span>
-              <span class="text-slate-400">|</span>
-              <span>Status: <strong id="lab2-tag-pos" class="text-emerald-600">Mengapung</strong></span>
+            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-xs font-mono font-bold">
+              <span><strong id="lab2-tag-name" class="text-blue-700">Kayu</strong></span>
+              <span class="text-slate-300">|</span>
+              <span>ρ: <strong id="lab2-tag-rho" class="text-amber-600">0.65</strong></span>
+              <span class="text-slate-300">|</span>
+              <span><strong id="lab2-tag-pos" class="text-emerald-600">Mengapung</strong></span>
             </div>
           </div>
 
-          <!-- RIGHT: Material Selector & Prediction (Lab 2) -->
-          <div class="col-span-7 h-full flex flex-col justify-between gap-1.5">
-            
-            <div class="bg-white/95 backdrop-blur-md rounded-xl p-2 border border-white/60 shadow-lg">
-              <div class="text-xs font-bold text-slate-700 mb-1 flex justify-between">
-                <span>1. Pilih Benda (Tabel 3.2 BSE IPA):</span>
-                <span class="text-[10px] text-slate-400 font-mono">ρ air = 1,00 g/cm³</span>
-              </div>
-              <div class="grid grid-cols-4 sm:grid-cols-6 gap-1">
-                <button onclick="setLab2Material('gabus')" id="btn-mat-gabus" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Gabus (0.24)</button>
-                <button onclick="setLab2Material('kayu')" id="btn-mat-kayu" class="p-1 rounded text-[10px] font-bold bg-blue-50 border border-deepBlue text-deepBlue">Kayu (0.65)</button>
-                <button onclick="setLab2Material('lilin')" id="btn-mat-lilin" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Lilin (0.90)</button>
-                <button onclick="setLab2Material('es')" id="btn-mat-es" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Es (0.92)</button>
-                <button onclick="setLab2Material('plastik')" id="btn-mat-plastik" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Plastik (0.95)</button>
-                <button onclick="setLab2Material('ujiKhusus')" id="btn-mat-ujiKhusus" class="p-1 rounded text-[10px] font-semibold bg-amber-50 border border-amber-400 text-amber-900">Uji Khusus (1.00)</button>
-                <button onclick="setLab2Material('aluminium')" id="btn-mat-aluminium" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Aluminium (2.7)</button>
-                <button onclick="setLab2Material('besi')" id="btn-mat-besi" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Besi/Paku (7.9)</button>
-                <button onclick="setLab2Material('kuningan')" id="btn-mat-kuningan" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Kuningan (8.5)</button>
-                <button onclick="setLab2Material('tembaga')" id="btn-mat-tembaga" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Tembaga (8.9)</button>
-                <button onclick="setLab2Material('emas')" id="btn-mat-emas" class="p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400 col-span-2 sm:col-span-2">Emas Murni (19.3)</button>
+          <!-- RIGHT: Minimalist Controls -->
+          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
+              <div class="text-xs font-bold text-slate-700 mb-2">Pilih Benda (g/cm³)</div>
+              <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5">
+                <button onclick="setLab2Material('gabus')" id="btn-mat-gabus" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Gabus 0.24</button>
+                <button onclick="setLab2Material('kayu')" id="btn-mat-kayu" class="p-1.5 rounded-lg text-[10px] font-bold bg-blue-50 border border-deepBlue text-deepBlue">Kayu 0.65</button>
+                <button onclick="setLab2Material('lilin')" id="btn-mat-lilin" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Lilin 0.90</button>
+                <button onclick="setLab2Material('es')" id="btn-mat-es" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Es 0.92</button>
+                <button onclick="setLab2Material('plastik')" id="btn-mat-plastik" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Plastik 0.95</button>
+                <button onclick="setLab2Material('ujiKhusus')" id="btn-mat-ujiKhusus" class="p-1.5 rounded-lg text-[10px] font-semibold bg-amber-50 border border-amber-400 text-amber-900">Khusus 1.00</button>
+                <button onclick="setLab2Material('aluminium')" id="btn-mat-aluminium" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Alum 2.7</button>
+                <button onclick="setLab2Material('besi')" id="btn-mat-besi" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Besi 7.9</button>
+                <button onclick="setLab2Material('kuningan')" id="btn-mat-kuningan" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Kuningan 8.5</button>
+                <button onclick="setLab2Material('tembaga')" id="btn-mat-tembaga" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Tembaga 8.9</button>
+                <button onclick="setLab2Material('emas')" id="btn-mat-emas" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400 col-span-2">Emas 19.3</button>
               </div>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md rounded-xl p-2 border border-white/60 shadow-lg space-y-1">
-              <span class="text-xs font-bold text-slate-700 block">2. Buat Prediksimu Terlebih Dahulu:</span>
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg space-y-2.5">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                <span>Prediksi Kedudukan</span>
+                <span class="font-mono text-[11px] text-blue-700" id="lab2-pred-text">Belum dipilih</span>
+              </div>
               <div class="grid grid-cols-3 gap-2">
-                <button onclick="setLab2Prediction('mengapung')" id="pred-mengapung" class="p-1.5 rounded-lg border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-emerald-50 hover:border-emerald-500">
+                <button onclick="setLab2Prediction('mengapung')" id="pred-mengapung" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-emerald-50 hover:border-emerald-500">
                   🟢 Mengapung
                 </button>
-                <button onclick="setLab2Prediction('melayang')" id="pred-melayang" class="p-1.5 rounded-lg border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-amber-50 hover:border-amber-500">
+                <button onclick="setLab2Prediction('melayang')" id="pred-melayang" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-amber-50 hover:border-amber-500">
                   🟡 Melayang
                 </button>
-                <button onclick="setLab2Prediction('tenggelam')" id="pred-tenggelam" class="p-1.5 rounded-lg border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-red-50 hover:border-red-500">
+                <button onclick="setLab2Prediction('tenggelam')" id="pred-tenggelam" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-red-50 hover:border-red-500">
                   🔴 Tenggelam
                 </button>
               </div>
-              <div class="flex items-center justify-between pt-0.5">
-                <span class="text-[11px] text-slate-500 font-mono">Prediksimu: <strong id="lab2-pred-text" class="text-blue-700">Belum dipilih</strong></span>
-                <button onclick="executeLab2Drop()" id="btn-drop-lab2" class="px-4 py-1 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-lg shadow transition">
-                  Masukkan Benda ke Air 💧
-                </button>
-              </div>
+              <button onclick="executeLab2Drop()" id="btn-drop-lab2" class="w-full py-2 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow transition">
+                💧 Masukkan ke Air
+              </button>
             </div>
 
-            <div id="lab2-feedback-banner" class="hidden p-2 rounded-xl border text-xs flex items-center justify-between font-mono shadow-sm transition-all">
+            <div id="lab2-feedback-banner" class="hidden p-2.5 rounded-xl border text-xs flex items-center justify-between font-mono shadow-sm">
               <div class="flex items-center gap-2">
                 <span id="lab2-feedback-icon" class="text-base">🎉</span>
                 <div>
@@ -752,49 +714,34 @@
               <span id="lab2-feedback-badge" class="px-2 py-0.5 rounded text-[10px] font-bold"></span>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md border border-blue-200/80 rounded-xl p-2 text-xs text-slate-700 space-y-1 shadow">
-              <div class="font-bold text-deepBlue flex items-center gap-1">
-                <span>💡</span> Syarat Fisika Kedudukan Benda (BSE IPA):
-              </div>
-              <div class="grid grid-cols-3 gap-1.5 text-[10px] font-mono">
-                <span class="p-1 bg-blue-50/80 rounded border border-blue-100 text-center">ρ_b &lt; ρ_air → Terapung</span>
-                <span class="p-1 bg-blue-50/80 rounded border border-blue-100 text-center">ρ_b = ρ_air → Melayang</span>
-                <span class="p-1 bg-blue-50/80 rounded border border-blue-100 text-center">ρ_b &gt; ρ_air → Tenggelam</span>
-              </div>
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl px-3.5 py-2.5 border border-white/60 shadow-lg flex justify-between text-[11px] font-mono text-slate-700">
+              <span>ρ &lt; 1: <strong>Apung</strong></span>
+              <span>ρ = 1: <strong>Melayang</strong></span>
+              <span>ρ &gt; 1: <strong>Tenggelam</strong></span>
             </div>
-
-            <div class="bg-white/95 backdrop-blur-md rounded-xl p-2 border border-white/60 shadow-lg overflow-hidden">
-              <div class="text-[10px] font-bold text-slate-700 uppercase mb-1 flex justify-between">
-                <span>Tabel 3.2 Kedudukan Benda dalam Air</span>
-                <button onclick="saveLab2Observation()" class="text-blue-600 hover:underline">Catat Hasil</button>
-              </div>
-              <table class="w-full text-left font-mono text-[10px] border border-slate-200">
-                <thead class="bg-slate-100 text-slate-600">
-                  <tr><th class="p-1">Benda</th><th class="p-1">Prediksi</th><th class="p-1">Hasil Uji</th><th class="p-1">ρ (g/cm³)</th><th class="p-1">Kedudukan</th></tr>
-                </thead>
-                <tbody id="lab2-table-body" class="divide-y divide-slate-100 text-slate-700">
-                  <tr><td class="p-1 font-bold">Kayu</td><td class="p-1">Mengapung</td><td class="p-1 text-emerald-600 font-bold">Mengapung</td><td class="p-1">0.65</td><td class="p-1">Terapung (ρ &lt; 1,0)</td></tr>
-                </tbody>
-              </table>
-            </div>
-
           </div>
         </div>
       </section>
 
       <!-- ======================================================== -->
-      <!-- VIEW 3: LAB 3 - PERBEDAAN MASSA JENIS ZAT CAIR (PELANGI)-->
+      <!-- VIEW 3: LAB 3 - PERBEDAAN MASSA JENIS ZAT CAIR (MINIMALIS)-->
       <!-- ======================================================== -->
-      <section id="view-lab3" class="absolute inset-0 p-3 sm:p-4 flex flex-col justify-between z-10 hidden">
-        <div class="flex-1 grid grid-cols-12 gap-3 items-center min-h-0">
-          
-          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-2 sm:p-3 border border-white/60 shadow-lg relative overflow-hidden">
-            <div class="w-full flex items-center justify-between text-[11px] font-mono text-slate-500 px-2">
-              <span class="font-bold text-deepBlue">Tabung Silinder Kaca (80 mL)</span>
-              <span class="text-xs text-amber-700 font-bold">Takaran: 20 mL / Cairan</span>
-            </div>
+      <section id="view-lab3" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+        <div class="flex items-center justify-between flex-shrink-0">
+          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+            Lab 3: <span class="text-amber-300">Lapisan Zat Cair</span>
+          </h2>
+          <span id="lab3-total-poured" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-slate-900/75 text-amber-200 border border-amber-500/30 backdrop-blur-md">
+            0 / 4 Cairan
+          </span>
+        </div>
 
-            <div class="w-full flex-1 relative flex items-center justify-center max-h-[78%]">
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+          <!-- LEFT: Cylinder -->
+          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
+            <span class="text-[11px] font-mono font-bold text-deepBlue">Tabung Silinder (20 mL / Cairan)</span>
+
+            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
               <svg viewBox="0 0 200 340" class="h-full w-auto overflow-visible drop-shadow">
                 <rect id="layer-madu" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#B45309" fill-opacity="0.95"/>
                 <rect id="layer-sirup" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#EF4444" fill-opacity="0.85"/>
@@ -816,106 +763,84 @@
               </svg>
             </div>
 
-            <div class="w-full bg-slate-100 rounded-lg p-1.5 flex justify-around text-xs font-mono font-bold">
-              <span>Minyak: <span class="text-amber-500">0.92 g/mL</span></span>
-              <span>Air: <span class="text-sky-600">1.00</span></span>
-              <span>Sirup: <span class="text-red-600">1.30</span></span>
-              <span>Madu: <span class="text-amber-800">1.40</span></span>
+            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-[11px] font-mono font-bold">
+              <span class="text-amber-600">Minyak 0.92</span>
+              <span class="text-sky-600">Air 1.00</span>
+              <span class="text-red-600">Sirup 1.30</span>
+              <span class="text-amber-800">Madu 1.40</span>
             </div>
           </div>
 
-          <div class="col-span-7 h-full flex flex-col justify-between gap-2">
-            
-            <div class="bg-white/95 backdrop-blur-md rounded-xl p-2.5 border border-white/60 shadow-lg">
-              <div class="text-xs font-bold text-slate-700 mb-1.5 flex justify-between">
-                <span>Tuang Cairan (Masing-masing 20 mL):</span>
-                <span class="text-[11px] font-mono text-emerald-600 font-bold" id="lab3-total-poured">0 / 4 Cairan</span>
+          <!-- RIGHT: Minimalist Pour Controls -->
+          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700 mb-2">
+                <span>Tuang Zat Cair</span>
+                <button onclick="resetLab3Liquids()" class="text-[11px] font-mono text-blue-600 hover:underline">Reset</button>
               </div>
-              <div class="grid grid-cols-4 gap-2">
-                <button onclick="pourLiquid('madu')" id="btn-pour-madu" class="p-2 rounded-xl border border-amber-800/40 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold flex flex-col items-center">
-                  <span class="text-lg">🍯</span> Madu (1.40)
+              <div class="grid grid-cols-2 gap-2.5">
+                <button onclick="pourLiquid('madu')" id="btn-pour-madu" class="p-3 rounded-xl border border-amber-800/30 bg-amber-50 hover:bg-amber-100 text-amber-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-lg">🍯</span> Madu</span>
+                  <span class="font-mono text-[11px]">1,40</span>
                 </button>
-                <button onclick="pourLiquid('sirup')" id="btn-pour-sirup" class="p-2 rounded-xl border border-red-500/40 bg-red-50 hover:bg-red-100 text-red-900 text-xs font-bold flex flex-col items-center">
-                  <span class="text-lg">🍓</span> Sirup (1.30)
+                <button onclick="pourLiquid('sirup')" id="btn-pour-sirup" class="p-3 rounded-xl border border-red-500/30 bg-red-50 hover:bg-red-100 text-red-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-lg">🍓</span> Sirup</span>
+                  <span class="font-mono text-[11px]">1,30</span>
                 </button>
-                <button onclick="pourLiquid('air')" id="btn-pour-air" class="p-2 rounded-xl border border-sky-500/40 bg-sky-50 hover:bg-sky-100 text-sky-900 text-xs font-bold flex flex-col items-center">
-                  <span class="text-lg">💧</span> Air (1.00)
+                <button onclick="pourLiquid('air')" id="btn-pour-air" class="p-3 rounded-xl border border-sky-500/30 bg-sky-50 hover:bg-sky-100 text-sky-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-lg">💧</span> Air</span>
+                  <span class="font-mono text-[11px]">1,00</span>
                 </button>
-                <button onclick="pourLiquid('minyak')" id="btn-pour-minyak" class="p-2 rounded-xl border border-yellow-500/40 bg-yellow-50 hover:bg-yellow-100 text-yellow-900 text-xs font-bold flex flex-col items-center">
-                  <span class="text-lg">🌻</span> Minyak (0.92)
+                <button onclick="pourLiquid('minyak')" id="btn-pour-minyak" class="p-3 rounded-xl border border-yellow-500/30 bg-yellow-50 hover:bg-yellow-100 text-yellow-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-lg">🌻</span> Minyak</span>
+                  <span class="font-mono text-[11px]">0,92</span>
                 </button>
               </div>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md border border-amber-200/80 rounded-xl p-2.5 text-xs text-slate-700 shadow-lg">
-              <span class="font-bold text-amber-900 block mb-0.5">📌 Konsep Lapisan Zat Cair (BSE IPA):</span>
-              <p class="leading-relaxed">
-                Zat cair yang tidak saling bercampur akan berlapis menurut massa jenisnya: yang terbesar di dasar, yang terkecil di atas. Urutan penuangan tidak mengubah susunan akhir karena yang menentukan hanya massa jenis zat cair.
-              </p>
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg text-xs text-slate-700 space-y-1">
+              <div class="font-bold text-amber-900">Urutan Dasar → Atas</div>
+              <p class="font-mono text-[11px] text-slate-600">Madu (1,40) → Sirup (1,30) → Air (1,00) → Minyak (0,92)</p>
             </div>
-
-            <div class="bg-white/95 backdrop-blur-md rounded-xl p-2 border border-white/60 shadow-lg overflow-hidden">
-              <div class="text-[10px] font-bold text-slate-700 uppercase mb-1 flex justify-between">
-                <span>Tabel 3.3 Pengamatan Lapisan Zat Cair</span>
-                <button onclick="resetLab3Liquids()" class="text-blue-600 hover:underline">Reset Cairan</button>
-              </div>
-              <table class="w-full text-left font-mono text-[10px] border border-slate-200">
-                <thead class="bg-slate-100 text-slate-600">
-                  <tr><th class="p-1">Lapisan</th><th class="p-1">Zat Cair</th><th class="p-1">Keterangan</th><th class="p-1">ρ (g/cm³ atau g/mL)</th></tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 text-slate-700">
-                  <tr><td class="p-1 font-bold text-yellow-600">1 (Atas)</td><td class="p-1">Minyak Goreng</td><td class="p-1">Paling ringan</td><td class="p-1">0,92 (920 kg/m³)</td></tr>
-                  <tr><td class="p-1 font-bold text-sky-600">2</td><td class="p-1">Air Murni</td><td class="p-1">Sedang</td><td class="p-1">1,00 (1.000 kg/m³)</td></tr>
-                  <tr><td class="p-1 font-bold text-red-600">3</td><td class="p-1">Sirup Manis</td><td class="p-1">Lebih berat</td><td class="p-1">1,30 (1.300 kg/m³)</td></tr>
-                  <tr><td class="p-1 font-bold text-amber-800">4 (Dasar)</td><td class="p-1">Madu Murni</td><td class="p-1">Paling berat</td><td class="p-1">1,40 (1.400 kg/m³)</td></tr>
-                </tbody>
-              </table>
-            </div>
-
           </div>
         </div>
       </section>
 
       <!-- ======================================================== -->
-      <!-- VIEW 4: MODE KUIS EVALUASI MANDIRI (18 SOAL BERLEVEL)   -->
+      <!-- VIEW 4: MODE KUIS EVALUASI MANDIRI (MINIMALIS)           -->
       <!-- ======================================================== -->
-      <section id="view-quiz" class="absolute inset-0 p-3 sm:p-4 flex flex-col justify-between z-10 hidden">
+      <section id="view-quiz" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
         
-        <div class="flex items-center justify-between border-b border-slate-200/40 pb-1.5 flex-shrink-0">
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-full bg-blue-100 text-deepBlue font-mono font-bold text-xs">Evaluasi Mandiri</span>
-            <span class="font-display font-bold text-white text-xs sm:text-sm" id="quiz-progress-text">Soal 1 dari 18</span>
-            <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold" id="quiz-level-badge">Level 1 (10 Poin)</span>
+        <div class="flex items-center justify-between flex-shrink-0">
+          <div class="flex items-center gap-2.5">
+            <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+              Kuis <span class="text-purple-300" id="quiz-progress-text">1 / 18</span>
+            </h2>
+            <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold" id="quiz-level-badge">Level 1</span>
           </div>
           <div class="flex items-center gap-2 text-xs font-mono">
             <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-md font-bold">
-              Total Skor: <span id="quiz-score-val">0</span> Poin
+              Skor: <span id="quiz-score-val">0</span>
             </span>
             <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-bold">
-              Beruntun: <span id="quiz-streak-val">0</span> 🔥
+              🔥 <span id="quiz-streak-val">0</span>
             </span>
           </div>
         </div>
 
-        <div class="flex-1 grid grid-cols-12 gap-3 items-center min-h-0 py-2">
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
           
-          <div class="col-span-7 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-lg">
+          <div class="col-span-8 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-lg">
             <div>
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold" id="quiz-category-tag">
-                  Simulasi 1: Volume Tak Beraturan
-                </span>
-                <span class="text-[10px] text-slate-400 font-mono" id="quiz-type-tag">Pilihan Ganda</span>
-              </div>
+              <span class="text-[10px] font-mono text-slate-400 block mb-1" id="quiz-category-tag">Simulasi 1</span>
               <h3 class="text-sm sm:text-base font-bold text-slate-800 leading-snug" id="quiz-question-text"></h3>
             </div>
 
             <div id="quiz-mc-container" class="grid grid-cols-2 gap-2 my-2"></div>
 
             <div id="quiz-input-container" class="space-y-2 hidden">
-              <label class="block text-xs font-bold text-slate-700">Masukkan Nilai Angka:</label>
               <div class="flex items-center gap-2">
-                <input type="number" id="quiz-num-input" placeholder="Tulis jawaban..." step="any"
+                <input type="number" id="quiz-num-input" placeholder="Jawaban..." step="any"
                        class="flex-1 p-2 bg-slate-50 border border-slate-300 rounded-xl font-mono text-center font-bold text-sm focus:ring-2 focus:ring-deepBlue"
                        onkeydown="if(event.key === 'Enter') checkCurrentQuizAnswer()">
                 <span class="font-mono text-xs font-bold text-slate-500" id="quiz-unit-label">cm³</span>
@@ -928,26 +853,18 @@
             </div>
           </div>
 
-          <div class="col-span-5 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
+          <div class="col-span-4 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
             <div>
-              <div class="flex items-center justify-between mb-1.5">
-                <span class="text-xs font-bold text-slate-700">Navigasi 18 Soal Evaluasi:</span>
-                <span class="text-[10px] text-slate-500 font-mono">Level 1 (10p) | 2 (20p) | 3 (30p)</span>
-              </div>
+              <div class="text-xs font-bold text-slate-700 mb-2">Nomor Soal</div>
               <div class="grid grid-cols-6 gap-1" id="quiz-pills-container"></div>
             </div>
 
-            <div class="bg-blue-50 border border-blue-200 rounded-xl p-2.5 text-[11px] text-slate-600">
-              <strong class="text-deepBlue block mb-0.5">Sistem Skor Dokumen Resmi:</strong>
-              <p>Level 1 = 10 poin, Level 2 = 20 poin, Level 3 = 30 poin. Setiap 3 jawaban benar beruntun mendapat bonus 5 poin. Beruntun kembali ke 0 jika salah.</p>
-            </div>
-
-            <div class="flex items-center justify-between pt-1">
-              <button onclick="resetQuizScore()" class="px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-lg transition font-mono font-bold">
-                Reset Kuis
+            <div class="flex items-center justify-between gap-2 pt-2">
+              <button onclick="resetQuizScore()" class="px-2.5 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-xl transition font-mono font-bold">
+                Reset
               </button>
-              <button onclick="submitOrNextQuiz()" id="btn-quiz-action" class="px-4 py-1.5 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-lg shadow transition">
-                Periksa Jawaban
+              <button onclick="submitOrNextQuiz()" id="btn-quiz-action" class="flex-1 py-2 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow transition">
+                Periksa
               </button>
             </div>
           </div>
@@ -961,12 +878,12 @@
     <footer class="h-10 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-4 flex items-center justify-between flex-shrink-0 z-30">
       <button id="btn-back-dashboard" onclick="goToStart()" class="hidden px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
         <span>🏠</span>
-        <span>Menu Dashboard</span>
+        <span>Dashboard</span>
       </button>
 
       <div id="footer-status-pill" class="text-[11px] font-mono text-sky-300 flex items-center gap-1.5 bg-slate-950 px-3 py-0.5 rounded-full border border-slate-800 mx-auto">
         <span class="w-1.5 h-1.5 rounded-full bg-emeraldGreen animate-pulse"></span>
-        <span id="footer-status-label">Menu Eksperimen Dashboard</span>
+        <span id="footer-status-label">Dashboard</span>
       </div>
     </footer>
 
@@ -975,52 +892,24 @@
 
   </div>
 
-  <!-- MODAL 1: PANDUAN PRAKTIKUM -->
+  <!-- MODAL 1: PETUNJUK PRAKTIKUM (MINIMALIS) -->
   <div id="modal-petunjuk" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-5 shadow-2xl border border-slate-200 max-h-[85vh] flex flex-col">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
-        <div class="flex items-center gap-2">
-          <span class="text-lg">📖</span>
-          <h3 class="text-sm font-bold text-slate-800">Panduan Praktikum &amp; Variabel Percobaan</h3>
-        </div>
-        <button onclick="toggleModal('petunjuk', false)" class="text-slate-400 hover:text-slate-600 p-1 text-base">✕</button>
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-slate-100">
+        <h3 class="text-lg font-display font-extrabold text-slate-800">📖 Petunjuk Praktikum</h3>
+        <button onclick="toggleModal('petunjuk', false)" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕</button>
       </div>
 
-      <div class="space-y-3 text-xs text-slate-600 overflow-y-auto custom-scroll pr-1">
-        <div class="p-2.5 bg-blue-50 border border-blue-200 rounded-xl">
-          <h4 class="font-bold text-deepBlue mb-1 flex items-center gap-1.5">
-            <span>📐</span> Rumus &amp; Formula Pokok (BSE IPA Kelas VII)
-          </h4>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-1.5 font-mono text-[11px] text-center">
-            <span class="p-1 bg-white rounded border border-blue-100 font-bold text-blue-800">V = V₂ − V₁</span>
-            <span class="p-1 bg-white rounded border border-blue-100 font-bold text-blue-800">ρ = m / V</span>
-            <span class="p-1 bg-white rounded border border-blue-100 font-bold text-blue-800">1 g/cm³ = 1.000 kg/m³</span>
-          </div>
-        </div>
+      <ul class="space-y-2 text-xs text-slate-600 leading-relaxed">
+        <li><strong>1. Lab 1 (Volume):</strong> Atur V₁, lalu klik <em>Celupkan</em> untuk melihat kenaikan volume (V = V₂ − V₁) dan massa jenis (ρ = m / V).</li>
+        <li><strong>2. Lab 2 (Archimedes):</strong> Pilih benda, buat prediksi <em>Mengapung</em>, <em>Melayang</em>, atau <em>Tenggelam</em>, lalu uji ke dalam air.</li>
+        <li><strong>3. Lab 3 (Lapisan Cair):</strong> Tuang 4 zat cair dan amati susunan lapisan dari massa jenis terbesar (dasar) ke terkecil (atas).</li>
+        <li><strong>4. Kuis:</strong> Jawab 18 soal berlevel (10–30 poin) dengan bonus 5 poin tiap 3 jawaban benar beruntun.</li>
+      </ul>
 
-        <div>
-          <h4 class="font-bold text-blue-700 mb-0.5">1. Alur Belajar Praktikum</h4>
-          <p class="leading-relaxed">Simulasi 1 (Mengukur volume dan massa jenis zat padat tak beraturan) → Simulasi 2 (Kedudukan benda terapung, melayang, tenggelam dalam air) → Simulasi 3 (Lapisan zat cair menurut massa jenis) → Evaluasi Mandiri Berlevel.</p>
-        </div>
-
-        <div>
-          <h4 class="font-bold text-emerald-700 mb-0.5">2. Pengukuran dengan Gelas Ukur &amp; Gelas Berpancuran</h4>
-          <ul class="list-disc pl-4 space-y-1">
-            <li><strong>Gelas Ukur:</strong> Volume benda = V₂ − V₁. Bacalah skala tepat pada dasar lengkungan (meniskus bawah) dengan mata sejajar permukaan air.</li>
-            <li><strong>Gelas Berpancuran (Eureka Can):</strong> Digunakan jika benda terlalu besar untuk gelas ukur. Volume benda tepat sama dengan volume air yang tumpah ke gelas penampung.</li>
-            <li><strong>Syarat Pengukuran:</strong> Benda harus tercelup seluruhnya, tidak larut dalam air, dan tidak menyerap air.</li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="font-bold text-amber-700 mb-0.5">3. Kisah Eureka Archimedes</h4>
-          <p class="leading-relaxed">Archimedes menemukan cara memeriksa kemurnian mahkota raja tanpa merusaknya saat berendam di bak mandi. Air yang tumpah menggeser volume yang sama dengan tubuhnya. Ia berseru <em>"Eureka!"</em> (aku menemukannya).</p>
-        </div>
-      </div>
-
-      <div class="mt-4 pt-2 border-t border-slate-100 flex justify-end">
+      <div class="mt-4 pt-3 border-t border-slate-100 flex justify-end">
         <button onclick="toggleModal('petunjuk', false)" class="px-4 py-1.5 bg-deepBlue text-white font-bold rounded-xl text-xs hover:bg-blue-800">
-          Saya Mengerti
+          Oke
         </button>
       </div>
     </div>
@@ -1497,11 +1386,11 @@
       }
 
       const statusLabel = document.getElementById('footer-status-label');
-      if (tab === 'title') statusLabel.textContent = 'Menu Eksperimen Dashboard';
-      else if (tab === 'lab1') statusLabel.textContent = 'Mode: Lab 1 (Volume Asimetris)';
-      else if (tab === 'lab2') statusLabel.textContent = 'Mode: Lab 2 (Hukum Archimedes)';
-      else if (tab === 'lab3') statusLabel.textContent = 'Mode: Lab 3 (Pelangi Cairan)';
-      else if (tab === 'quiz') statusLabel.textContent = 'Mode: Evaluasi Mandiri (18 Soal)';
+      if (tab === 'title') statusLabel.textContent = 'Dashboard';
+      else if (tab === 'lab1') statusLabel.textContent = 'Lab 1: Volume';
+      else if (tab === 'lab2') statusLabel.textContent = 'Lab 2: Archimedes';
+      else if (tab === 'lab3') statusLabel.textContent = 'Lab 3: Lapisan Cair';
+      else if (tab === 'quiz') statusLabel.textContent = 'Kuis (18 Soal)';
     }
 
     const lab3Poured = { minyak: false, air: false, sirup: false, madu: false };
@@ -1522,7 +1411,7 @@
 
     function updateLab3LayersStack() {
       const activeLiquids = liquidDensityOrder.filter(item => lab3Poured[item.key]);
-      document.getElementById('lab3-total-poured').textContent = `${activeLiquids.length} / 4 Cairan Dituang`;
+      document.getElementById('lab3-total-poured').textContent = `${activeLiquids.length} / 4 Cairan`;
 
       const BASE_Y = 300;
       const LAYER_HEIGHT = 60;
@@ -1565,19 +1454,19 @@
 
     const lab1Objects = {
       batu: {
-        name: 'Batu', m: 75, v: 30, rho: 2.5, ident: 'Batu (2.500 kg/m³)',
+        name: 'Batu', m: 75, v: 30, rho: 2.5, ident: 'Batu (2.5)',
         svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.4))"><path d="M -18,-18 L -9,-24 L 6,-22 L 20,-14 L 25,-1 L 22,14 L 10,24 L -8,25 L -22,15 L -26,-2 Z" fill="#475569" stroke="#0F172A" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="-11" cy="-10" rx="3" ry="2" fill="#0F172A"/><ellipse cx="8" cy="8" rx="3.5" ry="2.2" fill="#0F172A"/><circle cx="12" cy="-6" r="2" fill="#0F172A"/></g>`
       },
       kunci: {
-        name: 'Kunci Kuningan', m: 85, v: 10, rho: 8.5, ident: 'Kuningan (8.500 kg/m³)',
+        name: 'Kunci', m: 85, v: 10, rho: 8.5, ident: 'Kuningan (8.5)',
         svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.35))"><circle cx="0" cy="-14" r="10" fill="#D97706" stroke="#78350F" stroke-width="2"/><circle cx="0" cy="-14" r="4.5" fill="#38BDF8"/><rect x="-3" y="-4" width="6" height="26" fill="#F59E0B" stroke="#78350F" stroke-width="1.8"/><path d="M 3,4 L 10,4 L 10,8 L 3,8 Z" fill="#D97706" stroke="#78350F" stroke-width="1.5"/><path d="M 3,14 L 12,14 L 12,18 L 3,18 Z" fill="#D97706" stroke="#78350F" stroke-width="1.5"/></g>`
       },
       aluminium: {
-        name: 'Logam Aluminium', m: 54, v: 20, rho: 2.7, ident: 'Aluminium (2.700 kg/m³)',
+        name: 'Logam Al', m: 54, v: 20, rho: 2.7, ident: 'Aluminium (2.7)',
         svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.35))"><rect x="-14" y="-14" width="28" height="28" rx="3" fill="#94A3B8" stroke="#334155" stroke-width="2"/><circle cx="0" cy="0" r="6" fill="#E2E8F0" stroke="#334155" stroke-width="1.2"/></g>`
       },
       mahkota: {
-        name: 'Mahkota Uji', m: 286, v: 20, rho: 14.3, ident: 'Bukan Emas Murni (ρ < 19.3)',
+        name: 'Mahkota', m: 286, v: 20, rho: 14.3, ident: 'Bukan Emas (14.3)',
         svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.35))"><path d="M -16,10 L 16,10 L 14,-8 L 6,-2 L 0,-14 L -6,-2 L -14,-8 Z" fill="#F59E0B" stroke="#B45309" stroke-width="2"/><circle cx="0" cy="-14" r="2" fill="#EF4444"/><circle cx="-14" cy="-8" r="1.5" fill="#38BDF8"/><circle cx="14" cy="-8" r="1.5" fill="#38BDF8"/></g>`
       }
     };
@@ -1595,19 +1484,19 @@
       const v1Title = document.getElementById('lab1-v1-label-title');
 
       if (method === 'ukur') {
-        btnUkur.className = "px-2 py-0.5 text-[10px] rounded bg-deepBlue text-white font-bold";
-        btnPancur.className = "px-2 py-0.5 text-[10px] rounded bg-slate-100 text-slate-700 hover:bg-slate-200";
-        appName.textContent = "Gelas Ukur Linier (100 mL)";
+        btnUkur.className = "px-2.5 py-1 rounded bg-sky-500 text-slate-950 font-bold";
+        btnPancur.className = "px-2.5 py-1 rounded text-slate-300 hover:text-white";
+        appName.textContent = "Gelas Ukur (100 mL)";
         spout.classList.add('hidden');
         spoutGlass.classList.add('hidden');
-        v1Title.textContent = "Volume Awal Air (V₁):";
+        v1Title.textContent = "Volume Awal (V₁)";
       } else {
-        btnPancur.className = "px-2 py-0.5 text-[10px] rounded bg-deepBlue text-white font-bold";
-        btnUkur.className = "px-2 py-0.5 text-[10px] rounded bg-slate-100 text-slate-700 hover:bg-slate-200";
-        appName.textContent = "Gelas Berpancuran (Eureka Can)";
+        btnPancur.className = "px-2.5 py-1 rounded bg-sky-500 text-slate-950 font-bold";
+        btnUkur.className = "px-2.5 py-1 rounded text-slate-300 hover:text-white";
+        appName.textContent = "Gelas Pancuran";
         spout.classList.remove('hidden');
         spoutGlass.classList.remove('hidden');
-        v1Title.textContent = "Level Air Penuh Spout (V₁):";
+        v1Title.textContent = "Level Spout (V₁)";
       }
       updateLab1WaterLevel();
     }
@@ -1639,19 +1528,12 @@
         const btn = document.getElementById(`btn-obj-${k}`);
         if (btn) {
           btn.className = (k === key)
-            ? "p-1.5 rounded-lg border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue flex items-center justify-center gap-1"
-            : "p-1.5 rounded-lg border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:border-blue-400 flex items-center justify-center gap-1";
+            ? "p-2 rounded-xl border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue"
+            : "p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400";
         }
       });
 
       const current = lab1Objects[key];
-      const infoEl = document.getElementById('lab1-volume-info');
-      if (infoEl) {
-        infoEl.textContent = lab1State.submerged 
-          ? `Massa: ${current.m} g | Terukur: ${current.v} cm³` 
-          : `Massa: ${current.m} g | Vol: ? cm³`;
-      }
-
       document.getElementById('lab1-tag-stone').textContent = current.name;
       document.getElementById('lab1-calc-m').textContent = `${current.m} g`;
       document.getElementById('lab1-object-svg-container').innerHTML = current.svg;
@@ -1673,13 +1555,13 @@
       if (lab1State.submerged) {
         playSplashSound();
         objGroup.style.transform = 'translateY(190px)';
-        btnSubmerge.textContent = '↺ Angkat Benda';
-        btnSubmerge.className = 'px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow transition flex items-center gap-1';
+        btnSubmerge.textContent = '↺ Angkat';
+        btnSubmerge.className = 'px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow transition whitespace-nowrap';
       } else {
         playClickSound();
         objGroup.style.transform = 'translateY(0px)';
-        btnSubmerge.textContent = '💧 Masukkan Benda';
-        btnSubmerge.className = 'px-3.5 py-1.5 rounded-lg bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition flex items-center gap-1';
+        btnSubmerge.textContent = '💧 Celupkan';
+        btnSubmerge.className = 'px-4 py-2 rounded-xl bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition whitespace-nowrap';
       }
       updateLab1WaterLevel();
     }
@@ -1710,15 +1592,14 @@
       const calcIdent = document.getElementById('lab1-calc-ident');
 
       if (lab1State.submerged) {
-        if (infoEl) infoEl.textContent = `Massa: ${obj.m} g | Terukur: ${obj.v} cm³`;
+        if (infoEl) infoEl.textContent = `m = ${obj.m} g · V = ${obj.v} cm³`;
         tagV2.textContent = `${activeVolume} mL`;
         tagV2.className = "text-crimsonRed font-bold";
         calcV.textContent = `${obj.v} cm³`;
         calcRho.textContent = `${obj.rho.toFixed(1)} g/cm³`;
         calcIdent.textContent = obj.ident;
-        addLab1Observation(obj.name, lab1State.method === 'ukur' ? 'Gelas Ukur' : 'Gelas Pancur', obj.m, obj.v, obj.rho.toFixed(1), obj.ident);
       } else {
-        if (infoEl) infoEl.textContent = `Massa: ${obj.m} g | Vol: ? cm³`;
+        if (infoEl) infoEl.textContent = `m = ${obj.m} g · V = ? cm³`;
         tagV2.textContent = '?';
         tagV2.className = "text-slate-400 font-bold";
         calcV.textContent = '? cm³';
@@ -1727,20 +1608,12 @@
       }
     }
 
-    function addLab1Observation(name, method, m, v, rho, ident) {
-      const tbody = document.getElementById('lab1-table-body');
-      const existingRows = tbody.querySelectorAll('tr');
-      for (let r of existingRows) {
-        if (r.cells[0]?.textContent === name && r.cells[1]?.textContent === method) return;
-      }
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="p-1 font-bold">${name}</td><td class="p-1">${method}</td><td class="p-1">${m}</td><td class="p-1 font-bold text-blue-600">${v}</td><td class="p-1 font-bold text-emerald-600">${rho}</td><td class="p-1 text-slate-600">${ident}</td>`;
-      tbody.prepend(tr);
-    }
-
     function resetLab1Table() {
       playClickSound();
-      document.getElementById('lab1-table-body').innerHTML = `<tr><td class="p-1 font-bold">Batu</td><td class="p-1">Gelas Ukur</td><td class="p-1">75</td><td class="p-1 font-bold text-blue-600">30</td><td class="p-1 font-bold text-emerald-600">2,5</td><td class="p-1 text-slate-600">Batu (2.500 kg/m³)</td></tr>`;
+      if (lab1State.submerged) toggleLab1Submersion();
+      onLab1V1Input(50);
+      document.getElementById('slider-lab1-v1').value = 50;
+      setLab1Object('batu');
     }
 
     const lab2Materials = {
@@ -1748,13 +1621,13 @@
       kayu: { name: 'Kayu', rho: 0.65, status: 'Mengapung', targetY: 104, svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.35))"><rect x="-18" y="-12" width="36" height="24" rx="2" fill="#92400E" stroke="#451A03" stroke-width="1.8"/><path d="M -16,-6 Q 0,-3 16,-6" stroke="#B45309" stroke-width="1.5" fill="none"/><ellipse cx="-4" cy="1" rx="3" ry="1.5" fill="#451A03" opacity="0.6"/></g>` },
       lilin: { name: 'Lilin', rho: 0.90, status: 'Mengapung', targetY: 108, svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"><rect x="-9" y="-14" width="18" height="28" rx="2" fill="#FEF08A" stroke="#CA8A04" stroke-width="1.8"/><line x1="0" y1="-14" x2="0" y2="-20" stroke="#1F2937" stroke-width="1.8" stroke-linecap="round"/></g>` },
       es: { name: 'Es Batu', rho: 0.92, status: 'Mengapung', targetY: 110, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.25))"><polygon points="-16,-10 -6,-16 14,-13 18,6 8,16 -12,14" fill="#93C5FD" fill-opacity="0.8" stroke="#38BDF8" stroke-width="1.8"/></g>` },
-      plastik: { name: 'Plastik (Polietilena)', rho: 0.95, status: 'Mengapung', targetY: 112, svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"><rect x="-14" y="-10" width="28" height="20" rx="3" fill="#34D399" stroke="#059669" stroke-width="1.8"/></g>` },
-      ujiKhusus: { name: 'Benda Uji Khusus', rho: 1.00, status: 'Melayang', targetY: 195, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.35))"><circle cx="0" cy="0" r="14" fill="#F59E0B" stroke="#B45309" stroke-width="2"/><circle cx="0" cy="0" r="5" fill="#1E293B"/><text x="-6" y="3" font-size="7" fill="#fff" font-family="monospace">1.0</text></g>` },
+      plastik: { name: 'Plastik', rho: 0.95, status: 'Mengapung', targetY: 112, svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"><rect x="-14" y="-10" width="28" height="20" rx="3" fill="#34D399" stroke="#059669" stroke-width="1.8"/></g>` },
+      ujiKhusus: { name: 'Uji Khusus', rho: 1.00, status: 'Melayang', targetY: 195, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.35))"><circle cx="0" cy="0" r="14" fill="#F59E0B" stroke="#B45309" stroke-width="2"/><circle cx="0" cy="0" r="5" fill="#1E293B"/><text x="-6" y="3" font-size="7" fill="#fff" font-family="monospace">1.0</text></g>` },
       aluminium: { name: 'Aluminium', rho: 2.70, status: 'Tenggelam', targetY: 275, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.45))"><rect x="-14" y="-14" width="28" height="28" rx="2" fill="#94A3B8" stroke="#334155" stroke-width="1.8"/></g>` },
-      besi: { name: 'Besi (Paku)', rho: 7.90, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.5))"><rect x="-10" y="-16" width="20" height="3.5" rx="1" fill="#64748B" stroke="#1E293B" stroke-width="1.5"/><rect x="-3" y="-12.5" width="6" height="24" fill="#475569" stroke="#1E293B" stroke-width="1.5"/><polygon points="-3,11.5 3,11.5 0,20" fill="#334155" stroke="#1E293B" stroke-width="1.5"/></g>` },
+      besi: { name: 'Besi', rho: 7.90, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.5))"><rect x="-10" y="-16" width="20" height="3.5" rx="1" fill="#64748B" stroke="#1E293B" stroke-width="1.5"/><rect x="-3" y="-12.5" width="6" height="24" fill="#475569" stroke="#1E293B" stroke-width="1.5"/><polygon points="-3,11.5 3,11.5 0,20" fill="#334155" stroke="#1E293B" stroke-width="1.5"/></g>` },
       kuningan: { name: 'Kuningan', rho: 8.50, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.45))"><circle cx="0" cy="0" r="12" fill="#FBBF24" stroke="#B45309" stroke-width="2"/></g>` },
       tembaga: { name: 'Tembaga', rho: 8.90, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.45))"><polygon points="0,-14 12,12 -12,12" fill="#FB923C" stroke="#C2410C" stroke-width="2"/></g>` },
-      emas: { name: 'Emas Murni', rho: 19.30, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.5))"><rect x="-15" y="-10" width="30" height="20" rx="2" fill="#FACC15" stroke="#854D0E" stroke-width="2"/><text x="-12" y="4" font-size="8" fill="#713F12" font-weight="bold">99.9</text></g>` }
+      emas: { name: 'Emas', rho: 19.30, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.5))"><rect x="-15" y="-10" width="30" height="20" rx="2" fill="#FACC15" stroke="#854D0E" stroke-width="2"/><text x="-12" y="4" font-size="8" fill="#713F12" font-weight="bold">99.9</text></g>` }
     };
 
     let lab2State = { materialKey: 'kayu', prediction: null, isDropped: false };
@@ -1768,17 +1641,17 @@
         const btn = document.getElementById(`btn-mat-${k}`);
         if (btn) {
           btn.className = (k === key)
-            ? "p-1 rounded text-[10px] font-bold bg-blue-50 border border-deepBlue text-deepBlue"
-            : "p-1 rounded text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400";
+            ? "p-1.5 rounded-lg text-[10px] font-bold bg-blue-50 border border-deepBlue text-deepBlue"
+            : "p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400";
         }
       });
 
       const mat = lab2Materials[key];
       document.getElementById('lab2-tag-name').textContent = mat.name;
-      document.getElementById('lab2-tag-rho').textContent = `${mat.rho} g/cm³`;
-      document.getElementById('lab2-tag-pos').textContent = 'Di Udara';
+      document.getElementById('lab2-tag-rho').textContent = `${mat.rho}`;
+      document.getElementById('lab2-tag-pos').textContent = 'Udara';
       document.getElementById('lab2-result-pill').textContent = 'Siap Uji';
-      document.getElementById('lab2-result-pill').className = 'text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold';
+      document.getElementById('lab2-result-pill').className = 'px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold';
       document.getElementById('lab2-object-svg').innerHTML = mat.svg;
       document.getElementById('lab2-object-group').style.transform = 'translate(120px, 50px)';
     }
@@ -1804,9 +1677,9 @@
 
       const pill = document.getElementById('lab2-result-pill');
       pill.textContent = mat.status;
-      if (mat.status === 'Mengapung') pill.className = 'text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold';
-      else if (mat.status === 'Melayang') pill.className = 'text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold';
-      else pill.className = 'text-xs px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold';
+      if (mat.status === 'Mengapung') pill.className = 'px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold';
+      else if (mat.status === 'Melayang') pill.className = 'px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold';
+      else pill.className = 'px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold';
 
       const banner = document.getElementById('lab2-feedback-banner');
       const icon = document.getElementById('lab2-feedback-icon');
@@ -1819,58 +1692,43 @@
 
       if (pred && pred.toLowerCase() === mat.status.toLowerCase()) {
         setTimeout(() => { playSuccessChord(); triggerConfetti(); }, 300);
-        banner.className = 'p-2 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-950 flex items-center justify-between font-mono shadow-sm transition-all';
+        banner.className = 'p-2.5 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-950 flex items-center justify-between font-mono shadow-sm';
         icon.textContent = '🎉';
-        title.innerHTML = `<strong>PREDIKSI ANDA TEPAT SEKALI!</strong>`;
-        detail.innerHTML = `Benda <strong>${mat.name}</strong> terbukti <strong>${mat.status}</strong> karena ρ = ${mat.rho} g/cm³ dibandingkan air (1,00 g/cm³).`;
+        title.innerHTML = `<strong>Prediksi Tepat!</strong>`;
+        detail.innerHTML = `${mat.name} <strong>${mat.status}</strong> (ρ = ${mat.rho} g/cm³).`;
         badge.className = 'px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-bold';
         badge.textContent = '✓ BENAR';
       } else {
         setTimeout(() => { playTitutSound(); }, 280);
         void banner.offsetWidth;
-        banner.className = 'shake-active p-2 rounded-xl border bg-rose-50 border-rose-300 text-rose-950 flex items-center justify-between font-mono shadow-sm transition-all';
+        banner.className = 'shake-active p-2.5 rounded-xl border bg-rose-50 border-rose-300 text-rose-950 flex items-center justify-between font-mono shadow-sm';
         icon.textContent = '📢';
-        title.innerHTML = `<strong>PREDIKSI BELUM TEPAT! (TITUT!)</strong>`;
-        const userPredText = pred ? pred.toUpperCase() : 'BELUM DITEBAK';
-        detail.innerHTML = `Tebakan Anda: <strong>${userPredText}</strong>. Posisi sebenarnya adalah <strong>${mat.status.toUpperCase()}</strong> (ρ = ${mat.rho} g/cm³).`;
+        title.innerHTML = `<strong>Belum Tepat!</strong>`;
+        detail.innerHTML = `Hasil: <strong>${mat.status}</strong> (ρ = ${mat.rho} g/cm³).`;
         badge.className = 'px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold';
-        badge.textContent = '✕ TITUT!';
+        badge.textContent = '✕ SALAH';
       }
-
-      saveLab2Observation();
-    }
-
-    function saveLab2Observation() {
-      const mat = lab2Materials[lab2State.materialKey];
-      const pred = lab2State.prediction ? (lab2State.prediction.charAt(0).toUpperCase() + lab2State.prediction.slice(1)) : '–';
-      const isMatch = (mat.status.toLowerCase() === (lab2State.prediction || '').toLowerCase());
-      const kesimpulan = isMatch ? 'Prediksi Benar' : `Sifat Zat (ρ = ${mat.rho})`;
-
-      const tbody = document.getElementById('lab2-table-body');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="p-1 font-bold">${mat.name}</td><td class="p-1">${pred}</td><td class="p-1 text-emerald-600 font-bold">${mat.status}</td><td class="p-1">${mat.rho}</td><td class="p-1">${kesimpulan}</td>`;
-      tbody.prepend(tr);
     }
 
     const quizDatabase = [
-      { id: 1, cat: 'Simulasi 1: Volume Tak Beraturan', level: 1, points: 10, type: 'mc', q: 'Air dalam gelas ukur mula-mula 50 mL. Setelah batu dimasukkan, volumenya 80 mL. Volume batu adalah ...', options: ['A. 30 cm³', 'B. 50 cm³', 'C. 80 cm³', 'D. 130 cm³'], key: 'A', exp: 'V = V₂ − V₁ = 80 mL − 50 mL = 30 mL = 30 cm³.' },
-      { id: 2, cat: 'Simulasi 1: Volume Tak Beraturan', level: 1, points: 10, type: 'mc', q: 'Pada gelas berpancuran, air yang tumpah ke gelas ukur sebanyak 30 mL. Volume benda yang dimasukkan adalah ...', options: ['A. 15 cm³', 'B. 30 cm³', 'C. 60 cm³', 'D. 130 cm³'], key: 'B', exp: 'Volume benda sama dengan volume air yang tumpah (metode perpindahan air Archimedes).' },
-      { id: 3, cat: 'Simulasi 1: Volume Tak Beraturan', level: 2, points: 20, type: 'mc', q: 'Sebuah batu bermassa 75 g dan bervolume 30 cm³. Massa jenis batu adalah ...', options: ['A. 0,4 g/cm³', 'B. 2,5 g/cm³', 'C. 45 g/cm³', 'D. 105 g/cm³'], key: 'B', exp: 'ρ = m / V = 75 g / 30 cm³ = 2,5 g/cm³.' },
-      { id: 4, cat: 'Simulasi 1: Volume Tak Beraturan', level: 2, points: 20, type: 'mc', q: 'Logam bermassa 270 g menaikkan permukaan air dari 200 mL menjadi 300 mL. Menurut Tabel 3.1, logam itu adalah ...', options: ['A. Aluminium', 'B. Besi', 'C. Tembaga', 'D. Emas'], key: 'A', exp: 'V = 300 − 200 = 100 cm³. ρ = 270 / 100 = 2,7 g/cm³ (Aluminium).' },
-      { id: 5, cat: 'Simulasi 1: Volume Tak Beraturan', level: 3, points: 30, type: 'mc', q: 'Sebuah mahkota bermassa 500 g menumpahkan 35 mL air pada gelas berpancuran. Kesimpulan yang tepat adalah ...', options: ['A. Emas murni karena massanya besar', 'B. Emas murni karena ρ = 19,3 g/cm³', 'C. Bukan emas murni karena ρ ≈ 14,3 g/cm³', 'D. Tidak dapat ditentukan'], key: 'C', exp: 'ρ = 500 / 35 ≈ 14,3 g/cm³ = 14.300 kg/m³, lebih kecil dari massa jenis emas murni (19.300 kg/m³).' },
-      { id: 6, cat: 'Simulasi 1: Volume Tak Beraturan', level: 3, points: 30, type: 'mc', q: 'Benda A dan B sama-sama bermassa 100 g. Volume A = 10 cm³ dan volume B = 40 cm³. Pernyataan yang benar adalah ...', options: ['A. Massa jenis A empat kali massa jenis B', 'B. Massa jenis A dan B sama', 'C. Massa jenis B lebih besar dari A', 'D. Massa jenis A dua kali massa jenis B'], key: 'A', exp: 'ρ A = 100 / 10 = 10 g/cm³ dan ρ B = 100 / 40 = 2,5 g/cm³. Jadi ρ A = 4 × ρ B.' },
-      { id: 7, cat: 'Simulasi 2: Kedudukan Benda dalam Air', level: 1, points: 10, type: 'mc', q: 'Gabus mengapung di air karena ...', options: ['A. Massa jenis gabus lebih besar dari air', 'B. Massa jenis gabus lebih kecil dari air', 'C. Massa gabus sangat kecil', 'D. Gabus berukuran kecil'], key: 'B', exp: 'Yang menentukan kedudukan benda di air adalah perbandingan massa jenis zat, bukan massa semata.' },
-      { id: 8, cat: 'Simulasi 2: Kedudukan Benda dalam Air', level: 1, points: 10, type: 'mc', q: 'Sebuah benda akan melayang di dalam zat cair jika ...', options: ['A. ρ benda < ρ zat cair', 'B. ρ benda > ρ zat cair', 'C. ρ benda = ρ zat cair', 'D. Massa benda = massa zat cair'], key: 'C', exp: 'Syarat benda melayang adalah massa jenis benda sama persis dengan massa jenis fluida.' },
-      { id: 9, cat: 'Simulasi 2: Kedudukan Benda dalam Air', level: 2, points: 20, type: 'mc', q: 'Balok bermassa 200 g dan bervolume 80 cm³ dimasukkan ke air, lalu ke raksa (ρ = 13,6 g/cm³). Kedudukannya adalah ...', options: ['A. Tenggelam di air dan tenggelam di raksa', 'B. Mengapung di air dan mengapung di raksa', 'C. Tenggelam di air dan mengapung di raksa', 'D. Melayang di air dan tenggelam di raksa'], key: 'C', exp: 'ρ balok = 200 / 80 = 2,5 g/cm³. Di air (1,0) balok tenggelam; di raksa (13,6) balok mengapung.' },
-      { id: 10, cat: 'Simulasi 2: Kedudukan Benda dalam Air', level: 2, points: 20, type: 'mc', q: 'Pasangan benda yang sama-sama mengapung di air adalah ...', options: ['A. Lilin dan es batu', 'B. Besi dan lilin', 'C. Tembaga dan es batu', 'D. Besi dan tembaga'], key: 'A', exp: 'Massa jenis lilin (0,90) dan es batu (0,92) keduanya lebih kecil dari massa jenis air (1,00).' },
-      { id: 11, cat: 'Simulasi 2: Kedudukan Benda dalam Air', level: 3, points: 30, type: 'mc', q: 'Balok kayu bervolume 100 cm³ dengan massa jenis 0,65 g/cm³ mengapung di air. Volume bagian yang tercelup adalah ...', options: ['A. 35 cm³', 'B. 50 cm³', 'C. 65 cm³', 'D. 100 cm³'], key: 'C', exp: 'Bagian tercelup = (ρ benda / ρ air) × V total = (0,65 / 1,00) × 100 cm³ = 65 cm³.' },
-      { id: 12, cat: 'Simulasi 2: Kedudukan Benda dalam Air', level: 3, points: 30, type: 'mc', q: 'Sebongkah es batu bervolume 100 cm³ mengapung di air. Volume bagian es yang berada di ATAS permukaan air adalah ...', options: ['A. 8 cm³', 'B. 20 cm³', 'C. 92 cm³', 'D. 100 cm³'], key: 'A', exp: 'Tercelup = 0,92 × 100 = 92 cm³. Yang menyembul di atas permukaan = 100 − 92 = 8 cm³.' },
-      { id: 13, cat: 'Simulasi 3: Perbedaan Massa Jenis Cairan', level: 1, points: 10, type: 'mc', q: 'Zat cair yang berada di lapisan paling atas adalah ...', options: ['A. Madu', 'B. Sirup', 'C. Air', 'D. Minyak goreng'], key: 'D', exp: 'Minyak goreng memiliki massa jenis terkecil (0,92 g/cm³) sehingga berada di lapisan paling atas.' },
-      { id: 14, cat: 'Simulasi 3: Perbedaan Massa Jenis Cairan', level: 1, points: 10, type: 'mc', q: 'Zat cair yang berada di dasar gelas adalah ...', options: ['A. Madu', 'B. Sirup', 'C. Air', 'D. Minyak goreng'], key: 'A', exp: 'Madu memiliki massa jenis terbesar (1,40 g/cm³) sehingga mengendap di dasar tabung.' },
-      { id: 15, cat: 'Simulasi 3: Perbedaan Massa Jenis Cairan', level: 2, points: 20, type: 'mc', q: 'Urutan lapisan dari DASAR KE ATAS adalah ...', options: ['A. Minyak goreng, air, sirup, madu', 'B. Madu, sirup, air, minyak goreng', 'C. Sirup, madu, air, minyak goreng', 'D. Madu, air, sirup, minyak goreng'], key: 'B', exp: 'Dari yang terbesar ke terkecil: Madu (1,40) → Sirup (1,30) → Air (1,00) → Minyak goreng (0,92).' },
-      { id: 16, cat: 'Simulasi 3: Perbedaan Massa Jenis Cairan', level: 2, points: 20, type: 'mc', q: 'Sirup memiliki massa jenis 1,3 g/mL. Massa dari 50 mL sirup adalah ...', options: ['A. 38 g', 'B. 50 g', 'C. 65 g', 'D. 130 g'], key: 'C', exp: 'm = ρ × V = 1,3 g/mL × 50 mL = 65 g.' },
-      { id: 17, cat: 'Simulasi 3: Perbedaan Massa Jenis Cairan', level: 3, points: 30, type: 'mc', q: 'Sebanyak 100 mL air dicampur dengan 100 mL madu (anggap volume campuran 200 mL). Massa jenis campuran adalah ...', options: ['A. 1,0 g/cm³', 'B. 1,2 g/cm³', 'C. 1,4 g/cm³', 'D. 2,4 g/cm³'], key: 'B', exp: 'Massa air = 100 g, massa madu = 1,4 × 100 = 140 g. Total massa = 240 g. ρ campuran = 240 / 200 = 1,2 g/cm³.' },
-      { id: 18, cat: 'Simulasi 3: Perbedaan Massa Jenis Cairan', level: 3, points: 30, type: 'mc', q: 'Sebuah benda bermassa jenis 1,1 g/cm³ dimasukkan ke gelas berisi empat lapisan (minyak, air, sirup, madu). Kedudukan benda adalah ...', options: ['A. Tenggelam sampai dasar gelas', 'B. Mengapung di atas minyak goreng', 'C. Melayang di antara lapisan air dan sirup', 'D. Melayang di antara lapisan minyak goreng dan air'], key: 'C', exp: 'Benda lebih rapat dari air (1,0) sehingga tenggelam melewatinya, namun kurang rapat dari sirup (1,3) sehingga tertahan melayang di batas keduanya.' }
+      { id: 1, cat: 'Simulasi 1', level: 1, points: 10, type: 'mc', q: 'Air dalam gelas ukur mula-mula 50 mL. Setelah batu dimasukkan, volumenya 80 mL. Volume batu adalah ...', options: ['A. 30 cm³', 'B. 50 cm³', 'C. 80 cm³', 'D. 130 cm³'], key: 'A', exp: 'V = V₂ − V₁ = 80 − 50 = 30 cm³.' },
+      { id: 2, cat: 'Simulasi 1', level: 1, points: 10, type: 'mc', q: 'Pada gelas berpancuran, air yang tumpah sebanyak 30 mL. Volume benda adalah ...', options: ['A. 15 cm³', 'B. 30 cm³', 'C. 60 cm³', 'D. 130 cm³'], key: 'B', exp: 'Volume benda sama dengan volume air yang tumpah.' },
+      { id: 3, cat: 'Simulasi 1', level: 2, points: 20, type: 'mc', q: 'Batu bermassa 75 g dan bervolume 30 cm³. Massa jenis batu adalah ...', options: ['A. 0,4 g/cm³', 'B. 2,5 g/cm³', 'C. 45 g/cm³', 'D. 105 g/cm³'], key: 'B', exp: 'ρ = m / V = 75 / 30 = 2,5 g/cm³.' },
+      { id: 4, cat: 'Simulasi 1', level: 2, points: 20, type: 'mc', q: 'Logam bermassa 270 g menaikkan air dari 200 mL menjadi 300 mL. Bahan logam tersebut adalah ...', options: ['A. Aluminium', 'B. Besi', 'C. Tembaga', 'D. Emas'], key: 'A', exp: 'V = 100 cm³, ρ = 270 / 100 = 2,7 g/cm³ (Aluminium).' },
+      { id: 5, cat: 'Simulasi 1', level: 3, points: 30, type: 'mc', q: 'Mahkota bermassa 500 g menumpahkan 35 mL air. Kesimpulannya adalah ...', options: ['A. Emas murni', 'B. ρ = 19,3 g/cm³', 'C. Bukan emas murni (ρ ≈ 14,3 g/cm³)', 'D. Tidak dapat ditentukan'], key: 'C', exp: 'ρ = 500 / 35 ≈ 14,3 g/cm³, lebih kecil dari emas murni (19,3 g/cm³).' },
+      { id: 6, cat: 'Simulasi 1', level: 3, points: 30, type: 'mc', q: 'Benda A (100 g, 10 cm³) dan B (100 g, 40 cm³). Hubungan massa jenisnya adalah ...', options: ['A. ρ A = 4 × ρ B', 'B. ρ A = ρ B', 'C. ρ B > ρ A', 'D. ρ A = 2 × ρ B'], key: 'A', exp: 'ρ A = 10 g/cm³ dan ρ B = 2,5 g/cm³, maka ρ A = 4 × ρ B.' },
+      { id: 7, cat: 'Simulasi 2', level: 1, points: 10, type: 'mc', q: 'Gabus mengapung di air karena ...', options: ['A. ρ gabus > ρ air', 'B. ρ gabus < ρ air', 'C. Massa sangat kecil', 'D. Ukuran kecil'], key: 'B', exp: 'Benda mengapung jika massa jenisnya lebih kecil dari zat cair.' },
+      { id: 8, cat: 'Simulasi 2', level: 1, points: 10, type: 'mc', q: 'Syarat benda melayang di dalam zat cair adalah ...', options: ['A. ρ benda < ρ cair', 'B. ρ benda > ρ cair', 'C. ρ benda = ρ cair', 'D. Massa sama'], key: 'C', exp: 'Benda melayang jika massa jenis benda sama dengan massa jenis zat cair.' },
+      { id: 9, cat: 'Simulasi 2', level: 2, points: 20, type: 'mc', q: 'Balok (200 g, 80 cm³) di air (1,0) dan raksa (13,6) akan ...', options: ['A. Tenggelam di keduanya', 'B. Mengapung di keduanya', 'C. Tenggelam di air, apung di raksa', 'D. Melayang di air'], key: 'C', exp: 'ρ balok = 2,5 g/cm³: tenggelam di air (1,0) dan mengapung di raksa (13,6).' },
+      { id: 10, cat: 'Simulasi 2', level: 2, points: 20, type: 'mc', q: 'Pasangan benda yang sama-sama mengapung di air adalah ...', options: ['A. Lilin dan es batu', 'B. Besi dan lilin', 'C. Tembaga dan es', 'D. Besi dan tembaga'], key: 'A', exp: 'Lilin (0,90) dan es batu (0,92) lebih kecil dari massa jenis air (1,00).' },
+      { id: 11, cat: 'Simulasi 2', level: 3, points: 30, type: 'mc', q: 'Kayu (100 cm³, ρ = 0,65 g/cm³) mengapung di air. Volume tercelupnya adalah ...', options: ['A. 35 cm³', 'B. 50 cm³', 'C. 65 cm³', 'D. 100 cm³'], key: 'C', exp: 'Volume tercelup = (0,65 / 1,00) × 100 = 65 cm³.' },
+      { id: 12, cat: 'Simulasi 2', level: 3, points: 30, type: 'mc', q: 'Es batu (100 cm³, ρ = 0,92 g/cm³) di air. Bagian di ATAS permukaan adalah ...', options: ['A. 8 cm³', 'B. 20 cm³', 'C. 92 cm³', 'D. 100 cm³'], key: 'A', exp: 'Tercelup 92 cm³, bagian di atas permukaan = 100 − 92 = 8 cm³.' },
+      { id: 13, cat: 'Simulasi 3', level: 1, points: 10, type: 'mc', q: 'Zat cair di lapisan paling atas adalah ...', options: ['A. Madu', 'B. Sirup', 'C. Air', 'D. Minyak goreng'], key: 'D', exp: 'Minyak goreng memiliki massa jenis terkecil (0,92 g/cm³).' },
+      { id: 14, cat: 'Simulasi 3', level: 1, points: 10, type: 'mc', q: 'Zat cair di lapisan paling dasar adalah ...', options: ['A. Madu', 'B. Sirup', 'C. Air', 'D. Minyak goreng'], key: 'A', exp: 'Madu memiliki massa jenis terbesar (1,40 g/cm³).' },
+      { id: 15, cat: 'Simulasi 3', level: 2, points: 20, type: 'mc', q: 'Urutan lapisan dari DASAR KE ATAS adalah ...', options: ['A. Minyak, air, sirup, madu', 'B. Madu, sirup, air, minyak', 'C. Sirup, madu, air, minyak', 'D. Madu, air, sirup, minyak'], key: 'B', exp: 'Dari terbesar ke terkecil: Madu → Sirup → Air → Minyak.' },
+      { id: 16, cat: 'Simulasi 3', level: 2, points: 20, type: 'mc', q: 'Massa 50 mL sirup (ρ = 1,3 g/mL) adalah ...', options: ['A. 38 g', 'B. 50 g', 'C. 65 g', 'D. 130 g'], key: 'C', exp: 'm = ρ × V = 1,3 × 50 = 65 g.' },
+      { id: 17, cat: 'Simulasi 3', level: 3, points: 30, type: 'mc', q: '100 mL air + 100 mL madu (200 mL). Massa jenis campurannya adalah ...', options: ['A. 1,0 g/cm³', 'B. 1,2 g/cm³', 'C. 1,4 g/cm³', 'D. 2,4 g/cm³'], key: 'B', exp: 'Massa = 100 + 140 = 240 g; ρ = 240 / 200 = 1,2 g/cm³.' },
+      { id: 18, cat: 'Simulasi 3', level: 3, points: 30, type: 'mc', q: 'Benda (ρ = 1,1 g/cm³) pada 4 lapisan cairan akan ...', options: ['A. Tenggelam ke dasar', 'B. Apung di atas minyak', 'C. Melayang antara air & sirup', 'D. Melayang antara minyak & air'], key: 'C', exp: 'ρ = 1,1 berada di antara air (1,0) dan sirup (1,3).' }
     ];
 
     let quizState = { index: 0, userAnswers: {}, score: 0, streak: 0, answered: false };
@@ -1911,20 +1769,19 @@
 
     function renderCurrentQuestion() {
       const q = quizDatabase[quizState.index];
-      document.getElementById('quiz-progress-text').textContent = `Soal ${quizState.index + 1} dari ${quizDatabase.length}`;
+      document.getElementById('quiz-progress-text').textContent = `${quizState.index + 1} / ${quizDatabase.length}`;
       document.getElementById('quiz-category-tag').textContent = q.cat;
-      document.getElementById('quiz-type-tag').textContent = 'Pilihan Ganda';
       document.getElementById('quiz-question-text').textContent = q.q;
 
       const levelBadge = document.getElementById('quiz-level-badge');
       if (q.level === 1) {
-        levelBadge.textContent = "Level 1 (Mudah · 10 Poin)";
+        levelBadge.textContent = "Level 1 · 10p";
         levelBadge.className = "text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-emerald-100 text-emerald-800";
       } else if (q.level === 2) {
-        levelBadge.textContent = "Level 2 (Sedang · 20 Poin)";
+        levelBadge.textContent = "Level 2 · 20p";
         levelBadge.className = "text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-amber-100 text-amber-800";
       } else {
-        levelBadge.textContent = "Level 3 (Sulit · 30 Poin)";
+        levelBadge.textContent = "Level 3 · 30p";
         levelBadge.className = "text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-purple-100 text-purple-800";
       }
 
@@ -1933,7 +1790,7 @@
       const btnAction = document.getElementById('btn-quiz-action');
 
       feedbackBox.classList.add('hidden');
-      btnAction.textContent = 'Periksa Jawaban';
+      btnAction.textContent = 'Periksa';
       mcBox.innerHTML = '';
 
       q.options.forEach(opt => {
@@ -1987,13 +1844,13 @@
         let streakBonusText = '';
         if (quizState.streak > 0 && quizState.streak % 3 === 0) {
           earned += 5;
-          streakBonusText = ' (+5 Poin Bonus Streak! 🔥)';
+          streakBonusText = ' (+5 Streak 🔥)';
         }
         quizState.score += earned;
 
         feedbackBox.className = 'p-2.5 rounded-xl border-2 bg-emerald-50 border-emerald-400 text-emerald-900 transition-all';
-        title.innerHTML = `<div class="flex items-center gap-1.5 text-emerald-700"><span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black">✓</span><span class="font-bold text-xs uppercase tracking-wide">Tepat sekali! Kamu memahami konsepnya. (+${earned} Poin${streakBonusText})</span></div>`;
-        desc.innerHTML = `<strong>Pembahasan:</strong> ${q.exp}`;
+        title.innerHTML = `<span class="font-bold text-xs text-emerald-700">✓ Benar (+${earned} Poin${streakBonusText})</span>`;
+        desc.innerHTML = q.exp;
 
         if (currentPill) {
           currentPill.className = 'p-1 rounded text-[11px] font-mono font-bold border-2 border-emerald-600 bg-emerald-600 text-white shadow';
@@ -2004,8 +1861,8 @@
         quizState.streak = 0;
         void feedbackBox.offsetWidth;
         feedbackBox.className = 'p-2.5 rounded-xl border-2 bg-rose-50 border-rose-400 text-rose-950 transition-all shake-anim shadow-md';
-        title.innerHTML = `<div class="flex items-center gap-1.5 text-rose-700"><span class="w-5 h-5 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs font-black">✕</span><span class="font-bold text-xs uppercase tracking-wide">Jawaban Belum Tepat! (TITUT!)</span></div>`;
-        desc.innerHTML = `<div class="mt-1 space-y-1"><div class="text-[11px] font-mono text-rose-800 bg-rose-100/80 px-2 py-0.5 rounded border border-rose-200 inline-block">Jawaban Anda: <strong class="text-rose-900 underline">${selectedOptionLetter}</strong> | Kunci: <strong class="text-emerald-800">${q.key}</strong></div><div class="text-[11px] leading-relaxed"><strong>Pembahasan:</strong> ${q.exp}</div></div>`;
+        title.innerHTML = `<span class="font-bold text-xs text-rose-700">✕ Belum Tepat · Kunci: ${q.key}</span>`;
+        desc.innerHTML = q.exp;
 
         if (currentPill) {
           currentPill.className = 'p-1 rounded text-[11px] font-mono font-bold border-2 border-rose-600 bg-rose-600 text-white shadow';
@@ -2015,7 +1872,7 @@
 
       document.getElementById('quiz-score-val').textContent = quizState.score;
       document.getElementById('quiz-streak-val').textContent = quizState.streak;
-      document.getElementById('btn-quiz-action').textContent = 'Soal Berikutnya →';
+      document.getElementById('btn-quiz-action').textContent = 'Berikutnya →';
     }
 
     function resetQuizScore() {
