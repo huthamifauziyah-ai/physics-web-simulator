@@ -220,4 +220,1675 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .fluid-wave, .liquid-surface, .bubble, .floater, .flo
+      .fluid-wave, .liquid-surface, .bubble, .floater, .floater-body,
+      .float-slow, .float-med, .float-fast, .aurora-glow {
+        animation: none !important;
+      }
+    }
+
+    :fullscreen #aspect-ratio-viewport,
+    :-webkit-full-screen #aspect-ratio-viewport {
+      border-radius: 0;
+      box-shadow: none;
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      max-height: none;
+    }
+
+    .liquid-anim {
+      transition: y 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .object-anim {
+      transition: transform 0.6s cubic-bezier(0.34, 1.25, 0.64, 1), opacity 0.3s;
+    }
+
+    .meniscus-line {
+      stroke-dasharray: 4, 3;
+      filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.7));
+      transition: y1 0.5s cubic-bezier(0.4, 0, 0.2, 1), y2 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Animasi Goyang (Shake Effect) Saat Jawaban Salah */
+    @keyframes shakeError {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+    .shake-anim {
+      animation: shakeError 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    /* Equalizer Bar for BGM */
+    @keyframes eqBar {
+      0%, 100% { height: 3px; }
+      50% { height: 11px; }
+    }
+    .eq-1 { animation: eqBar 0.6s ease-in-out infinite; }
+    .eq-2 { animation: eqBar 0.8s ease-in-out 0.15s infinite; }
+    .eq-3 { animation: eqBar 0.5s ease-in-out 0.3s infinite; }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="aspect-ratio-viewport">
+
+    <!-- Top Scientific Header -->
+    <header class="h-11 bg-deepBlue/95 backdrop-blur-md text-white flex items-center justify-between px-4 border-b border-blue-900/60 shadow-md flex-shrink-0 z-20">
+      <div class="flex items-center space-x-2.5 cursor-pointer" onclick="goToStart()">
+        <div class="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sm shadow">
+          🧪
+        </div>
+        <div class="flex items-baseline gap-2">
+          <span class="font-display font-black tracking-tight text-white text-xs sm:text-sm">ARCHIMEDES LAB</span>
+          <span class="text-[10px] text-sky-200 hidden sm:inline">| Zat &amp; Karakteristiknya (Kelas VII)</span>
+        </div>
+      </div>
+
+      <!-- Header Action Controls -->
+      <div class="flex items-center space-x-1.5 sm:space-x-2">
+        <button id="btn-theme-toggle" onclick="cycleThemeBg()" class="p-1 px-2 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-200 border border-blue-700/60 transition flex items-center gap-1.5 text-[11px] font-mono whitespace-nowrap" title="Ganti Suasana Latar Belakang">
+          <span id="theme-icon">🎨</span>
+          <span id="theme-label" class="hidden md:inline">Tema: Blue Lab</span>
+        </button>
+
+        <button id="btn-bgm-toggle" onclick="toggleBgmMusic()" class="p-1 px-2 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition flex items-center gap-1.5 text-[11px] font-mono whitespace-nowrap">
+          <div id="eq-container" class="flex items-end gap-0.5 h-2.5">
+            <span class="w-0.5 bg-sky-400 eq-1"></span>
+            <span class="w-0.5 bg-sky-300 eq-2"></span>
+            <span class="w-0.5 bg-sky-400 eq-3"></span>
+          </div>
+          <span id="bgm-label" class="hidden sm:inline">BGM: ON</span>
+        </button>
+
+        <button id="btn-sound-toggle" onclick="toggleAudioMute()" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition" title="Bisu / Nyalakan Efek Suara">
+          <svg id="icon-sound-on" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/></svg>
+          <svg id="icon-sound-off" class="w-3.5 h-3.5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15zM17 14l4-4m0 4l-4-4"/></svg>
+        </button>
+
+        <button onclick="toggleModal('petunjuk', true)" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-sky-300 border border-blue-700/60 transition flex items-center gap-1 text-[11px] whitespace-nowrap" title="Petunjuk Praktikum">
+          <span>📖</span>
+          <span class="hidden sm:inline">Petunjuk</span>
+        </button>
+
+        <button onclick="toggleModal('penjelasan', true)" class="p-1.5 rounded-lg bg-blue-900/60 hover:bg-blue-800 text-amber-300 border border-blue-700/60 transition flex items-center gap-1 text-[11px] whitespace-nowrap" title="Penjelasan Materi &amp; Rumus">
+          <span>💡</span>
+          <span class="hidden sm:inline">Materi</span>
+        </button>
+
+        <button onclick="toggleFullscreen()" class="p-1 px-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-900 font-bold transition flex items-center gap-1 text-[11px] shadow whitespace-nowrap" title="Layar Penuh (16:9)">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+          <span class="hidden sm:inline font-mono">16:9</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Stage -->
+    <main id="main-stage-container" class="flex-1 relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex flex-col transition-colors duration-700">
+
+      <!-- Ambient Dynamic Background Layers + Larutan Bergerak & Benda Mengapung -->
+      <div id="ambient-bg-layer" class="absolute inset-0 pointer-events-none overflow-hidden z-0 transition-opacity duration-700" aria-hidden="true">
+        <div id="blob-1" class="absolute -top-24 -left-20 w-80 h-80 rounded-full bg-sky-500/15 blur-3xl aurora-glow"></div>
+        <div id="blob-2" class="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-blue-600/15 blur-3xl aurora-glow" style="animation-delay: -3s;"></div>
+        <div id="blob-3" class="absolute top-1/3 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full bg-teal-400/10 blur-3xl aurora-glow" style="animation-delay: -5s;"></div>
+
+        <!-- Lapisan Konveksi Larutan & Permukaan Halus -->
+        <div class="fluid-wave wave-1"></div>
+        <div class="fluid-wave wave-2"></div>
+        <div class="liquid-surface"></div>
+
+        <!-- Benda Mengapung di Larutan (Bobbing & Tilt) -->
+        <div class="floater" style="--top: 14%; --left: 8%; --bob-dur: 5.2s; --tilt-dur: 6.8s; --delay: 0s;">
+          <svg class="floater-body" width="46" height="28" viewBox="0 0 54 32">
+            <rect x="4" y="6" width="46" height="20" rx="6" fill="#d97706" stroke="#fbbf24" stroke-width="1.5" />
+            <ellipse cx="27" cy="6" rx="23" ry="3.5" fill="#f59e0b" opacity="0.7" />
+          </svg>
+        </div>
+
+        <div class="floater" style="--top: 17%; --left: 85%; --bob-dur: 6.4s; --tilt-dur: 8s; --delay: -1.8s;">
+          <svg class="floater-body" width="40" height="40" viewBox="0 0 46 46">
+            <circle cx="23" cy="23" r="16" fill="#38bdf8" fill-opacity="0.28" stroke="#7dd3fc" stroke-width="1.5" />
+            <circle cx="18" cy="18" r="4" fill="#ffffff" fill-opacity="0.45" />
+          </svg>
+        </div>
+
+        <div class="floater" style="--top: 76%; --left: 12%; --bob-dur: 7.1s; --tilt-dur: 6.2s; --delay: -3.2s;">
+          <svg class="floater-body" width="38" height="38" viewBox="0 0 44 44">
+            <rect x="10" y="10" width="24" height="24" rx="5" fill="#34d399" fill-opacity="0.7" stroke="#a7f3d0" stroke-width="1.5" />
+          </svg>
+        </div>
+
+        <div class="floater" style="--top: 72%; --left: 88%; --bob-dur: 5.8s; --tilt-dur: 7.4s; --delay: -2.4s;">
+          <svg class="floater-body" width="42" height="28" viewBox="0 0 54 32">
+            <rect x="4" y="6" width="46" height="20" rx="10" fill="#fbbf24" fill-opacity="0.45" stroke="#fde68a" stroke-width="1.5" />
+          </svg>
+        </div>
+
+        <div id="bg-pattern-grid" class="absolute inset-0 bg-grid-lab opacity-70"></div>
+
+        <div class="absolute inset-0 flex justify-between p-8 font-mono text-[11px] select-none text-sky-300/15 font-bold">
+          <div class="space-y-12">
+            <div class="float-slow">ρ = m / V</div>
+            <div class="float-fast pl-8">V₂ − V₁ = V_benda</div>
+            <div class="float-med">F_a = ρ_f · g · V_celup</div>
+          </div>
+          <div class="space-y-12 text-right">
+            <div class="float-med">1 mL = 1 cm³ = 10⁻⁶ m³</div>
+            <div class="float-slow pr-6">W_semu = W_udara − F_a</div>
+            <div class="float-fast">ρ_b &lt; ρ_air → Terapung</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- VIEW 0: BERANDA DASHBOARD (JUDUL BESAR & MINIMALIS)       -->
+      <!-- ======================================================== -->
+      <section id="view-title" class="absolute inset-0 px-6 py-4 flex flex-col justify-between items-center z-20 transition-opacity duration-300 overflow-hidden">
+        
+        <!-- Header Dashboard Judul Besar -->
+        <div class="text-center space-y-1.5 pt-1">
+          <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-900/75 border border-sky-400/35 text-sky-300 text-[10px] font-bold font-mono uppercase backdrop-blur-md">
+            <span class="w-1.5 h-1.5 rounded-full bg-emeraldGreen animate-pulse"></span>
+            Lab Fisika Virtual · SMP Kelas VII
+          </div>
+
+          <h1 class="text-2xl sm:text-4xl lg:text-5xl font-display font-black text-white tracking-tight leading-none drop-shadow-lg">
+            Laboratorium <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-300 to-blue-300">Archimedes Lab</span>
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-200/90 max-w-lg mx-auto leading-snug">
+            Eksperimen volume benda tak beraturan, hukum Archimedes, dan lapisan massa jenis zat cair.
+          </p>
+        </div>
+
+        <!-- 3 Kartu Modul Minimalis -->
+        <div class="w-full max-w-3xl grid grid-cols-3 gap-3.5 my-auto py-1">
+          <div onclick="setTabMode('lab1')" class="cursor-pointer group bg-slate-900/80 hover:bg-slate-800/90 backdrop-blur-md rounded-xl p-3.5 border border-slate-700/80 hover:border-sky-400 transition-all flex flex-col items-center text-center justify-between shadow-lg">
+            <div class="w-11 h-11 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
+              📏
+            </div>
+            <div class="my-2">
+              <h2 class="font-display font-bold text-sm sm:text-base text-white group-hover:text-sky-300">Lab 1: Volume</h2>
+              <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Benda Tak Beraturan</p>
+            </div>
+            <span class="text-[10px] font-mono font-semibold text-sky-300 bg-sky-950/70 border border-sky-800/50 px-2.5 py-0.5 rounded-md w-full truncate">
+              V₂ − V₁
+            </span>
+          </div>
+
+          <div onclick="setTabMode('lab2')" class="cursor-pointer group bg-slate-900/80 hover:bg-slate-800/90 backdrop-blur-md rounded-xl p-3.5 border border-slate-700/80 hover:border-emerald-400 transition-all flex flex-col items-center text-center justify-between shadow-lg">
+            <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
+              ⚖️
+            </div>
+            <div class="my-2">
+              <h2 class="font-display font-bold text-sm sm:text-base text-white group-hover:text-emerald-300">Lab 2: Archimedes</h2>
+              <p class="text-[11px] text-slate-400 leading-tight mt-0.5">Apung, Melayang, Tenggelam</p>
+            </div>
+            <span class="text-[10px] font-mono font-semibold text-emerald-300 bg-emerald-950/70 border border-emerald-800/50 px-2.5 py-0.5 rounded-md w-full truncate">
+              ρ_b vs ρ_air
+            </span>
+          </div>
+
+          <div onclick="setTabMode('lab3')" class="cursor-pointer group bg-slate-900/80 hover:bg-slate-800/90 backdrop-blur-md rounded-xl p-3.5 border border-slate-700/80 hover:border-amber-400 transition-all flex flex-col items-center text-center justify-between shadow-lg">
+            <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-300 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
+              🌈
+            </div>
+            <div class="my-2">
+              <h2 class="font-display font-bold text-sm sm:text-base text-white group-hover:text-amber-300">Lab 3: Lapisan Cair</h2>
+              <p class="text-[11px] text-slate-400 leading-tight mt-0.5">4 Cairan Berbeda ρ</p>
+            </div>
+            <span class="text-[10px] font-mono font-semibold text-amber-300 bg-amber-950/70 border border-amber-800/50 px-2.5 py-0.5 rounded-md w-full truncate">
+              20 mL / Layer
+            </span>
+          </div>
+        </div>
+
+        <!-- Baris Bawah: Tombol Kuis -->
+        <div class="w-full max-w-3xl flex items-center justify-start gap-3 text-[11px] text-slate-200 font-mono">
+          <button onclick="setTabMode('quiz')" class="px-3.5 py-1.5 rounded-lg bg-slate-900/85 hover:bg-slate-800 backdrop-blur-md border border-purple-500/40 hover:border-purple-400 text-purple-200 hover:text-white transition flex items-center gap-2 whitespace-nowrap shadow">
+            <span>📝</span>
+            <span class="font-bold">Kuis (18 Soal)</span>
+            <span class="text-[9px] bg-purple-900/80 text-purple-200 px-1.5 py-0.5 rounded hidden sm:inline">Level 1–3</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- VIEW 1: LAB 1 - PENGUKURAN VOLUME & MASSA JENIS BENDA (MINIMALIS) -->
+      <!-- ======================================================== -->
+      <section id="view-lab1" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+        <div class="flex items-center justify-between flex-shrink-0">
+          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+            Lab 1: <span class="text-sky-300">Volume &amp; Massa Jenis</span>
+          </h2>
+          <div class="flex gap-1 bg-slate-900/75 p-1 rounded-lg border border-slate-700/70 backdrop-blur-md font-mono text-[11px]">
+            <button onclick="switchLab1Method('ukur')" id="btn-method-ukur" class="px-2.5 py-1 rounded bg-sky-500 text-slate-950 font-bold">Gelas Ukur</button>
+            <button onclick="switchLab1Method('pancur')" id="btn-method-pancur" class="px-2.5 py-1 rounded text-slate-300 hover:text-white">Pancuran</button>
+          </div>
+        </div>
+
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+          <!-- LEFT: Apparatus -->
+          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
+            <span id="lab1-apparatus-name" class="text-[11px] font-mono font-bold text-deepBlue">Gelas Ukur (100 mL)</span>
+
+            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
+              <svg viewBox="0 0 220 400" class="h-full w-auto overflow-visible drop-shadow">
+                <defs>
+                  <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.9" />
+                    <stop offset="65%" stop-color="#0284C7" stop-opacity="0.85" />
+                    <stop offset="100%" stop-color="#0369A1" stop-opacity="0.92" />
+                  </linearGradient>
+                  <linearGradient id="glassGloss" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+                    <stop offset="25%" stop-color="#ffffff" stop-opacity="0.05"/>
+                    <stop offset="75%" stop-color="#ffffff" stop-opacity="0.08"/>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0.35"/>
+                  </linearGradient>
+                  <clipPath id="cylinderInnerClip">
+                    <rect x="33" y="42" width="134" height="300" rx="4"/>
+                  </clipPath>
+                </defs>
+
+                <path id="lab1-eureka-spout" class="hidden" d="M 160,116 L 188,142 L 188,146 L 160,124" fill="#38BDF8" stroke="#0284C7" stroke-width="2"/>
+                <path id="lab1-eureka-spout-glass" class="hidden" d="M 160,114 L 190,142 L 190,147 L 160,126" fill="none" stroke="#64748B" stroke-width="2.5"/>
+
+                <path d="M 40,40 L 32,40 L 32,340 A 18,18 0 0,0 50,358 L 150,358 A 18,18 0 0,0 168,340 L 168,40 L 160,40" fill="none" stroke="#64748B" stroke-width="3"/>
+                <path d="M 20,370 C 20,358 45,358 50,358 L 150,358 C 155,358 180,358 180,370 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+
+                <g clip-path="url(#cylinderInnerClip)">
+                  <rect id="lab1-water-rect" class="liquid-anim" x="35" y="200" width="130" height="140" fill="url(#waterGrad)"/>
+                  <path id="lab1-meniscus-curve" class="liquid-anim" d="M 35,200 Q 100,208 165,200 Z" fill="#38BDF8" stroke="#0284C7" stroke-width="1.5"/>
+                </g>
+
+                <line id="lab1-meniscus-line" class="meniscus-line" x1="16" y1="204" x2="184" y2="204" stroke="#EF4444" stroke-width="2"/>
+
+                <g id="lab1-eye-marker" class="liquid-anim" transform="translate(190, 204)">
+                  <path d="M -10,0 Q 0,-7 10,0 Q 0,7 -10,0 Z" fill="#FFFFFF" stroke="#1E3A8A" stroke-width="1.8"/>
+                  <circle cx="0" cy="0" r="3.5" fill="#38BDF8" stroke="#1E3A8A" stroke-width="1"/>
+                  <circle cx="0" cy="0" r="1.5" fill="#1E3A8A"/>
+                </g>
+
+                <g id="lab1-object-group" class="object-anim" transform="translate(0, 0)">
+                  <line x1="100" y1="0" x2="100" y2="80" stroke="#475569" stroke-width="1.5" stroke-dasharray="3,2"/>
+                  <g id="lab1-object-svg-container" transform="translate(100, 95)"></g>
+                </g>
+
+                <g id="lab1-ticks-group" class="text-[9px] font-mono select-none" fill="#1E293B"></g>
+                <rect x="35" y="40" width="130" height="300" fill="url(#glassGloss)" pointer-events="none"/>
+              </svg>
+            </div>
+
+            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-xs font-mono font-bold">
+              <span class="text-blue-700">V₁: <span id="lab1-tag-v1">50</span> mL</span>
+              <span class="text-slate-300">|</span>
+              <span class="text-slate-700"><span id="lab1-tag-stone" class="text-amber-600">Batu</span></span>
+              <span class="text-slate-300">|</span>
+              <span class="text-crimsonRed">V₂: <span id="lab1-tag-v2" class="text-slate-400">?</span></span>
+            </div>
+          </div>
+
+          <!-- RIGHT: Minimalist Controls & Output -->
+          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg space-y-3">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                <span>Pilih Benda</span>
+                <span id="lab1-volume-info" class="font-mono text-[11px] text-slate-500">m = 75 g · V = ? cm³</span>
+              </div>
+              <div class="grid grid-cols-4 gap-2">
+                <button onclick="setLab1Object('batu')" id="btn-obj-batu" class="p-2 rounded-xl border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue">🪨 Batu</button>
+                <button onclick="setLab1Object('kunci')" id="btn-obj-kunci" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">🔑 Kunci</button>
+                <button onclick="setLab1Object('aluminium')" id="btn-obj-aluminium" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">⚙️ Logam</button>
+                <button onclick="setLab1Object('mahkota')" id="btn-obj-mahkota" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">👑 Mahkota</button>
+              </div>
+
+              <div class="pt-1 space-y-2">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                  <span id="lab1-v1-label-title">Volume Awal (V₁)</span>
+                  <span class="px-2 py-0.5 bg-deepBlue text-white font-mono rounded"><span id="lab1-v1-label">50</span> mL</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <input type="range" id="slider-lab1-v1" min="30" max="65" value="50" step="1" 
+                         class="flex-1 h-2 bg-slate-200 rounded-lg cursor-pointer accent-blue-900"
+                         oninput="onLab1V1Input(this.value)">
+                  <button onclick="toggleLab1Submersion()" id="btn-submerge-lab1" class="px-4 py-2 rounded-xl bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition whitespace-nowrap">
+                    💧 Celupkan
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-3.5 shadow-lg border border-slate-700/80 font-mono">
+              <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                <div class="p-2 bg-slate-800/90 rounded-xl border border-slate-700">
+                  <span class="text-slate-400 block text-[10px]">Massa (m)</span>
+                  <span id="lab1-calc-m" class="font-bold text-amber-300">75 g</span>
+                </div>
+                <div class="p-2 bg-slate-800/90 rounded-xl border border-slate-700">
+                  <span class="text-slate-400 block text-[10px]">Volume (V)</span>
+                  <span id="lab1-calc-v" class="font-bold text-sky-300">? cm³</span>
+                </div>
+                <div class="p-2 bg-emerald-950/90 rounded-xl border border-emerald-500/40">
+                  <span class="text-emerald-300 block text-[10px]">ρ = m / V</span>
+                  <span id="lab1-calc-rho" class="font-bold text-emerald-400">? g/cm³</span>
+                </div>
+                <div class="p-2 bg-blue-950/90 rounded-xl border border-blue-500/40 flex flex-col justify-center">
+                  <span class="text-blue-300 block text-[10px]">Bahan</span>
+                  <span id="lab1-calc-ident" class="font-bold text-blue-200 text-[10px] truncate">–</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg flex items-center justify-between text-xs font-mono">
+              <span class="text-slate-600">Rumus: <strong class="text-deepBlue">V = V₂ − V₁</strong> · <strong class="text-deepBlue">ρ = m / V</strong></span>
+              <button onclick="resetLab1Table()" class="text-[11px] text-slate-500 hover:text-deepBlue font-bold">Reset</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- VIEW 2: LAB 2 - MENGAPUNG, MELAYANG, TENGGELAM (MINIMALIS) -->
+      <!-- ======================================================== -->
+      <section id="view-lab2" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+        <div class="flex items-center justify-between flex-shrink-0">
+          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+            Lab 2: <span class="text-emerald-300">Hukum Archimedes</span>
+          </h2>
+          <span class="text-xs font-mono px-3 py-1 rounded-full bg-slate-900/75 text-emerald-200 border border-emerald-500/30 backdrop-blur-md">
+            Fluida Air: ρ = 1,00 g/cm³
+          </span>
+        </div>
+
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+          <!-- LEFT: Beaker -->
+          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
+            <div class="w-full flex items-center justify-between text-[11px] font-mono">
+              <span class="font-bold text-deepBlue">Gelas Kimia</span>
+              <span id="lab2-result-pill" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold">Siap Uji</span>
+            </div>
+
+            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
+              <svg viewBox="0 0 240 320" class="h-full w-auto overflow-visible drop-shadow">
+                <path d="M 25,40 L 30,50 L 30,280 A 20,20 0 0,0 50,300 L 190,300 A 20,20 0 0,0 210,280 L 210,50 L 215,40" fill="none" stroke="#64748B" stroke-width="3"/>
+                <line x1="30" y1="110" x2="55" y2="110" stroke="#94A3B8" stroke-width="1.5"/>
+                <text x="60" y="113" font-size="9" fill="#94A3B8" font-family="monospace">200 mL</text>
+                <line x1="30" y1="170" x2="55" y2="170" stroke="#94A3B8" stroke-width="1.5"/>
+                <text x="60" y="173" font-size="9" fill="#94A3B8" font-family="monospace">150 mL</text>
+                <line x1="30" y1="230" x2="55" y2="230" stroke="#94A3B8" stroke-width="1.5"/>
+                <text x="60" y="233" font-size="9" fill="#94A3B8" font-family="monospace">100 mL</text>
+
+                <rect x="32" y="100" width="176" height="198" fill="url(#waterGrad)"/>
+                <ellipse cx="120" cy="100" rx="88" ry="8" fill="#38BDF8" stroke="#0284C7" stroke-width="1.2"/>
+
+                <g id="lab2-object-group" class="object-anim" transform="translate(120, 50)">
+                  <g id="lab2-object-svg"></g>
+                </g>
+
+                <rect x="32" y="50" width="176" height="248" fill="url(#glassGloss)" pointer-events="none"/>
+              </svg>
+            </div>
+
+            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-xs font-mono font-bold">
+              <span><strong id="lab2-tag-name" class="text-blue-700">Kayu</strong></span>
+              <span class="text-slate-300">|</span>
+              <span>ρ: <strong id="lab2-tag-rho" class="text-amber-600">0.65</strong></span>
+              <span class="text-slate-300">|</span>
+              <span><strong id="lab2-tag-pos" class="text-emerald-600">Mengapung</strong></span>
+            </div>
+          </div>
+
+          <!-- RIGHT: Minimalist Controls -->
+          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
+              <div class="text-xs font-bold text-slate-700 mb-2">Pilih Benda (g/cm³)</div>
+              <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5">
+                <button onclick="setLab2Material('gabus')" id="btn-mat-gabus" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Gabus 0.24</button>
+                <button onclick="setLab2Material('kayu')" id="btn-mat-kayu" class="p-1.5 rounded-lg text-[10px] font-bold bg-blue-50 border border-deepBlue text-deepBlue">Kayu 0.65</button>
+                <button onclick="setLab2Material('lilin')" id="btn-mat-lilin" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Lilin 0.90</button>
+                <button onclick="setLab2Material('es')" id="btn-mat-es" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Es 0.92</button>
+                <button onclick="setLab2Material('plastik')" id="btn-mat-plastik" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Plastik 0.95</button>
+                <button onclick="setLab2Material('ujiKhusus')" id="btn-mat-ujiKhusus" class="p-1.5 rounded-lg text-[10px] font-semibold bg-amber-50 border border-amber-400 text-amber-900">Khusus 1.00</button>
+                <button onclick="setLab2Material('aluminium')" id="btn-mat-aluminium" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Alum 2.7</button>
+                <button onclick="setLab2Material('besi')" id="btn-mat-besi" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Besi 7.9</button>
+                <button onclick="setLab2Material('kuningan')" id="btn-mat-kuningan" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Kuningan 8.5</button>
+                <button onclick="setLab2Material('tembaga')" id="btn-mat-tembaga" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Tembaga 8.9</button>
+                <button onclick="setLab2Material('emas')" id="btn-mat-emas" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400 col-span-2">Emas 19.3</button>
+              </div>
+            </div>
+
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg space-y-2.5">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                <span>Prediksi Kedudukan</span>
+                <span class="font-mono text-[11px] text-blue-700" id="lab2-pred-text">Belum dipilih</span>
+              </div>
+              <div class="grid grid-cols-3 gap-2">
+                <button onclick="setLab2Prediction('mengapung')" id="pred-mengapung" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-emerald-50 hover:border-emerald-500">
+                  🟢 Mengapung
+                </button>
+                <button onclick="setLab2Prediction('melayang')" id="pred-melayang" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-amber-50 hover:border-amber-500">
+                  🟡 Melayang
+                </button>
+                <button onclick="setLab2Prediction('tenggelam')" id="pred-tenggelam" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-red-50 hover:border-red-500">
+                  🔴 Tenggelam
+                </button>
+              </div>
+              <button onclick="executeLab2Drop()" id="btn-drop-lab2" class="w-full py-2 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow transition">
+                💧 Masukkan ke Air
+              </button>
+            </div>
+
+            <div id="lab2-feedback-banner" class="hidden p-2.5 rounded-xl border text-xs flex items-center justify-between font-mono shadow-sm">
+              <div class="flex items-center gap-2">
+                <span id="lab2-feedback-icon" class="text-base">🎉</span>
+                <div>
+                  <div id="lab2-feedback-title" class="font-bold text-xs"></div>
+                  <div id="lab2-feedback-detail" class="text-[10px]"></div>
+                </div>
+              </div>
+              <span id="lab2-feedback-badge" class="px-2 py-0.5 rounded text-[10px] font-bold"></span>
+            </div>
+
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl px-3.5 py-2.5 border border-white/60 shadow-lg flex justify-between text-[11px] font-mono text-slate-700">
+              <span>ρ &lt; 1: <strong>Apung</strong></span>
+              <span>ρ = 1: <strong>Melayang</strong></span>
+              <span>ρ &gt; 1: <strong>Tenggelam</strong></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- VIEW 3: LAB 3 - PERBEDAAN MASSA JENIS ZAT CAIR (MINIMALIS)-->
+      <!-- ======================================================== -->
+      <section id="view-lab3" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+        <div class="flex items-center justify-between flex-shrink-0">
+          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+            Lab 3: <span class="text-amber-300">Lapisan Zat Cair</span>
+          </h2>
+          <span id="lab3-total-poured" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-slate-900/75 text-amber-200 border border-amber-500/30 backdrop-blur-md">
+            0 / 4 Cairan
+          </span>
+        </div>
+
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+          <!-- LEFT: Cylinder -->
+          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
+            <span class="text-[11px] font-mono font-bold text-deepBlue">Tabung Silinder (20 mL / Cairan)</span>
+
+            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
+              <svg viewBox="0 0 200 340" class="h-full w-auto overflow-visible drop-shadow">
+                <rect id="layer-madu" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#B45309" fill-opacity="0.95"/>
+                <rect id="layer-sirup" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#EF4444" fill-opacity="0.85"/>
+                <rect id="layer-air" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#38BDF8" fill-opacity="0.85"/>
+                <rect id="layer-minyak" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#FACC15" fill-opacity="0.85"/>
+
+                <line x1="32" y1="240" x2="48" y2="240" stroke="#475569" stroke-width="1.5"/>
+                <text x="16" y="243" font-size="9" fill="#475569" font-family="monospace">20mL</text>
+                <line x1="32" y1="180" x2="48" y2="180" stroke="#475569" stroke-width="1.5"/>
+                <text x="16" y="183" font-size="9" fill="#475569" font-family="monospace">40mL</text>
+                <line x1="32" y1="120" x2="48" y2="120" stroke="#475569" stroke-width="1.5"/>
+                <text x="16" y="123" font-size="9" fill="#475569" font-family="monospace">60mL</text>
+                <line x1="32" y1="60" x2="48" y2="60" stroke="#475569" stroke-width="1.5"/>
+                <text x="16" y="63" font-size="9" fill="#475569" font-family="monospace">80mL</text>
+
+                <path d="M 40,40 L 40,300 A 15,15 0 0,0 55,315 L 145,315 A 15,15 0 0,0 160,300 L 160,40" fill="none" stroke="#64748B" stroke-width="3"/>
+                <path d="M 25,325 C 25,315 45,315 55,315 L 145,315 C 155,315 175,315 175,325 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
+                <rect x="40" y="40" width="120" height="260" fill="url(#glassGloss)" pointer-events="none"/>
+              </svg>
+            </div>
+
+            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-[11px] font-mono font-bold">
+              <span class="text-amber-600">Minyak 0.92</span>
+              <span class="text-sky-600">Air 1.00</span>
+              <span class="text-red-600">Sirup 1.30</span>
+              <span class="text-amber-800">Madu 1.40</span>
+            </div>
+          </div>
+
+          <!-- RIGHT: Minimalist Pour Controls -->
+          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700 mb-2">
+                <span>Tuang Zat Cair</span>
+                <button onclick="resetLab3Liquids()" class="text-[11px] font-mono text-blue-600 hover:underline">Reset</button>
+              </div>
+              <div class="grid grid-cols-2 gap-2.5">
+                <button onclick="pourLiquid('madu')" id="btn-pour-madu" class="p-3 rounded-xl border border-amber-800/30 bg-amber-50 hover:bg-amber-100 text-amber-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-lg">🍯</span> Madu</span>
+                  <span class="font-mono text-[11px]">1,40</span>
+                </button>
+                <button onclick="pourLiquid('sirup')" id="btn-pour-sirup" class="p-3 rounded-xl border border-red-500/30 bg-red-50 hover:bg-red-100 text-red-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-lg">🍓</span> Sirup</span>
+                  <span class="font-mono text-[11px]">1,30</span>
+                </button>
+                <button onclick="pourLiquid('air')" id="btn-pour-air" class="p-3 rounded-xl border border-sky-500/30 bg-sky-50 hover:bg-sky-100 text-sky-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-lg">💧</span> Air</span>
+                  <span class="font-mono text-[11px]">1,00</span>
+                </button>
+                <button onclick="pourLiquid('minyak')" id="btn-pour-minyak" class="p-3 rounded-xl border border-yellow-500/30 bg-yellow-50 hover:bg-yellow-100 text-yellow-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-lg">🌻</span> Minyak</span>
+                  <span class="font-mono text-[11px]">0,92</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg text-xs text-slate-700 space-y-1">
+              <div class="font-bold text-amber-900">Urutan Dasar → Atas</div>
+              <p class="font-mono text-[11px] text-slate-600">Madu (1,40) → Sirup (1,30) → Air (1,00) → Minyak (0,92)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- VIEW 4: MODE KUIS EVALUASI MANDIRI (MINIMALIS)           -->
+      <!-- ======================================================== -->
+      <section id="view-quiz" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+        
+        <div class="flex items-center justify-between flex-shrink-0">
+          <div class="flex items-center gap-2.5">
+            <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+              Kuis <span class="text-purple-300" id="quiz-progress-text">1 / 18</span>
+            </h2>
+            <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold" id="quiz-level-badge">Level 1</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs font-mono">
+            <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-0.5 rounded-md font-bold">
+              Skor: <span id="quiz-score-val">0</span>
+            </span>
+            <span class="bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded-md font-bold">
+              🔥 <span id="quiz-streak-val">0</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+          
+          <div class="col-span-8 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-lg">
+            <div>
+              <span class="text-[10px] font-mono text-slate-400 block mb-1" id="quiz-category-tag">Simulasi 1</span>
+              <h3 class="text-sm sm:text-base font-bold text-slate-800 leading-snug" id="quiz-question-text"></h3>
+            </div>
+
+            <div id="quiz-mc-container" class="grid grid-cols-2 gap-2 my-2"></div>
+
+            <div id="quiz-input-container" class="space-y-2 hidden">
+              <div class="flex items-center gap-2">
+                <input type="number" id="quiz-num-input" placeholder="Jawaban..." step="any"
+                       class="flex-1 p-2 bg-slate-50 border border-slate-300 rounded-xl font-mono text-center font-bold text-sm focus:ring-2 focus:ring-deepBlue"
+                       onkeydown="if(event.key === 'Enter') checkCurrentQuizAnswer()">
+                <span class="font-mono text-xs font-bold text-slate-500" id="quiz-unit-label">cm³</span>
+              </div>
+            </div>
+
+            <div id="quiz-feedback-box" class="p-2.5 rounded-xl border text-xs hidden">
+              <div id="quiz-feedback-title" class="font-bold mb-0.5"></div>
+              <div id="quiz-feedback-desc" class="text-[11px] leading-relaxed"></div>
+            </div>
+          </div>
+
+          <div class="col-span-4 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
+            <div>
+              <div class="text-xs font-bold text-slate-700 mb-2">Nomor Soal</div>
+              <div class="grid grid-cols-6 gap-1" id="quiz-pills-container"></div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 pt-2">
+              <button onclick="resetQuizScore()" class="px-2.5 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-xl transition font-mono font-bold">
+                Reset
+              </button>
+              <button onclick="submitOrNextQuiz()" id="btn-quiz-action" class="flex-1 py-2 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow transition">
+                Periksa
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Dock Controller -->
+    <footer class="h-10 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-4 flex items-center justify-between flex-shrink-0 z-30">
+      <button id="btn-back-dashboard" onclick="goToStart()" class="hidden px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+        <span>🏠</span>
+        <span>Dashboard</span>
+      </button>
+
+      <div id="footer-status-pill" class="text-[11px] font-mono text-sky-300 flex items-center gap-1.5 bg-slate-950 px-3 py-0.5 rounded-full border border-slate-800 mx-auto">
+        <span class="w-1.5 h-1.5 rounded-full bg-emeraldGreen animate-pulse"></span>
+        <span id="footer-status-label">Dashboard</span>
+      </div>
+    </footer>
+
+    <!-- Canvas Confetti Overlay -->
+    <canvas id="confetti-canvas" class="absolute inset-0 pointer-events-none z-50"></canvas>
+
+  </div>
+
+  <!-- MODAL 1: PETUNJUK PRAKTIKUM (MINIMALIS) -->
+  <div id="modal-petunjuk" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-slate-100">
+        <h3 class="text-lg font-display font-extrabold text-slate-800">📖 Petunjuk Praktikum</h3>
+        <button onclick="toggleModal('petunjuk', false)" class="text-slate-400 hover:text-slate-600 text-sm font-bold">✕</button>
+      </div>
+
+      <ul class="space-y-2 text-xs text-slate-600 leading-relaxed">
+        <li><strong>1. Lab 1 (Volume):</strong> Atur V₁, lalu klik <em>Celupkan</em> untuk melihat kenaikan volume (V = V₂ − V₁) dan massa jenis (ρ = m / V).</li>
+        <li><strong>2. Lab 2 (Archimedes):</strong> Pilih benda, buat prediksi <em>Mengapung</em>, <em>Melayang</em>, atau <em>Tenggelam</em>, lalu uji ke dalam air.</li>
+        <li><strong>3. Lab 3 (Lapisan Cair):</strong> Tuang 4 zat cair dan amati susunan lapisan dari massa jenis terbesar (dasar) ke terkecil (atas).</li>
+        <li><strong>4. Kuis:</strong> Jawab 18 soal berlevel (10–30 poin) dengan bonus 5 poin tiap 3 jawaban benar beruntun.</li>
+      </ul>
+
+      <div class="mt-4 pt-3 border-t border-slate-100 flex justify-end">
+        <button onclick="toggleModal('petunjuk', false)" class="px-4 py-1.5 bg-deepBlue text-white font-bold rounded-xl text-xs hover:bg-blue-800">
+          Oke
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: PENJELASAN MATERI -->
+  <div id="modal-penjelasan" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 shadow-2xl border border-slate-200 max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">💡</span>
+          <h3 class="text-sm font-bold text-slate-800">Materi &amp; Tabel Massa Jenis (Buku BSE IPA VII)</h3>
+        </div>
+        <button onclick="toggleModal('penjelasan', false)" class="text-slate-400 hover:text-slate-600 p-1 text-base">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-600 overflow-y-auto custom-scroll pr-1">
+        <div>
+          <h4 class="font-bold text-blue-700 mb-0.5">Massa Jenis sebagai Sifat Khas Zat</h4>
+          <p class="leading-relaxed">Massa jenis adalah perbandingan massa terhadap volume (ρ = m / V). Benda berbahan sama memiliki massa jenis yang sama berapapun ukurannya, sehingga dapat digunakan untuk mengenali jenis bahan.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-slate-800 mb-0.5">Tabel 3.1 Massa Jenis Beberapa Zat Padat:</h4>
+          <table class="w-full text-left font-mono text-[10px] border border-slate-200 rounded-lg overflow-hidden">
+            <thead class="bg-slate-100 text-slate-700">
+              <tr><th class="p-1">Zat Padat</th><th class="p-1">ρ (g/cm³)</th><th class="p-1">ρ (kg/m³)</th></tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr><td class="p-1">Batu (rata-rata)</td><td class="p-1">2,5</td><td class="p-1">2.500</td></tr>
+              <tr><td class="p-1">Aluminium</td><td class="p-1">2,7</td><td class="p-1">2.700</td></tr>
+              <tr><td class="p-1">Besi</td><td class="p-1">7,9</td><td class="p-1">7.900</td></tr>
+              <tr><td class="p-1">Kuningan (kunci)</td><td class="p-1">8,5</td><td class="p-1">8.500</td></tr>
+              <tr><td class="p-1">Tembaga</td><td class="p-1">8,9</td><td class="p-1">8.900</td></tr>
+              <tr><td class="p-1 font-bold text-amber-700">Emas Murni</td><td class="p-1 font-bold text-amber-700">19,3</td><td class="p-1 font-bold text-amber-700">19.300</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-slate-800 mb-0.5">Tabel 3.3 Massa Jenis Zat Cair Pembanding:</h4>
+          <table class="w-full text-left font-mono text-[10px] border border-slate-200 rounded-lg overflow-hidden">
+            <thead class="bg-slate-100 text-slate-700">
+              <tr><th class="p-1">Zat Cair</th><th class="p-1">ρ (g/cm³ atau g/mL)</th><th class="p-1">ρ (kg/m³)</th></tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr><td class="p-1">Oli</td><td class="p-1">0,88</td><td class="p-1">880</td></tr>
+              <tr><td class="p-1">Minyak Goreng</td><td class="p-1">0,92 (≈0,9)</td><td class="p-1">920</td></tr>
+              <tr><td class="p-1 font-bold text-blue-600">Air Murni</td><td class="p-1 font-bold text-blue-600">1,00</td><td class="p-1 font-bold text-blue-600">1.000</td></tr>
+              <tr><td class="p-1">Sabun Cuci Cair</td><td class="p-1">1,05</td><td class="p-1">1.050</td></tr>
+              <tr><td class="p-1">Sirup</td><td class="p-1">1,30</td><td class="p-1">1.300</td></tr>
+              <tr><td class="p-1">Madu</td><td class="p-1">1,40</td><td class="p-1">1.400</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="p-2 rounded-xl bg-amber-50 border border-amber-200 text-[11px] leading-snug">
+          <strong class="text-amber-900 block mb-0.5">Fakta Menarik Sains:</strong>
+          • Danau di daerah dingin membeku dari permukaan ke bawah karena es (ρ = 0,92) lebih ringan dari air cair, sehingga ikan tetap hidup di dasar danau.<br>
+          • Satu liter madu bermassa sekitar 1,4 kg (40% lebih berat dari 1 liter air).<br>
+          • Lampu lava bekerja dengan pemanasan dan pendinginan fluida yang mengubah massa jenisnya secara berkala.
+        </div>
+      </div>
+
+      <div class="mt-4 pt-2 border-t border-slate-100 flex justify-end">
+        <button onclick="toggleModal('penjelasan', false)" class="px-4 py-1.5 bg-deepBlue text-white font-bold rounded-xl text-xs hover:bg-blue-800">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let audioCtx = null;
+    let isMuted = false;
+    let isBgmPlaying = true;
+    let bgmOscillators = [];
+    let bgmInterval = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function toggleAudioMute() {
+      isMuted = !isMuted;
+      document.getElementById('icon-sound-on').classList.toggle('hidden', isMuted);
+      document.getElementById('icon-sound-off').classList.toggle('hidden', !isMuted);
+      if (!isMuted) playClickSound();
+    }
+
+    function toggleBgmMusic() {
+      isBgmPlaying = !isBgmPlaying;
+      const label = document.getElementById('bgm-label');
+      const eqContainer = document.getElementById('eq-container');
+
+      if (isBgmPlaying) {
+        label.textContent = "BGM: ON";
+        eqContainer.classList.remove('opacity-30');
+        startBgmSynthesizer();
+      } else {
+        label.textContent = "BGM: OFF";
+        eqContainer.classList.add('opacity-30');
+        stopBgmSynthesizer();
+      }
+    }
+
+    function startBgmSynthesizer() {
+      if (!isBgmPlaying) return;
+      try {
+        const ctx = getAudioContext();
+        stopBgmSynthesizer();
+
+        const notes = {
+          C3: 130.81, G3: 196.00, A3: 220.00, F3: 174.61,
+          C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+          C5: 523.25, D5: 587.33, E5: 659.25, G5: 783.99
+        };
+
+        const pattern = [
+          { bass: notes.C3, lead: notes.C5 },
+          { bass: null,     lead: notes.E5 },
+          { bass: notes.G3, lead: notes.G5 },
+          { bass: null,     lead: notes.E5 },
+          { bass: notes.G3, lead: notes.D5 },
+          { bass: null,     lead: notes.B4 },
+          { bass: notes.D4, lead: notes.G4 },
+          { bass: null,     lead: notes.D5 },
+          { bass: notes.A3, lead: notes.C5 },
+          { bass: null,     lead: notes.E5 },
+          { bass: notes.E4, lead: notes.A4 },
+          { bass: null,     lead: notes.C5 },
+          { bass: notes.F3, lead: notes.F4 },
+          { bass: null,     lead: notes.A4 },
+          { bass: notes.C4, lead: notes.C5 },
+          { bass: null,     lead: notes.D5 }
+        ];
+
+        let step = 0;
+        const stepTime = 230;
+
+        function playStep() {
+          if (!isBgmPlaying) return;
+          const current = pattern[step];
+          step = (step + 1) % pattern.length;
+          const now = ctx.currentTime;
+
+          if (current.bass) {
+            const oscB = ctx.createOscillator();
+            const gainB = ctx.createGain();
+            oscB.type = 'triangle';
+            oscB.frequency.setValueAtTime(current.bass, now);
+            gainB.gain.setValueAtTime(0.04, now);
+            gainB.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+            oscB.connect(gainB);
+            gainB.connect(ctx.destination);
+            oscB.start(now);
+            oscB.stop(now + 0.36);
+            bgmOscillators.push(oscB);
+          }
+
+          if (current.lead) {
+            const oscL = ctx.createOscillator();
+            const gainL = ctx.createGain();
+            const filterL = ctx.createBiquadFilter();
+
+            oscL.type = (step % 2 === 0) ? 'sine' : 'square';
+            oscL.frequency.setValueAtTime(current.lead, now);
+
+            filterL.type = 'lowpass';
+            filterL.frequency.setValueAtTime(1400, now);
+
+            gainL.gain.setValueAtTime(0.022, now);
+            gainL.gain.exponentialRampToValueAtTime(0.0008, now + 0.2);
+
+            oscL.connect(filterL);
+            filterL.connect(gainL);
+            gainL.connect(ctx.destination);
+
+            oscL.start(now);
+            oscL.stop(now + 0.22);
+            bgmOscillators.push(oscL);
+          }
+
+          if (bgmOscillators.length > 25) {
+            bgmOscillators = bgmOscillators.slice(-10);
+          }
+        }
+
+        playStep();
+        bgmInterval = setInterval(playStep, stepTime);
+      } catch (e) {}
+    }
+
+    function stopBgmSynthesizer() {
+      if (bgmInterval) {
+        clearInterval(bgmInterval);
+        bgmInterval = null;
+      }
+      bgmOscillators.forEach(osc => {
+        try { osc.stop(); } catch(e){}
+      });
+      bgmOscillators = [];
+    }
+
+    function playClickSound() {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(650, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.045);
+      } catch (e) {}
+    }
+
+    function playSplashSound() {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const bufferSize = ctx.sampleRate * 0.3;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+
+        const whiteNoise = ctx.createBufferSource();
+        whiteNoise.buffer = buffer;
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1100, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.3);
+
+        const gainNode = ctx.createGain();
+        gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+
+        whiteNoise.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(ctx.destination);
+        whiteNoise.start();
+      } catch (e) {}
+    }
+
+    function playSuccessChord() {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const notes = [523.25, 659.25, 783.99];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
+          gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.08);
+          gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + i * 0.08 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.08 + 0.45);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + i * 0.08);
+          osc.stop(ctx.currentTime + i * 0.08 + 0.48);
+        });
+      } catch (e) {}
+    }
+
+    function playTitutSound() {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        const t = ctx.currentTime;
+
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'square';
+        osc1.frequency.setValueAtTime(880, t);
+        gain1.gain.setValueAtTime(0.2, t);
+        gain1.gain.exponentialRampToValueAtTime(0.01, t + 0.16);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(t);
+        osc1.stop(t + 0.16);
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sawtooth';
+        osc2.frequency.setValueAtTime(440, t + 0.18);
+        gain2.gain.setValueAtTime(0.25, t + 0.18);
+        gain2.gain.exponentialRampToValueAtTime(0.01, t + 0.46);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(t + 0.18);
+        osc2.stop(t + 0.46);
+      } catch (e) {}
+    }
+
+    function triggerConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      const particles = [];
+      const colors = ['#10B981', '#38BDF8', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#FBBF24'];
+
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: canvas.width * 0.5 + (Math.random() - 0.5) * 160,
+          y: canvas.height * 0.45,
+          vx: (Math.random() - 0.5) * 12,
+          vy: -Math.random() * 9 - 4,
+          size: Math.random() * 7 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 14,
+          life: 1
+        });
+      }
+
+      let animId;
+      function update() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = 0;
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.28;
+          p.vx *= 0.98;
+          p.rotation += p.rotSpeed;
+          p.life -= 0.016;
+
+          if (p.life > 0) {
+            alive++;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = Math.max(0, p.life);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+            ctx.restore();
+          }
+        });
+
+        if (alive > 0) {
+          animId = requestAnimationFrame(update);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          cancelAnimationFrame(animId);
+        }
+      }
+      update();
+    }
+
+    function renderAmbientBubbles() {
+      const bg = document.getElementById("ambient-bg-layer");
+      if (!bg) return;
+      const bubbleCount = 14;
+
+      for (let i = 0; i < bubbleCount; i++) {
+        const b = document.createElement("span");
+        b.className = "bubble";
+        const size = Math.round(7 + Math.random() * 14);
+        b.style.width = `${size}px`;
+        b.style.height = `${size}px`;
+        b.style.left = `${Math.round(4 + Math.random() * 92)}%`;
+        b.style.setProperty("--dur", `${(8 + Math.random() * 8).toFixed(1)}s`);
+        b.style.setProperty("--delay", `${(-Math.random() * 12).toFixed(1)}s`);
+        b.style.setProperty("--sway", `${Math.round((Math.random() - 0.5) * 36)}px`);
+        bg.appendChild(b);
+      }
+    }
+
+    let currentTab = 'title';
+
+    const labThemes = [
+      { id: 'blue-lab', name: 'Blue Lab', icon: '🌌', gradient: 'from-slate-950 via-blue-950 to-slate-900', pattern: 'bg-grid-lab', blobs: ['bg-sky-500/18', 'bg-blue-600/18', 'bg-teal-400/10'] },
+      { id: 'ocean-deep', name: 'Ocean Deep', icon: '🌊', gradient: 'from-cyan-950 via-teal-950 to-blue-950', pattern: 'bg-grid-lab', blobs: ['bg-cyan-500/22', 'bg-teal-500/20', 'bg-sky-400/15'] },
+      { id: 'midnight-violet', name: 'Cyber Violet', icon: '🔮', gradient: 'from-slate-950 via-purple-950 to-indigo-950', pattern: 'bg-dots-lab', blobs: ['bg-purple-500/20', 'bg-pink-600/15', 'bg-indigo-500/20'] },
+      { id: 'emerald-mint', name: 'Emerald Bio', icon: '🍃', gradient: 'from-slate-950 via-emerald-950 to-teal-950', pattern: 'bg-grid-lab', blobs: ['bg-emerald-500/20', 'bg-teal-600/18', 'bg-lime-400/12'] },
+      { id: 'amber-physics', name: 'Amber Glow', icon: '⚡', gradient: 'from-stone-950 via-amber-950 to-slate-950', pattern: 'bg-dots-lab', blobs: ['bg-amber-500/20', 'bg-orange-600/16', 'bg-yellow-400/12'] }
+    ];
+
+    let currentThemeIndex = 0;
+
+    function applyTheme(theme) {
+      const stage = document.getElementById('main-stage-container');
+      const grid = document.getElementById('bg-pattern-grid');
+      const blob1 = document.getElementById('blob-1');
+      const blob2 = document.getElementById('blob-2');
+      const blob3 = document.getElementById('blob-3');
+
+      if (stage) stage.className = `flex-1 relative overflow-hidden bg-gradient-to-br ${theme.gradient} flex flex-col transition-all duration-700`;
+      if (grid) grid.className = `absolute inset-0 ${theme.pattern} opacity-70 transition-all duration-500`;
+      if (blob1) blob1.className = `absolute -top-24 -left-20 w-80 h-80 rounded-full ${theme.blobs[0]} blur-3xl aurora-glow`;
+      if (blob2) blob2.className = `absolute -bottom-20 -right-20 w-96 h-96 rounded-full ${theme.blobs[1]} blur-3xl aurora-glow`;
+      if (blob3) blob3.className = `absolute top-1/3 left-1/2 -translate-x-1/2 w-72 h-72 rounded-full ${theme.blobs[2]} blur-3xl aurora-glow`;
+
+      const label = document.getElementById('theme-label');
+      const icon = document.getElementById('theme-icon');
+      if (label) label.textContent = `Tema: ${theme.name}`;
+      if (icon) icon.textContent = theme.icon;
+    }
+
+    function cycleThemeBg() {
+      playClickSound();
+      currentThemeIndex = (currentThemeIndex + 1) % labThemes.length;
+      applyTheme(labThemes[currentThemeIndex]);
+    }
+
+    function autoHarmonizeTabBackground(tab) {
+      if (tab === 'lab1') applyTheme(labThemes[1]);
+      else if (tab === 'lab2') applyTheme(labThemes[3]);
+      else if (tab === 'lab3') applyTheme(labThemes[4]);
+      else if (tab === 'quiz') applyTheme(labThemes[2]);
+      else applyTheme(labThemes[0]);
+    }
+
+    function toggleModal(type, show) {
+      playClickSound();
+      const modal = document.getElementById(type === 'petunjuk' ? 'modal-petunjuk' : 'modal-penjelasan');
+      if (modal) {
+        if (show) modal.classList.remove('hidden');
+        else modal.classList.add('hidden');
+      }
+    }
+
+    function toggleFullscreen() {
+      playClickSound();
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    function goToStart() {
+      playClickSound();
+      setTabMode('title');
+    }
+
+    function setTabMode(tab) {
+      playClickSound();
+      currentTab = tab;
+
+      ['title', 'lab1', 'lab2', 'lab3', 'quiz'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) {
+          if (v === tab) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
+      });
+
+      autoHarmonizeTabBackground(tab);
+
+      const btnBackDashboard = document.getElementById('btn-back-dashboard');
+      if (btnBackDashboard) {
+        if (tab === 'title') btnBackDashboard.classList.add('hidden');
+        else btnBackDashboard.classList.remove('hidden');
+      }
+
+      const statusLabel = document.getElementById('footer-status-label');
+      if (tab === 'title') statusLabel.textContent = 'Dashboard';
+      else if (tab === 'lab1') statusLabel.textContent = 'Lab 1: Volume';
+      else if (tab === 'lab2') statusLabel.textContent = 'Lab 2: Archimedes';
+      else if (tab === 'lab3') statusLabel.textContent = 'Lab 3: Lapisan Cair';
+      else if (tab === 'quiz') statusLabel.textContent = 'Kuis (18 Soal)';
+    }
+
+    const lab3Poured = { minyak: false, air: false, sirup: false, madu: false };
+    const liquidDensityOrder = [
+      { key: 'madu', rho: 1.40 },
+      { key: 'sirup', rho: 1.30 },
+      { key: 'air', rho: 1.00 },
+      { key: 'minyak', rho: 0.92 }
+    ];
+
+    function pourLiquid(type) {
+      playClickSound();
+      lab3Poured[type] = true;
+      const btn = document.getElementById(`btn-pour-${type}`);
+      if (btn) btn.classList.add('opacity-40', 'pointer-events-none');
+      updateLab3LayersStack();
+    }
+
+    function updateLab3LayersStack() {
+      const activeLiquids = liquidDensityOrder.filter(item => lab3Poured[item.key]);
+      document.getElementById('lab3-total-poured').textContent = `${activeLiquids.length} / 4 Cairan`;
+
+      const BASE_Y = 300;
+      const LAYER_HEIGHT = 60;
+
+      liquidDensityOrder.forEach(item => {
+        const el = document.getElementById(`layer-${item.key}`);
+        if (el && !lab3Poured[item.key]) {
+          el.classList.add('opacity-0');
+          el.setAttribute('height', '0');
+          el.setAttribute('y', BASE_Y);
+        }
+      });
+
+      activeLiquids.forEach((item, index) => {
+        const el = document.getElementById(`layer-${item.key}`);
+        if (el) {
+          const targetY = BASE_Y - ((index + 1) * LAYER_HEIGHT);
+          el.setAttribute('y', targetY);
+          el.setAttribute('height', LAYER_HEIGHT);
+          el.classList.remove('opacity-0');
+        }
+      });
+    }
+
+    function resetLab3Liquids() {
+      playClickSound();
+      Object.keys(lab3Poured).forEach(type => {
+        lab3Poured[type] = false;
+        const el = document.getElementById(`layer-${type}`);
+        if (el) {
+          el.classList.add('opacity-0');
+          el.setAttribute('y', 300);
+          el.setAttribute('height', '0');
+        }
+        const btn = document.getElementById(`btn-pour-${type}`);
+        if (btn) btn.classList.remove('opacity-40', 'pointer-events-none');
+      });
+      document.getElementById('lab3-total-poured').textContent = '0 / 4 Cairan';
+    }
+
+    const lab1Objects = {
+      batu: {
+        name: 'Batu', m: 75, v: 30, rho: 2.5, ident: 'Batu (2.5)',
+        svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.4))"><path d="M -18,-18 L -9,-24 L 6,-22 L 20,-14 L 25,-1 L 22,14 L 10,24 L -8,25 L -22,15 L -26,-2 Z" fill="#475569" stroke="#0F172A" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="-11" cy="-10" rx="3" ry="2" fill="#0F172A"/><ellipse cx="8" cy="8" rx="3.5" ry="2.2" fill="#0F172A"/><circle cx="12" cy="-6" r="2" fill="#0F172A"/></g>`
+      },
+      kunci: {
+        name: 'Kunci', m: 85, v: 10, rho: 8.5, ident: 'Kuningan (8.5)',
+        svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.35))"><circle cx="0" cy="-14" r="10" fill="#D97706" stroke="#78350F" stroke-width="2"/><circle cx="0" cy="-14" r="4.5" fill="#38BDF8"/><rect x="-3" y="-4" width="6" height="26" fill="#F59E0B" stroke="#78350F" stroke-width="1.8"/><path d="M 3,4 L 10,4 L 10,8 L 3,8 Z" fill="#D97706" stroke="#78350F" stroke-width="1.5"/><path d="M 3,14 L 12,14 L 12,18 L 3,18 Z" fill="#D97706" stroke="#78350F" stroke-width="1.5"/></g>`
+      },
+      aluminium: {
+        name: 'Logam Al', m: 54, v: 20, rho: 2.7, ident: 'Aluminium (2.7)',
+        svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.35))"><rect x="-14" y="-14" width="28" height="28" rx="3" fill="#94A3B8" stroke="#334155" stroke-width="2"/><circle cx="0" cy="0" r="6" fill="#E2E8F0" stroke="#334155" stroke-width="1.2"/></g>`
+      },
+      mahkota: {
+        name: 'Mahkota', m: 286, v: 20, rho: 14.3, ident: 'Bukan Emas (14.3)',
+        svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.35))"><path d="M -16,10 L 16,10 L 14,-8 L 6,-2 L 0,-14 L -6,-2 L -14,-8 Z" fill="#F59E0B" stroke="#B45309" stroke-width="2"/><circle cx="0" cy="-14" r="2" fill="#EF4444"/><circle cx="-14" cy="-8" r="1.5" fill="#38BDF8"/><circle cx="14" cy="-8" r="1.5" fill="#38BDF8"/></g>`
+      }
+    };
+
+    const lab1State = { method: 'ukur', selectedObj: 'batu', v1: 50, submerged: false };
+
+    function switchLab1Method(method) {
+      playClickSound();
+      lab1State.method = method;
+      const btnUkur = document.getElementById('btn-method-ukur');
+      const btnPancur = document.getElementById('btn-method-pancur');
+      const appName = document.getElementById('lab1-apparatus-name');
+      const spout = document.getElementById('lab1-eureka-spout');
+      const spoutGlass = document.getElementById('lab1-eureka-spout-glass');
+      const v1Title = document.getElementById('lab1-v1-label-title');
+
+      if (method === 'ukur') {
+        btnUkur.className = "px-2.5 py-1 rounded bg-sky-500 text-slate-950 font-bold";
+        btnPancur.className = "px-2.5 py-1 rounded text-slate-300 hover:text-white";
+        appName.textContent = "Gelas Ukur (100 mL)";
+        spout.classList.add('hidden');
+        spoutGlass.classList.add('hidden');
+        v1Title.textContent = "Volume Awal (V₁)";
+      } else {
+        btnPancur.className = "px-2.5 py-1 rounded bg-sky-500 text-slate-950 font-bold";
+        btnUkur.className = "px-2.5 py-1 rounded text-slate-300 hover:text-white";
+        appName.textContent = "Gelas Pancuran";
+        spout.classList.remove('hidden');
+        spoutGlass.classList.remove('hidden');
+        v1Title.textContent = "Level Spout (V₁)";
+      }
+      updateLab1WaterLevel();
+    }
+
+    function renderLab1Ticks() {
+      const container = document.getElementById('lab1-ticks-group');
+      if (!container) return;
+      let ticksHTML = '';
+      for (let ml = 10; ml <= 100; ml += 2) {
+        const y = 340 - (ml * 2.8);
+        const isMajor = (ml % 10 === 0);
+        const isHalf = (ml % 5 === 0 && !isMajor);
+        const len = isMajor ? 24 : (isHalf ? 16 : 8);
+        const strokeW = isMajor ? 2 : (isHalf ? 1.4 : 0.9);
+        const color = isMajor ? '#1E293B' : '#64748B';
+        ticksHTML += `<line x1="35" y1="${y}" x2="${35 + len}" y2="${y}" stroke="${color}" stroke-width="${strokeW}"/>`;
+        if (isMajor) {
+          ticksHTML += `<text x="${35 + len + 3}" y="${y + 3.5}" font-size="9" font-weight="700" fill="#1E293B">${ml}</text>`;
+        }
+      }
+      container.innerHTML = ticksHTML;
+    }
+
+    function setLab1Object(key) {
+      playClickSound();
+      lab1State.selectedObj = key;
+
+      ['batu', 'kunci', 'aluminium', 'mahkota'].forEach(k => {
+        const btn = document.getElementById(`btn-obj-${k}`);
+        if (btn) {
+          btn.className = (k === key)
+            ? "p-2 rounded-xl border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue"
+            : "p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400";
+        }
+      });
+
+      const current = lab1Objects[key];
+      document.getElementById('lab1-tag-stone').textContent = current.name;
+      document.getElementById('lab1-calc-m').textContent = `${current.m} g`;
+      document.getElementById('lab1-object-svg-container').innerHTML = current.svg;
+      updateLab1WaterLevel();
+    }
+
+    function onLab1V1Input(val) {
+      lab1State.v1 = parseInt(val, 10);
+      document.getElementById('lab1-v1-label').textContent = lab1State.v1;
+      document.getElementById('lab1-tag-v1').textContent = lab1State.v1;
+      updateLab1WaterLevel();
+    }
+
+    function toggleLab1Submersion() {
+      lab1State.submerged = !lab1State.submerged;
+      const objGroup = document.getElementById('lab1-object-group');
+      const btnSubmerge = document.getElementById('btn-submerge-lab1');
+
+      if (lab1State.submerged) {
+        playSplashSound();
+        objGroup.style.transform = 'translateY(190px)';
+        btnSubmerge.textContent = '↺ Angkat';
+        btnSubmerge.className = 'px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow transition whitespace-nowrap';
+      } else {
+        playClickSound();
+        objGroup.style.transform = 'translateY(0px)';
+        btnSubmerge.textContent = '💧 Celupkan';
+        btnSubmerge.className = 'px-4 py-2 rounded-xl bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition whitespace-nowrap';
+      }
+      updateLab1WaterLevel();
+    }
+
+    function updateLab1WaterLevel() {
+      const obj = lab1Objects[lab1State.selectedObj];
+      const activeVolume = lab1State.submerged ? (lab1State.v1 + obj.v) : lab1State.v1;
+      const renderVolume = (lab1State.method === 'pancur' && lab1State.submerged)
+        ? Math.min(80, activeVolume)
+        : Math.min(100, activeVolume);
+
+      const currentY = Math.max(52, 340 - (renderVolume * 2.8));
+      const currentH = 340 - currentY;
+
+      document.getElementById('lab1-water-rect').setAttribute('y', currentY);
+      document.getElementById('lab1-water-rect').setAttribute('height', currentH);
+      document.getElementById('lab1-meniscus-curve').setAttribute('d', `M 35,${currentY} Q 100,${currentY + 8} 165,${currentY} Z`);
+
+      const lineY = currentY + 4;
+      document.getElementById('lab1-meniscus-line').setAttribute('y1', lineY);
+      document.getElementById('lab1-meniscus-line').setAttribute('y2', lineY);
+      document.getElementById('lab1-eye-marker').setAttribute('transform', `translate(190, ${lineY})`);
+
+      const infoEl = document.getElementById('lab1-volume-info');
+      const tagV2 = document.getElementById('lab1-tag-v2');
+      const calcV = document.getElementById('lab1-calc-v');
+      const calcRho = document.getElementById('lab1-calc-rho');
+      const calcIdent = document.getElementById('lab1-calc-ident');
+
+      if (lab1State.submerged) {
+        if (infoEl) infoEl.textContent = `m = ${obj.m} g · V = ${obj.v} cm³`;
+        tagV2.textContent = `${activeVolume} mL`;
+        tagV2.className = "text-crimsonRed font-bold";
+        calcV.textContent = `${obj.v} cm³`;
+        calcRho.textContent = `${obj.rho.toFixed(1)} g/cm³`;
+        calcIdent.textContent = obj.ident;
+      } else {
+        if (infoEl) infoEl.textContent = `m = ${obj.m} g · V = ? cm³`;
+        tagV2.textContent = '?';
+        tagV2.className = "text-slate-400 font-bold";
+        calcV.textContent = '? cm³';
+        calcRho.textContent = '? g/cm³';
+        calcIdent.textContent = '–';
+      }
+    }
+
+    function resetLab1Table() {
+      playClickSound();
+      if (lab1State.submerged) toggleLab1Submersion();
+      onLab1V1Input(50);
+      document.getElementById('slider-lab1-v1').value = 50;
+      setLab1Object('batu');
+    }
+
+    const lab2Materials = {
+      gabus: { name: 'Gabus', rho: 0.24, status: 'Mengapung', targetY: 96, svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.35))"><path d="M -15,-12 L 15,-12 L 12,12 L -12,12 Z" fill="#D97706" stroke="#92400E" stroke-width="1.8"/><ellipse cx="0" cy="-12" rx="15" ry="3.5" fill="#FBBF24" stroke="#92400E" stroke-width="1.5"/><circle cx="-6" cy="-2" r="1" fill="#78350F"/><circle cx="4" cy="3" r="1.2" fill="#78350F"/></g>` },
+      kayu: { name: 'Kayu', rho: 0.65, status: 'Mengapung', targetY: 104, svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.35))"><rect x="-18" y="-12" width="36" height="24" rx="2" fill="#92400E" stroke="#451A03" stroke-width="1.8"/><path d="M -16,-6 Q 0,-3 16,-6" stroke="#B45309" stroke-width="1.5" fill="none"/><ellipse cx="-4" cy="1" rx="3" ry="1.5" fill="#451A03" opacity="0.6"/></g>` },
+      lilin: { name: 'Lilin', rho: 0.90, status: 'Mengapung', targetY: 108, svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"><rect x="-9" y="-14" width="18" height="28" rx="2" fill="#FEF08A" stroke="#CA8A04" stroke-width="1.8"/><line x1="0" y1="-14" x2="0" y2="-20" stroke="#1F2937" stroke-width="1.8" stroke-linecap="round"/></g>` },
+      es: { name: 'Es Batu', rho: 0.92, status: 'Mengapung', targetY: 110, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.25))"><polygon points="-16,-10 -6,-16 14,-13 18,6 8,16 -12,14" fill="#93C5FD" fill-opacity="0.8" stroke="#38BDF8" stroke-width="1.8"/></g>` },
+      plastik: { name: 'Plastik', rho: 0.95, status: 'Mengapung', targetY: 112, svg: `<g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.3))"><rect x="-14" y="-10" width="28" height="20" rx="3" fill="#34D399" stroke="#059669" stroke-width="1.8"/></g>` },
+      ujiKhusus: { name: 'Uji Khusus', rho: 1.00, status: 'Melayang', targetY: 195, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.35))"><circle cx="0" cy="0" r="14" fill="#F59E0B" stroke="#B45309" stroke-width="2"/><circle cx="0" cy="0" r="5" fill="#1E293B"/><text x="-6" y="3" font-size="7" fill="#fff" font-family="monospace">1.0</text></g>` },
+      aluminium: { name: 'Aluminium', rho: 2.70, status: 'Tenggelam', targetY: 275, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.45))"><rect x="-14" y="-14" width="28" height="28" rx="2" fill="#94A3B8" stroke="#334155" stroke-width="1.8"/></g>` },
+      besi: { name: 'Besi', rho: 7.90, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.5))"><rect x="-10" y="-16" width="20" height="3.5" rx="1" fill="#64748B" stroke="#1E293B" stroke-width="1.5"/><rect x="-3" y="-12.5" width="6" height="24" fill="#475569" stroke="#1E293B" stroke-width="1.5"/><polygon points="-3,11.5 3,11.5 0,20" fill="#334155" stroke="#1E293B" stroke-width="1.5"/></g>` },
+      kuningan: { name: 'Kuningan', rho: 8.50, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.45))"><circle cx="0" cy="0" r="12" fill="#FBBF24" stroke="#B45309" stroke-width="2"/></g>` },
+      tembaga: { name: 'Tembaga', rho: 8.90, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.45))"><polygon points="0,-14 12,12 -12,12" fill="#FB923C" stroke="#C2410C" stroke-width="2"/></g>` },
+      emas: { name: 'Emas', rho: 19.30, status: 'Tenggelam', targetY: 280, svg: `<g filter="drop-shadow(0 2px 5px rgba(0,0,0,0.5))"><rect x="-15" y="-10" width="30" height="20" rx="2" fill="#FACC15" stroke="#854D0E" stroke-width="2"/><text x="-12" y="4" font-size="8" fill="#713F12" font-weight="bold">99.9</text></g>` }
+    };
+
+    let lab2State = { materialKey: 'kayu', prediction: null, isDropped: false };
+
+    function setLab2Material(key) {
+      playClickSound();
+      lab2State.materialKey = key;
+      lab2State.isDropped = false;
+
+      Object.keys(lab2Materials).forEach(k => {
+        const btn = document.getElementById(`btn-mat-${k}`);
+        if (btn) {
+          btn.className = (k === key)
+            ? "p-1.5 rounded-lg text-[10px] font-bold bg-blue-50 border border-deepBlue text-deepBlue"
+            : "p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400";
+        }
+      });
+
+      const mat = lab2Materials[key];
+      document.getElementById('lab2-tag-name').textContent = mat.name;
+      document.getElementById('lab2-tag-rho').textContent = `${mat.rho}`;
+      document.getElementById('lab2-tag-pos').textContent = 'Udara';
+      document.getElementById('lab2-result-pill').textContent = 'Siap Uji';
+      document.getElementById('lab2-result-pill').className = 'px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold';
+      document.getElementById('lab2-object-svg').innerHTML = mat.svg;
+      document.getElementById('lab2-object-group').style.transform = 'translate(120px, 50px)';
+    }
+
+    function setLab2Prediction(pred) {
+      playClickSound();
+      lab2State.prediction = pred;
+      ['mengapung', 'melayang', 'tenggelam'].forEach(p => {
+        const btn = document.getElementById(`pred-${p}`);
+        if (p === pred) btn.classList.add('ring-2', 'ring-deepBlue', 'font-bold');
+        else btn.classList.remove('ring-2', 'ring-deepBlue', 'font-bold');
+      });
+      document.getElementById('lab2-pred-text').textContent = pred.charAt(0).toUpperCase() + pred.slice(1);
+    }
+
+    function executeLab2Drop() {
+      const mat = lab2Materials[lab2State.materialKey];
+      lab2State.isDropped = true;
+
+      playSplashSound();
+      document.getElementById('lab2-object-group').style.transform = `translate(120px, ${mat.targetY}px)`;
+      document.getElementById('lab2-tag-pos').textContent = mat.status;
+
+      const pill = document.getElementById('lab2-result-pill');
+      pill.textContent = mat.status;
+      if (mat.status === 'Mengapung') pill.className = 'px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold';
+      else if (mat.status === 'Melayang') pill.className = 'px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold';
+      else pill.className = 'px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold';
+
+      const banner = document.getElementById('lab2-feedback-banner');
+      const icon = document.getElementById('lab2-feedback-icon');
+      const title = document.getElementById('lab2-feedback-title');
+      const detail = document.getElementById('lab2-feedback-detail');
+      const badge = document.getElementById('lab2-feedback-badge');
+
+      banner.classList.remove('hidden', 'shake-active');
+      const pred = lab2State.prediction;
+
+      if (pred && pred.toLowerCase() === mat.status.toLowerCase()) {
+        setTimeout(() => { playSuccessChord(); triggerConfetti(); }, 300);
+        banner.className = 'p-2.5 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-950 flex items-center justify-between font-mono shadow-sm';
+        icon.textContent = '🎉';
+        title.innerHTML = `<strong>Prediksi Tepat!</strong>`;
+        detail.innerHTML = `${mat.name} <strong>${mat.status}</strong> (ρ = ${mat.rho} g/cm³).`;
+        badge.className = 'px-2 py-0.5 rounded bg-emerald-600 text-white text-[10px] font-bold';
+        badge.textContent = '✓ BENAR';
+      } else {
+        setTimeout(() => { playTitutSound(); }, 280);
+        void banner.offsetWidth;
+        banner.className = 'shake-active p-2.5 rounded-xl border bg-rose-50 border-rose-300 text-rose-950 flex items-center justify-between font-mono shadow-sm';
+        icon.textContent = '📢';
+        title.innerHTML = `<strong>Belum Tepat!</strong>`;
+        detail.innerHTML = `Hasil: <strong>${mat.status}</strong> (ρ = ${mat.rho} g/cm³).`;
+        badge.className = 'px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-bold';
+        badge.textContent = '✕ SALAH';
+      }
+    }
+
+    const quizDatabase = [
+      { id: 1, cat: 'Simulasi 1', level: 1, points: 10, type: 'mc', q: 'Air dalam gelas ukur mula-mula 50 mL. Setelah batu dimasukkan, volumenya 80 mL. Volume batu adalah ...', options: ['A. 30 cm³', 'B. 50 cm³', 'C. 80 cm³', 'D. 130 cm³'], key: 'A', exp: 'V = V₂ − V₁ = 80 − 50 = 30 cm³.' },
+      { id: 2, cat: 'Simulasi 1', level: 1, points: 10, type: 'mc', q: 'Pada gelas berpancuran, air yang tumpah sebanyak 30 mL. Volume benda adalah ...', options: ['A. 15 cm³', 'B. 30 cm³', 'C. 60 cm³', 'D. 130 cm³'], key: 'B', exp: 'Volume benda sama dengan volume air yang tumpah.' },
+      { id: 3, cat: 'Simulasi 1', level: 2, points: 20, type: 'mc', q: 'Batu bermassa 75 g dan bervolume 30 cm³. Massa jenis batu adalah ...', options: ['A. 0,4 g/cm³', 'B. 2,5 g/cm³', 'C. 45 g/cm³', 'D. 105 g/cm³'], key: 'B', exp: 'ρ = m / V = 75 / 30 = 2,5 g/cm³.' },
+      { id: 4, cat: 'Simulasi 1', level: 2, points: 20, type: 'mc', q: 'Logam bermassa 270 g menaikkan air dari 200 mL menjadi 300 mL. Bahan logam tersebut adalah ...', options: ['A. Aluminium', 'B. Besi', 'C. Tembaga', 'D. Emas'], key: 'A', exp: 'V = 100 cm³, ρ = 270 / 100 = 2,7 g/cm³ (Aluminium).' },
+      { id: 5, cat: 'Simulasi 1', level: 3, points: 30, type: 'mc', q: 'Mahkota bermassa 500 g menumpahkan 35 mL air. Kesimpulannya adalah ...', options: ['A. Emas murni', 'B. ρ = 19,3 g/cm³', 'C. Bukan emas murni (ρ ≈ 14,3 g/cm³)', 'D. Tidak dapat ditentukan'], key: 'C', exp: 'ρ = 500 / 35 ≈ 14,3 g/cm³, lebih kecil dari emas murni (19,3 g/cm³).' },
+      { id: 6, cat: 'Simulasi 1', level: 3, points: 30, type: 'mc', q: 'Benda A (100 g, 10 cm³) dan B (100 g, 40 cm³). Hubungan massa jenisnya adalah ...', options: ['A. ρ A = 4 × ρ B', 'B. ρ A = ρ B', 'C. ρ B > ρ A', 'D. ρ A = 2 × ρ B'], key: 'A', exp: 'ρ A = 10 g/cm³ dan ρ B = 2,5 g/cm³, maka ρ A = 4 × ρ B.' },
+      { id: 7, cat: 'Simulasi 2', level: 1, points: 10, type: 'mc', q: 'Gabus mengapung di air karena ...', options: ['A. ρ gabus > ρ air', 'B. ρ gabus < ρ air', 'C. Massa sangat kecil', 'D. Ukuran kecil'], key: 'B', exp: 'Benda mengapung jika massa jenisnya lebih kecil dari zat cair.' },
+      { id: 8, cat: 'Simulasi 2', level: 1, points: 10, type: 'mc', q: 'Syarat benda melayang di dalam zat cair adalah ...', options: ['A. ρ benda < ρ cair', 'B. ρ benda > ρ cair', 'C. ρ benda = ρ cair', 'D. Massa sama'], key: 'C', exp: 'Benda melayang jika massa jenis benda sama dengan massa jenis zat cair.' },
+      { id: 9, cat: 'Simulasi 2', level: 2, points: 20, type: 'mc', q: 'Balok (200 g, 80 cm³) di air (1,0) dan raksa (13,6) akan ...', options: ['A. Tenggelam di keduanya', 'B. Mengapung di keduanya', 'C. Tenggelam di air, apung di raksa', 'D. Melayang di air'], key: 'C', exp: 'ρ balok = 2,5 g/cm³: tenggelam di air (1,0) dan mengapung di raksa (13,6).' },
+      { id: 10, cat: 'Simulasi 2', level: 2, points: 20, type: 'mc', q: 'Pasangan benda yang sama-sama mengapung di air adalah ...', options: ['A. Lilin dan es batu', 'B. Besi dan lilin', 'C. Tembaga dan es', 'D. Besi dan tembaga'], key: 'A', exp: 'Lilin (0,90) dan es batu (0,92) lebih kecil dari massa jenis air (1,00).' },
+      { id: 11, cat: 'Simulasi 2', level: 3, points: 30, type: 'mc', q: 'Kayu (100 cm³, ρ = 0,65 g/cm³) mengapung di air. Volume tercelupnya adalah ...', options: ['A. 35 cm³', 'B. 50 cm³', 'C. 65 cm³', 'D. 100 cm³'], key: 'C', exp: 'Volume tercelup = (0,65 / 1,00) × 100 = 65 cm³.' },
+      { id: 12, cat: 'Simulasi 2', level: 3, points: 30, type: 'mc', q: 'Es batu (100 cm³, ρ = 0,92 g/cm³) di air. Bagian di ATAS permukaan adalah ...', options: ['A. 8 cm³', 'B. 20 cm³', 'C. 92 cm³', 'D. 100 cm³'], key: 'A', exp: 'Tercelup 92 cm³, bagian di atas permukaan = 100 − 92 = 8 cm³.' },
+      { id: 13, cat: 'Simulasi 3', level: 1, points: 10, type: 'mc', q: 'Zat cair di lapisan paling atas adalah ...', options: ['A. Madu', 'B. Sirup', 'C. Air', 'D. Minyak goreng'], key: 'D', exp: 'Minyak goreng memiliki massa jenis terkecil (0,92 g/cm³).' },
+      { id: 14, cat: 'Simulasi 3', level: 1, points: 10, type: 'mc', q: 'Zat cair di lapisan paling dasar adalah ...', options: ['A. Madu', 'B. Sirup', 'C. Air', 'D. Minyak goreng'], key: 'A', exp: 'Madu memiliki massa jenis terbesar (1,40 g/cm³).' },
+      { id: 15, cat: 'Simulasi 3', level: 2, points: 20, type: 'mc', q: 'Urutan lapisan dari DASAR KE ATAS adalah ...', options: ['A. Minyak, air, sirup, madu', 'B. Madu, sirup, air, minyak', 'C. Sirup, madu, air, minyak', 'D. Madu, air, sirup, minyak'], key: 'B', exp: 'Dari terbesar ke terkecil: Madu → Sirup → Air → Minyak.' },
+      { id: 16, cat: 'Simulasi 3', level: 2, points: 20, type: 'mc', q: 'Massa 50 mL sirup (ρ = 1,3 g/mL) adalah ...', options: ['A. 38 g', 'B. 50 g', 'C. 65 g', 'D. 130 g'], key: 'C', exp: 'm = ρ × V = 1,3 × 50 = 65 g.' },
+      { id: 17, cat: 'Simulasi 3', level: 3, points: 30, type: 'mc', q: '100 mL air + 100 mL madu (200 mL). Massa jenis campurannya adalah ...', options: ['A. 1,0 g/cm³', 'B. 1,2 g/cm³', 'C. 1,4 g/cm³', 'D. 2,4 g/cm³'], key: 'B', exp: 'Massa = 100 + 140 = 240 g; ρ = 240 / 200 = 1,2 g/cm³.' },
+      { id: 18, cat: 'Simulasi 3', level: 3, points: 30, type: 'mc', q: 'Benda (ρ = 1,1 g/cm³) pada 4 lapisan cairan akan ...', options: ['A. Tenggelam ke dasar', 'B. Apung di atas minyak', 'C. Melayang antara air & sirup', 'D. Melayang antara minyak & air'], key: 'C', exp: 'ρ = 1,1 berada di antara air (1,0) dan sirup (1,3).' }
+    ];
+
+    let quizState = { index: 0, userAnswers: {}, score: 0, streak: 0, answered: false };
+    let selectedOptionLetter = null;
+
+    function initQuizPills() {
+      const container = document.getElementById('quiz-pills-container');
+      container.innerHTML = '';
+      quizDatabase.forEach((_, idx) => {
+        const btn = document.createElement('button');
+        btn.id = `quiz-nav-pill-${idx}`;
+        btn.textContent = idx + 1;
+        btn.onclick = () => selectQuizQuestion(idx);
+        btn.className = `p-1 rounded text-[11px] font-mono font-bold border transition ${idx === 0 ? 'bg-deepBlue text-white border-deepBlue' : 'bg-slate-50 text-slate-700 border-slate-200 hover:border-blue-400'}`;
+        container.appendChild(btn);
+      });
+    }
+
+    function selectQuizQuestion(idx) {
+      playClickSound();
+      quizState.index = idx;
+      quizState.answered = false;
+      selectedOptionLetter = null;
+
+      quizDatabase.forEach((_, i) => {
+        const p = document.getElementById(`quiz-nav-pill-${i}`);
+        if (p) {
+          const status = quizState.userAnswers[i];
+          if (i === idx) p.className = 'p-1 rounded text-[11px] font-mono font-bold border-2 border-deepBlue ring-2 ring-blue-400 bg-deepBlue text-white';
+          else if (status === true) p.className = 'p-1 rounded text-[11px] font-mono font-bold border border-emerald-500 bg-emerald-100 text-emerald-800';
+          else if (status === false) p.className = 'p-1 rounded text-[11px] font-mono font-bold border border-rose-500 bg-rose-100 text-rose-800';
+          else p.className = 'p-1 rounded text-[11px] font-mono font-bold border bg-slate-50 text-slate-700 border-slate-200 hover:border-blue-400';
+        }
+      });
+
+      renderCurrentQuestion();
+    }
+
+    function renderCurrentQuestion() {
+      const q = quizDatabase[quizState.index];
+      document.getElementById('quiz-progress-text').textContent = `${quizState.index + 1} / ${quizDatabase.length}`;
+      document.getElementById('quiz-category-tag').textContent = q.cat;
+      document.getElementById('quiz-question-text').textContent = q.q;
+
+      const levelBadge = document.getElementById('quiz-level-badge');
+      if (q.level === 1) {
+        levelBadge.textContent = "Level 1 · 10p";
+        levelBadge.className = "text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-emerald-100 text-emerald-800";
+      } else if (q.level === 2) {
+        levelBadge.textContent = "Level 2 · 20p";
+        levelBadge.className = "text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-amber-100 text-amber-800";
+      } else {
+        levelBadge.textContent = "Level 3 · 30p";
+        levelBadge.className = "text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-purple-100 text-purple-800";
+      }
+
+      const mcBox = document.getElementById('quiz-mc-container');
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      const btnAction = document.getElementById('btn-quiz-action');
+
+      feedbackBox.classList.add('hidden');
+      btnAction.textContent = 'Periksa';
+      mcBox.innerHTML = '';
+
+      q.options.forEach(opt => {
+        const letter = opt.charAt(0);
+        const btn = document.createElement('button');
+        btn.className = 'p-2 rounded-xl border border-slate-200 bg-white hover:bg-blue-50 text-left text-xs font-semibold text-slate-700 transition flex items-center gap-2';
+        btn.innerHTML = `<span class="w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[10px] text-deepBlue">${letter}</span> <span>${opt.slice(3)}</span>`;
+        btn.onclick = () => selectQuizOption(letter, btn);
+        mcBox.appendChild(btn);
+      });
+    }
+
+    function selectQuizOption(letter, buttonElement) {
+      playClickSound();
+      selectedOptionLetter = letter;
+      const allButtons = document.getElementById('quiz-mc-container').querySelectorAll('button');
+      allButtons.forEach(b => {
+        b.className = 'p-2 rounded-xl border border-slate-200 bg-white hover:bg-blue-50 text-left text-xs font-semibold text-slate-700 transition flex items-center gap-2';
+      });
+      buttonElement.className = 'p-2 rounded-xl border-2 border-deepBlue bg-blue-50 text-left text-xs font-bold text-deepBlue transition flex items-center gap-2 shadow-sm';
+    }
+
+    function submitOrNextQuiz() {
+      if (!quizState.answered) {
+        checkCurrentQuizAnswer();
+      } else {
+        const nextIdx = (quizState.index + 1) % quizDatabase.length;
+        selectQuizQuestion(nextIdx);
+      }
+    }
+
+    function checkCurrentQuizAnswer() {
+      const q = quizDatabase[quizState.index];
+      if (!selectedOptionLetter) return;
+
+      const isCorrect = (selectedOptionLetter === q.key);
+      quizState.answered = true;
+      quizState.userAnswers[quizState.index] = isCorrect;
+
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      const title = document.getElementById('quiz-feedback-title');
+      const desc = document.getElementById('quiz-feedback-desc');
+      const currentPill = document.getElementById(`quiz-nav-pill-${quizState.index}`);
+      feedbackBox.classList.remove('hidden', 'shake-anim');
+
+      if (isCorrect) {
+        playSuccessChord();
+        triggerConfetti();
+        quizState.streak++;
+        let earned = q.points;
+        let streakBonusText = '';
+        if (quizState.streak > 0 && quizState.streak % 3 === 0) {
+          earned += 5;
+          streakBonusText = ' (+5 Streak 🔥)';
+        }
+        quizState.score += earned;
+
+        feedbackBox.className = 'p-2.5 rounded-xl border-2 bg-emerald-50 border-emerald-400 text-emerald-900 transition-all';
+        title.innerHTML = `<span class="font-bold text-xs text-emerald-700">✓ Benar (+${earned} Poin${streakBonusText})</span>`;
+        desc.innerHTML = q.exp;
+
+        if (currentPill) {
+          currentPill.className = 'p-1 rounded text-[11px] font-mono font-bold border-2 border-emerald-600 bg-emerald-600 text-white shadow';
+          currentPill.innerHTML = `${quizState.index + 1} ✓`;
+        }
+      } else {
+        playTitutSound();
+        quizState.streak = 0;
+        void feedbackBox.offsetWidth;
+        feedbackBox.className = 'p-2.5 rounded-xl border-2 bg-rose-50 border-rose-400 text-rose-950 transition-all shake-anim shadow-md';
+        title.innerHTML = `<span class="font-bold text-xs text-rose-700">✕ Belum Tepat · Kunci: ${q.key}</span>`;
+        desc.innerHTML = q.exp;
+
+        if (currentPill) {
+          currentPill.className = 'p-1 rounded text-[11px] font-mono font-bold border-2 border-rose-600 bg-rose-600 text-white shadow';
+          currentPill.innerHTML = `${quizState.index + 1} ✕`;
+        }
+      }
+
+      document.getElementById('quiz-score-val').textContent = quizState.score;
+      document.getElementById('quiz-streak-val').textContent = quizState.streak;
+      document.getElementById('btn-quiz-action').textContent = 'Berikutnya →';
+    }
+
+    function resetQuizScore() {
+      playClickSound();
+      quizState.score = 0;
+      quizState.streak = 0;
+      quizState.userAnswers = {};
+      document.getElementById('quiz-score-val').textContent = 0;
+      document.getElementById('quiz-streak-val').textContent = 0;
+      initQuizPills();
+      selectQuizQuestion(0);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAmbientBubbles();
+      renderLab1Ticks();
+      setLab1Object('batu');
+      setLab2Material('kayu');
+      initQuizPills();
+      selectQuizQuestion(0);
+      setTabMode('title');
+    });
+
+    document.addEventListener('click', function initAudioOnce() {
+      getAudioContext();
+      if (isBgmPlaying && !bgmInterval) startBgmSynthesizer();
+      document.removeEventListener('click', initAudioOnce);
+    }, { once: true });
+  </script>
+</body>
+</html>
