@@ -72,6 +72,17 @@
       isolation: isolate;
     }
 
+    /* Pastikan SVG pada laboratorium pas di dalam wadahnya tanpa terpotong */
+    #view-lab1 svg,
+    #view-lab2 svg,
+    #view-lab3 svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: 100%;
+      display: block;
+    }
+
     /* Shake Animation for Wrong Feedback */
     @keyframes shakeFeedback {
       0%, 100% { transform: translateX(0); }
@@ -414,7 +425,7 @@
         </div>
 
         <!-- 3 Kartu Modul Minimalis -->
-        <div class="w-full max-w-3xl grid grid-cols-3 gap-3.5 my-auto py-1">
+        <div class="w-full max-w-3xl grid grid-cols-3 gap-3 my-auto py-1">
           <div onclick="setTabMode('lab1')" class="cursor-pointer group bg-slate-900/80 hover:bg-slate-800/90 backdrop-blur-md rounded-xl p-3.5 border border-slate-700/80 hover:border-sky-400 transition-all flex flex-col items-center text-center justify-between shadow-lg">
             <div class="w-11 h-11 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-300 flex items-center justify-center text-2xl group-hover:scale-105 transition-transform">
               📏
@@ -466,11 +477,11 @@
       </section>
 
       <!-- ======================================================== -->
-      <!-- VIEW 1: LAB 1 - PENGUKURAN VOLUME & MASSA JENIS BENDA (MINIMALIS) -->
+      <!-- VIEW 1: LAB 1 - PENGUKURAN VOLUME & MASSA JENIS BENDA      -->
       <!-- ======================================================== -->
-      <section id="view-lab1" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+      <section id="view-lab1" class="absolute inset-0 p-3.5 flex flex-col justify-between gap-2 z-20 hidden">
         <div class="flex items-center justify-between flex-shrink-0">
-          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+          <h2 class="text-lg sm:text-xl font-display font-extrabold text-white tracking-tight">
             Lab 1: <span class="text-sky-300">Volume &amp; Massa Jenis</span>
           </h2>
           <div class="flex gap-1 bg-slate-900/75 p-1 rounded-lg border border-slate-700/70 backdrop-blur-md font-mono text-[11px]">
@@ -479,13 +490,13 @@
           </div>
         </div>
 
-        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+        <div class="flex-1 grid grid-cols-12 gap-3 items-stretch min-h-0">
           <!-- LEFT: Apparatus -->
-          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
-            <span id="lab1-apparatus-name" class="text-[11px] font-mono font-bold text-deepBlue">Gelas Ukur (100 mL)</span>
+          <div class="col-span-5 h-full flex flex-col items-center justify-between gap-1.5 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 border border-white/60 shadow-lg min-h-0">
+            <span id="lab1-apparatus-name" class="text-[11px] font-mono font-bold text-deepBlue flex-shrink-0">Gelas Ukur (100 mL)</span>
 
-            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
-              <svg viewBox="0 0 220 400" class="h-full w-auto overflow-visible drop-shadow">
+            <div class="flex-1 w-full min-h-0 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 220 400" preserveAspectRatio="xMidYMid meet" class="h-full w-auto overflow-visible drop-shadow">
                 <defs>
                   <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.9" />
@@ -532,7 +543,7 @@
               </svg>
             </div>
 
-            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-xs font-mono font-bold">
+            <div class="w-full bg-slate-100 rounded-lg py-1 px-2 flex justify-around text-xs font-mono font-bold flex-shrink-0">
               <span class="text-blue-700">V₁: <span id="lab1-tag-v1">50</span> mL</span>
               <span class="text-slate-300">|</span>
               <span class="text-slate-700"><span id="lab1-tag-stone" class="text-amber-600">Batu</span></span>
@@ -541,58 +552,58 @@
             </div>
           </div>
 
-          <!-- RIGHT: Minimalist Controls & Output -->
-          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg space-y-3">
+          <!-- RIGHT: Controls & Output (Rapat dari atas) -->
+          <div class="col-span-7 h-full flex flex-col justify-start gap-2.5 min-h-0">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg space-y-2.5">
               <div class="flex items-center justify-between text-xs font-bold text-slate-700">
                 <span>Pilih Benda</span>
                 <span id="lab1-volume-info" class="font-mono text-[11px] text-slate-500">m = 75 g · V = ? cm³</span>
               </div>
               <div class="grid grid-cols-4 gap-2">
-                <button onclick="setLab1Object('batu')" id="btn-obj-batu" class="p-2 rounded-xl border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue">🪨 Batu</button>
-                <button onclick="setLab1Object('kunci')" id="btn-obj-kunci" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">🔑 Kunci</button>
-                <button onclick="setLab1Object('aluminium')" id="btn-obj-aluminium" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">⚙️ Logam</button>
-                <button onclick="setLab1Object('mahkota')" id="btn-obj-mahkota" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">👑 Mahkota</button>
+                <button onclick="setLab1Object('batu')" id="btn-obj-batu" class="p-1.5 rounded-xl border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue">🪨 Batu</button>
+                <button onclick="setLab1Object('kunci')" id="btn-obj-kunci" class="p-1.5 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">🔑 Kunci</button>
+                <button onclick="setLab1Object('aluminium')" id="btn-obj-aluminium" class="p-1.5 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">⚙️ Logam</button>
+                <button onclick="setLab1Object('mahkota')" id="btn-obj-mahkota" class="p-1.5 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400">👑 Mahkota</button>
               </div>
 
-              <div class="pt-1 space-y-2">
+              <div class="pt-1 space-y-1.5">
                 <div class="flex items-center justify-between text-xs font-bold text-slate-700">
                   <span id="lab1-v1-label-title">Volume Awal (V₁)</span>
-                  <span class="px-2 py-0.5 bg-deepBlue text-white font-mono rounded"><span id="lab1-v1-label">50</span> mL</span>
+                  <span class="px-2 py-0.5 bg-deepBlue text-white font-mono rounded text-[11px]"><span id="lab1-v1-label">50</span> mL</span>
                 </div>
                 <div class="flex items-center gap-3">
                   <input type="range" id="slider-lab1-v1" min="30" max="65" value="50" step="1" 
                          class="flex-1 h-2 bg-slate-200 rounded-lg cursor-pointer accent-blue-900"
                          oninput="onLab1V1Input(this.value)">
-                  <button onclick="toggleLab1Submersion()" id="btn-submerge-lab1" class="px-4 py-2 rounded-xl bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition whitespace-nowrap">
+                  <button onclick="toggleLab1Submersion()" id="btn-submerge-lab1" class="px-3.5 py-1.5 rounded-xl bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition whitespace-nowrap">
                     💧 Celupkan
                   </button>
                 </div>
               </div>
             </div>
 
-            <div class="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-3.5 shadow-lg border border-slate-700/80 font-mono">
+            <div class="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-3 shadow-lg border border-slate-700/80 font-mono">
               <div class="grid grid-cols-4 gap-2 text-center text-xs">
-                <div class="p-2 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="p-1.5 bg-slate-800/90 rounded-xl border border-slate-700">
                   <span class="text-slate-400 block text-[10px]">Massa (m)</span>
                   <span id="lab1-calc-m" class="font-bold text-amber-300">75 g</span>
                 </div>
-                <div class="p-2 bg-slate-800/90 rounded-xl border border-slate-700">
+                <div class="p-1.5 bg-slate-800/90 rounded-xl border border-slate-700">
                   <span class="text-slate-400 block text-[10px]">Volume (V)</span>
                   <span id="lab1-calc-v" class="font-bold text-sky-300">? cm³</span>
                 </div>
-                <div class="p-2 bg-emerald-950/90 rounded-xl border border-emerald-500/40">
+                <div class="p-1.5 bg-emerald-950/90 rounded-xl border border-emerald-500/40">
                   <span class="text-emerald-300 block text-[10px]">ρ = m / V</span>
                   <span id="lab1-calc-rho" class="font-bold text-emerald-400">? g/cm³</span>
                 </div>
-                <div class="p-2 bg-blue-950/90 rounded-xl border border-blue-500/40 flex flex-col justify-center">
+                <div class="p-1.5 bg-blue-950/90 rounded-xl border border-blue-500/40 flex flex-col justify-center">
                   <span class="text-blue-300 block text-[10px]">Bahan</span>
                   <span id="lab1-calc-ident" class="font-bold text-blue-200 text-[10px] truncate">–</span>
                 </div>
               </div>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg flex items-center justify-between text-xs font-mono">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl px-3.5 py-2 border border-white/60 shadow-lg flex items-center justify-between text-xs font-mono">
               <span class="text-slate-600">Rumus: <strong class="text-deepBlue">V = V₂ − V₁</strong> · <strong class="text-deepBlue">ρ = m / V</strong></span>
               <button onclick="resetLab1Table()" class="text-[11px] text-slate-500 hover:text-deepBlue font-bold">Reset</button>
             </div>
@@ -601,11 +612,11 @@
       </section>
 
       <!-- ======================================================== -->
-      <!-- VIEW 2: LAB 2 - MENGAPUNG, MELAYANG, TENGGELAM (MINIMALIS) -->
+      <!-- VIEW 2: LAB 2 - MENGAPUNG, MELAYANG, TENGGELAM             -->
       <!-- ======================================================== -->
-      <section id="view-lab2" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+      <section id="view-lab2" class="absolute inset-0 p-3.5 flex flex-col justify-between gap-2 z-20 hidden">
         <div class="flex items-center justify-between flex-shrink-0">
-          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+          <h2 class="text-lg sm:text-xl font-display font-extrabold text-white tracking-tight">
             Lab 2: <span class="text-emerald-300">Hukum Archimedes</span>
           </h2>
           <span class="text-xs font-mono px-3 py-1 rounded-full bg-slate-900/75 text-emerald-200 border border-emerald-500/30 backdrop-blur-md">
@@ -613,16 +624,16 @@
           </span>
         </div>
 
-        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+        <div class="flex-1 grid grid-cols-12 gap-3 items-stretch min-h-0">
           <!-- LEFT: Beaker -->
-          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
-            <div class="w-full flex items-center justify-between text-[11px] font-mono">
+          <div class="col-span-5 h-full flex flex-col items-center justify-between gap-1.5 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 border border-white/60 shadow-lg min-h-0">
+            <div class="w-full flex items-center justify-between text-[11px] font-mono flex-shrink-0">
               <span class="font-bold text-deepBlue">Gelas Kimia</span>
               <span id="lab2-result-pill" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold">Siap Uji</span>
             </div>
 
-            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
-              <svg viewBox="0 0 240 320" class="h-full w-auto overflow-visible drop-shadow">
+            <div class="flex-1 w-full min-h-0 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 240 320" preserveAspectRatio="xMidYMid meet" class="h-full w-auto overflow-visible drop-shadow">
                 <path d="M 25,40 L 30,50 L 30,280 A 20,20 0 0,0 50,300 L 190,300 A 20,20 0 0,0 210,280 L 210,50 L 215,40" fill="none" stroke="#64748B" stroke-width="3"/>
                 <line x1="30" y1="110" x2="55" y2="110" stroke="#94A3B8" stroke-width="1.5"/>
                 <text x="60" y="113" font-size="9" fill="#94A3B8" font-family="monospace">200 mL</text>
@@ -642,7 +653,7 @@
               </svg>
             </div>
 
-            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-xs font-mono font-bold">
+            <div class="w-full bg-slate-100 rounded-lg py-1 px-2 flex justify-around text-xs font-mono font-bold flex-shrink-0">
               <span><strong id="lab2-tag-name" class="text-blue-700">Kayu</strong></span>
               <span class="text-slate-300">|</span>
               <span>ρ: <strong id="lab2-tag-rho" class="text-amber-600">0.65</strong></span>
@@ -651,10 +662,10 @@
             </div>
           </div>
 
-          <!-- RIGHT: Minimalist Controls -->
-          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
-              <div class="text-xs font-bold text-slate-700 mb-2">Pilih Benda (g/cm³)</div>
+          <!-- RIGHT: Controls (Rapat dari atas) -->
+          <div class="col-span-7 h-full flex flex-col justify-start gap-2.5 min-h-0">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
+              <div class="text-xs font-bold text-slate-700 mb-1.5">Pilih Benda (g/cm³)</div>
               <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5">
                 <button onclick="setLab2Material('gabus')" id="btn-mat-gabus" class="p-1.5 rounded-lg text-[10px] font-semibold bg-white border border-slate-200 text-slate-700 hover:border-blue-400">Gabus 0.24</button>
                 <button onclick="setLab2Material('kayu')" id="btn-mat-kayu" class="p-1.5 rounded-lg text-[10px] font-bold bg-blue-50 border border-deepBlue text-deepBlue">Kayu 0.65</button>
@@ -670,28 +681,28 @@
               </div>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg space-y-2.5">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg space-y-2">
               <div class="flex items-center justify-between text-xs font-bold text-slate-700">
                 <span>Prediksi Kedudukan</span>
                 <span class="font-mono text-[11px] text-blue-700" id="lab2-pred-text">Belum dipilih</span>
               </div>
               <div class="grid grid-cols-3 gap-2">
-                <button onclick="setLab2Prediction('mengapung')" id="pred-mengapung" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-emerald-50 hover:border-emerald-500">
+                <button onclick="setLab2Prediction('mengapung')" id="pred-mengapung" class="p-1.5 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-emerald-50 hover:border-emerald-500">
                   🟢 Mengapung
                 </button>
-                <button onclick="setLab2Prediction('melayang')" id="pred-melayang" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-amber-50 hover:border-amber-500">
+                <button onclick="setLab2Prediction('melayang')" id="pred-melayang" class="p-1.5 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-amber-50 hover:border-amber-500">
                   🟡 Melayang
                 </button>
-                <button onclick="setLab2Prediction('tenggelam')" id="pred-tenggelam" class="p-2 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-red-50 hover:border-red-500">
+                <button onclick="setLab2Prediction('tenggelam')" id="pred-tenggelam" class="p-1.5 rounded-xl border text-xs font-semibold bg-white border-slate-300 text-slate-700 hover:bg-red-50 hover:border-red-500">
                   🔴 Tenggelam
                 </button>
               </div>
-              <button onclick="executeLab2Drop()" id="btn-drop-lab2" class="w-full py-2 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow transition">
+              <button onclick="executeLab2Drop()" id="btn-drop-lab2" class="w-full py-1.5 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow transition">
                 💧 Masukkan ke Air
               </button>
             </div>
 
-            <div id="lab2-feedback-banner" class="hidden p-2.5 rounded-xl border text-xs flex items-center justify-between font-mono shadow-sm">
+            <div id="lab2-feedback-banner" class="hidden p-2 rounded-xl border text-xs flex items-center justify-between font-mono shadow-sm">
               <div class="flex items-center gap-2">
                 <span id="lab2-feedback-icon" class="text-base">🎉</span>
                 <div>
@@ -702,7 +713,7 @@
               <span id="lab2-feedback-badge" class="px-2 py-0.5 rounded text-[10px] font-bold"></span>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl px-3.5 py-2.5 border border-white/60 shadow-lg flex justify-between text-[11px] font-mono text-slate-700">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl px-3.5 py-2 border border-white/60 shadow-lg flex justify-between text-[11px] font-mono text-slate-700">
               <span>ρ &lt; 1: <strong>Apung</strong></span>
               <span>ρ = 1: <strong>Melayang</strong></span>
               <span>ρ &gt; 1: <strong>Tenggelam</strong></span>
@@ -712,11 +723,11 @@
       </section>
 
       <!-- ======================================================== -->
-      <!-- VIEW 3: LAB 3 - PERBEDAAN MASSA JENIS ZAT CAIR (MINIMALIS)-->
+      <!-- VIEW 3: LAB 3 - PERBEDAAN MASSA JENIS ZAT CAIR             -->
       <!-- ======================================================== -->
-      <section id="view-lab3" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+      <section id="view-lab3" class="absolute inset-0 p-3.5 flex flex-col justify-between gap-2 z-20 hidden">
         <div class="flex items-center justify-between flex-shrink-0">
-          <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+          <h2 class="text-lg sm:text-xl font-display font-extrabold text-white tracking-tight">
             Lab 3: <span class="text-amber-300">Lapisan Zat Cair</span>
           </h2>
           <span id="lab3-total-poured" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-slate-900/75 text-amber-200 border border-amber-500/30 backdrop-blur-md">
@@ -724,13 +735,13 @@
           </span>
         </div>
 
-        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+        <div class="flex-1 grid grid-cols-12 gap-3 items-stretch min-h-0">
           <!-- LEFT: Cylinder -->
-          <div class="col-span-5 h-full flex flex-col items-center justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
-            <span class="text-[11px] font-mono font-bold text-deepBlue">Tabung Silinder (20 mL / Cairan)</span>
+          <div class="col-span-5 h-full flex flex-col items-center justify-between gap-1.5 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 border border-white/60 shadow-lg min-h-0">
+            <span class="text-[11px] font-mono font-bold text-deepBlue flex-shrink-0">Tabung Silinder (20 mL / Cairan)</span>
 
-            <div class="w-full flex-1 relative flex items-center justify-center max-h-[76%]">
-              <svg viewBox="0 0 200 340" class="h-full w-auto overflow-visible drop-shadow">
+            <div class="flex-1 w-full min-h-0 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 200 340" preserveAspectRatio="xMidYMid meet" class="h-full w-auto overflow-visible drop-shadow">
                 <rect id="layer-madu" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#B45309" fill-opacity="0.95"/>
                 <rect id="layer-sirup" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#EF4444" fill-opacity="0.85"/>
                 <rect id="layer-air" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#38BDF8" fill-opacity="0.85"/>
@@ -751,7 +762,7 @@
               </svg>
             </div>
 
-            <div class="w-full bg-slate-100 rounded-lg py-1.5 px-2 flex justify-around text-[11px] font-mono font-bold">
+            <div class="w-full bg-slate-100 rounded-lg py-1 px-2 flex justify-around text-[11px] font-mono font-bold flex-shrink-0">
               <span class="text-amber-600">Minyak 0.92</span>
               <span class="text-sky-600">Air 1.00</span>
               <span class="text-red-600">Sirup 1.30</span>
@@ -759,34 +770,34 @@
             </div>
           </div>
 
-          <!-- RIGHT: Minimalist Pour Controls -->
-          <div class="col-span-7 h-full flex flex-col justify-between gap-3">
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
+          <!-- RIGHT: Pour Controls (Rapat dari atas) -->
+          <div class="col-span-7 h-full flex flex-col justify-start gap-2.5 min-h-0">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
               <div class="flex items-center justify-between text-xs font-bold text-slate-700 mb-2">
                 <span>Tuang Zat Cair</span>
                 <button onclick="resetLab3Liquids()" class="text-[11px] font-mono text-blue-600 hover:underline">Reset</button>
               </div>
-              <div class="grid grid-cols-2 gap-2.5">
-                <button onclick="pourLiquid('madu')" id="btn-pour-madu" class="p-3 rounded-xl border border-amber-800/30 bg-amber-50 hover:bg-amber-100 text-amber-950 text-xs font-bold flex items-center justify-between">
-                  <span class="flex items-center gap-2"><span class="text-lg">🍯</span> Madu</span>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="pourLiquid('madu')" id="btn-pour-madu" class="p-2.5 rounded-xl border border-amber-800/30 bg-amber-50 hover:bg-amber-100 text-amber-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-base">🍯</span> Madu</span>
                   <span class="font-mono text-[11px]">1,40</span>
                 </button>
-                <button onclick="pourLiquid('sirup')" id="btn-pour-sirup" class="p-3 rounded-xl border border-red-500/30 bg-red-50 hover:bg-red-100 text-red-950 text-xs font-bold flex items-center justify-between">
-                  <span class="flex items-center gap-2"><span class="text-lg">🍓</span> Sirup</span>
+                <button onclick="pourLiquid('sirup')" id="btn-pour-sirup" class="p-2.5 rounded-xl border border-red-500/30 bg-red-50 hover:bg-red-100 text-red-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-base">🍓</span> Sirup</span>
                   <span class="font-mono text-[11px]">1,30</span>
                 </button>
-                <button onclick="pourLiquid('air')" id="btn-pour-air" class="p-3 rounded-xl border border-sky-500/30 bg-sky-50 hover:bg-sky-100 text-sky-950 text-xs font-bold flex items-center justify-between">
-                  <span class="flex items-center gap-2"><span class="text-lg">💧</span> Air</span>
+                <button onclick="pourLiquid('air')" id="btn-pour-air" class="p-2.5 rounded-xl border border-sky-500/30 bg-sky-50 hover:bg-sky-100 text-sky-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-base">💧</span> Air</span>
                   <span class="font-mono text-[11px]">1,00</span>
                 </button>
-                <button onclick="pourLiquid('minyak')" id="btn-pour-minyak" class="p-3 rounded-xl border border-yellow-500/30 bg-yellow-50 hover:bg-yellow-100 text-yellow-950 text-xs font-bold flex items-center justify-between">
-                  <span class="flex items-center gap-2"><span class="text-lg">🌻</span> Minyak</span>
+                <button onclick="pourLiquid('minyak')" id="btn-pour-minyak" class="p-2.5 rounded-xl border border-yellow-500/30 bg-yellow-50 hover:bg-yellow-100 text-yellow-950 text-xs font-bold flex items-center justify-between">
+                  <span class="flex items-center gap-2"><span class="text-base">🌻</span> Minyak</span>
                   <span class="font-mono text-[11px]">0,92</span>
                 </button>
               </div>
             </div>
 
-            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg text-xs text-slate-700 space-y-1">
+            <div class="bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg text-xs text-slate-700 space-y-1">
               <div class="font-bold text-amber-900">Urutan Dasar → Atas</div>
               <p class="font-mono text-[11px] text-slate-600">Madu (1,40) → Sirup (1,30) → Air (1,00) → Minyak (0,92)</p>
             </div>
@@ -795,13 +806,13 @@
       </section>
 
       <!-- ======================================================== -->
-      <!-- VIEW 4: MODE KUIS EVALUASI MANDIRI (MINIMALIS)           -->
+      <!-- VIEW 4: MODE KUIS EVALUASI MANDIRI                       -->
       <!-- ======================================================== -->
-      <section id="view-quiz" class="absolute inset-0 p-4 flex flex-col justify-between z-20 hidden">
+      <section id="view-quiz" class="absolute inset-0 p-3.5 flex flex-col justify-between gap-2 z-20 hidden">
         
         <div class="flex items-center justify-between flex-shrink-0">
           <div class="flex items-center gap-2.5">
-            <h2 class="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+            <h2 class="text-lg sm:text-xl font-display font-extrabold text-white tracking-tight">
               Kuis <span class="text-purple-300" id="quiz-progress-text">1 / 18</span>
             </h2>
             <span class="text-[10px] px-2 py-0.5 rounded font-mono font-bold" id="quiz-level-badge">Level 1</span>
@@ -816,15 +827,15 @@
           </div>
         </div>
 
-        <div class="flex-1 grid grid-cols-12 gap-4 items-center min-h-0 pt-2">
+        <div class="flex-1 grid grid-cols-12 gap-3 items-stretch min-h-0">
           
-          <div class="col-span-8 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-white/60 shadow-lg">
+          <div class="col-span-8 h-full flex flex-col justify-start gap-2.5 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
             <div>
-              <span class="text-[10px] font-mono text-slate-400 block mb-1" id="quiz-category-tag">Simulasi 1</span>
+              <span class="text-[10px] font-mono text-slate-400 block mb-0.5" id="quiz-category-tag">Simulasi 1</span>
               <h3 class="text-sm sm:text-base font-bold text-slate-800 leading-snug" id="quiz-question-text"></h3>
             </div>
 
-            <div id="quiz-mc-container" class="grid grid-cols-2 gap-2 my-2"></div>
+            <div id="quiz-mc-container" class="grid grid-cols-2 gap-2"></div>
 
             <div id="quiz-input-container" class="space-y-2 hidden">
               <div class="flex items-center gap-2">
@@ -841,17 +852,17 @@
             </div>
           </div>
 
-          <div class="col-span-4 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-lg">
+          <div class="col-span-4 h-full flex flex-col justify-between bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-white/60 shadow-lg">
             <div>
               <div class="text-xs font-bold text-slate-700 mb-2">Nomor Soal</div>
               <div class="grid grid-cols-6 gap-1" id="quiz-pills-container"></div>
             </div>
 
             <div class="flex items-center justify-between gap-2 pt-2">
-              <button onclick="resetQuizScore()" class="px-2.5 py-2 text-xs text-rose-600 hover:bg-rose-50 rounded-xl transition font-mono font-bold">
+              <button onclick="resetQuizScore()" class="px-2.5 py-1.5 text-xs text-rose-600 hover:bg-rose-50 rounded-xl transition font-mono font-bold">
                 Reset
               </button>
-              <button onclick="submitOrNextQuiz()" id="btn-quiz-action" class="flex-1 py-2 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow transition">
+              <button onclick="submitOrNextQuiz()" id="btn-quiz-action" class="flex-1 py-1.5 bg-deepBlue hover:bg-blue-800 text-white font-bold text-xs rounded-xl shadow transition">
                 Periksa
               </button>
             </div>
@@ -880,7 +891,7 @@
 
   </div>
 
-  <!-- MODAL 1: PETUNJUK PRAKTIKUM (MINIMALIS) -->
+  <!-- MODAL 1: PETUNJUK PRAKTIKUM -->
   <div id="modal-petunjuk" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl border border-slate-200">
       <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-slate-100">
@@ -1516,8 +1527,8 @@
         const btn = document.getElementById(`btn-obj-${k}`);
         if (btn) {
           btn.className = (k === key)
-            ? "p-2 rounded-xl border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue"
-            : "p-2 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400";
+            ? "p-1.5 rounded-xl border text-xs font-bold bg-blue-50 border-deepBlue text-deepBlue"
+            : "p-1.5 rounded-xl border text-xs font-semibold bg-white border-slate-200 text-slate-700 hover:border-blue-400";
         }
       });
 
@@ -1544,12 +1555,12 @@
         playSplashSound();
         objGroup.style.transform = 'translateY(190px)';
         btnSubmerge.textContent = '↺ Angkat';
-        btnSubmerge.className = 'px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow transition whitespace-nowrap';
+        btnSubmerge.className = 'px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow transition whitespace-nowrap';
       } else {
         playClickSound();
         objGroup.style.transform = 'translateY(0px)';
         btnSubmerge.textContent = '💧 Celupkan';
-        btnSubmerge.className = 'px-4 py-2 rounded-xl bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition whitespace-nowrap';
+        btnSubmerge.className = 'px-3.5 py-1.5 rounded-xl bg-emeraldGreen hover:bg-emerald-600 text-white font-bold text-xs shadow transition whitespace-nowrap';
       }
       updateLab1WaterLevel();
     }
@@ -1680,7 +1691,7 @@
 
       if (pred && pred.toLowerCase() === mat.status.toLowerCase()) {
         setTimeout(() => { playSuccessChord(); triggerConfetti(); }, 300);
-        banner.className = 'p-2.5 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-950 flex items-center justify-between font-mono shadow-sm';
+        banner.className = 'p-2 rounded-xl border bg-emerald-50 border-emerald-300 text-emerald-950 flex items-center justify-between font-mono shadow-sm';
         icon.textContent = '🎉';
         title.innerHTML = `<strong>Prediksi Tepat!</strong>`;
         detail.innerHTML = `${mat.name} <strong>${mat.status}</strong> (ρ = ${mat.rho} g/cm³).`;
@@ -1689,7 +1700,7 @@
       } else {
         setTimeout(() => { playTitutSound(); }, 280);
         void banner.offsetWidth;
-        banner.className = 'shake-active p-2.5 rounded-xl border bg-rose-50 border-rose-300 text-rose-950 flex items-center justify-between font-mono shadow-sm';
+        banner.className = 'shake-active p-2 rounded-xl border bg-rose-50 border-rose-300 text-rose-950 flex items-center justify-between font-mono shadow-sm';
         icon.textContent = '📢';
         title.innerHTML = `<strong>Belum Tepat!</strong>`;
         detail.innerHTML = `Hasil: <strong>${mat.status}</strong> (ρ = ${mat.rho} g/cm³).`;
