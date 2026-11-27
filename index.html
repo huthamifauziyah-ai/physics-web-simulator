@@ -308,7 +308,7 @@
 
     <!-- Top Scientific Header -->
     <header class="h-11 bg-deepBlue/95 backdrop-blur-md text-white flex items-center justify-between px-4 border-b border-blue-900/60 shadow-md flex-shrink-0 z-20">
-      <div class="flex items-center space-x-2.5 cursor-pointer" onclick="goToSplash()" title="Kembali ke Layar Awal">
+      <div class="flex items-center space-x-2.5 cursor-pointer" onclick="goToSplash()" title="Kembali ke Menu Paling Awal">
         <div class="w-7 h-7 rounded-lg bg-sky-500/20 border border-sky-400/40 flex items-center justify-center text-sm shadow">
           🧪
         </div>
@@ -945,15 +945,24 @@
 
     <!-- Bottom Dock Controller -->
     <footer class="h-10 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-4 flex items-center justify-between flex-shrink-0 z-30">
-      <button id="btn-back-dashboard" onclick="goToStart()" class="hidden px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
-        <span>🏠</span>
-        <span>Menu Utama</span>
-      </button>
+      <div class="flex items-center gap-1.5">
+        <button id="btn-back-splash" onclick="goToSplash()" class="hidden px-2.5 py-1 rounded-lg text-xs font-semibold text-sky-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1 cursor-pointer" title="Kembali ke Halaman Awal">
+          <span>⏮</span>
+          <span>Awal</span>
+        </button>
 
-      <div id="footer-status-pill" class="text-[11px] font-mono text-sky-300 flex items-center gap-1.5 bg-slate-950 px-3 py-0.5 rounded-full border border-slate-800 mx-auto">
+        <button id="btn-back-dashboard" onclick="goToStart()" class="hidden px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5 cursor-pointer" title="Kembali ke Menu Utama">
+          <span>🏠</span>
+          <span>Menu Utama</span>
+        </button>
+      </div>
+
+      <div id="footer-status-pill" class="text-[11px] font-mono text-sky-300 flex items-center gap-1.5 bg-slate-950 px-3 py-0.5 rounded-full border border-slate-800">
         <span class="w-1.5 h-1.5 rounded-full bg-emeraldGreen animate-pulse"></span>
         <span id="footer-status-label">Mulai Simulasi</span>
       </div>
+
+      <div class="w-16 hidden sm:block"></div>
     </footer>
 
     <!-- Canvas Confetti Overlay -->
@@ -1456,6 +1465,12 @@
       });
 
       autoHarmonizeTabBackground(tab);
+
+      const btnBackSplash = document.getElementById('btn-back-splash');
+      if (btnBackSplash) {
+        if (tab === 'splash') btnBackSplash.classList.add('hidden');
+        else btnBackSplash.classList.remove('hidden');
+      }
 
       const btnBackDashboard = document.getElementById('btn-back-dashboard');
       if (btnBackDashboard) {
