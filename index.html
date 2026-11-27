@@ -248,7 +248,7 @@
     }
 
     .liquid-anim {
-      transition: y 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: y 0.5s cubic-bezier(0.4, 0, 0.2, 1), height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     }
     
     .object-anim {
@@ -632,28 +632,35 @@
               <span id="lab2-result-pill" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold">Siap Uji</span>
             </div>
 
-          <div class="flex-1 w-full min-h-0 flex items-center justify-center overflow-hidden">
-  <svg viewBox="0 0 200 350" preserveAspectRatio="xMidYMid meet" class="w-full h-full overflow-visible drop-shadow">
-    <!-- Lapisan dari bawah (dasar y=300) ke atas -->
-    <rect id="layer-madu" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#B45309" fill-opacity="0.95"/>
-    <rect id="layer-sirup" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#EF4444" fill-opacity="0.85"/>
-    <rect id="layer-air" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#38BDF8" fill-opacity="0.85"/>
-    <rect id="layer-minyak" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#FACC15" fill-opacity="0.85"/>
+            <div class="flex-1 w-full min-h-0 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 240 320" preserveAspectRatio="xMidYMid meet" class="h-full w-auto overflow-visible drop-shadow">
+                <defs>
+                  <linearGradient id="lab2GlassGloss" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+                    <stop offset="25%" stop-color="#ffffff" stop-opacity="0.05"/>
+                    <stop offset="75%" stop-color="#ffffff" stop-opacity="0.08"/>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0.35"/>
+                  </linearGradient>
+                </defs>
 
-    <line x1="32" y1="240" x2="48" y2="240" stroke="#475569" stroke-width="1.5"/>
-    <text x="14" y="243" font-size="9" fill="#475569" font-family="monospace">20mL</text>
-    <line x1="32" y1="180" x2="48" y2="180" stroke="#475569" stroke-width="1.5"/>
-    <text x="14" y="183" font-size="9" fill="#475569" font-family="monospace">40mL</text>
-    <line x1="32" y1="120" x2="48" y2="120" stroke="#475569" stroke-width="1.5"/>
-    <text x="14" y="123" font-size="9" fill="#475569" font-family="monospace">60mL</text>
-    <line x1="32" y1="60" x2="48" y2="60" stroke="#475569" stroke-width="1.5"/>
-    <text x="14" y="63" font-size="9" fill="#475569" font-family="monospace">80mL</text>
+                <path d="M 25,40 L 30,50 L 30,280 A 20,20 0 0,0 50,300 L 190,300 A 20,20 0 0,0 210,280 L 210,50 L 215,40" fill="none" stroke="#64748B" stroke-width="3"/>
+                <line x1="30" y1="110" x2="55" y2="110" stroke="#94A3B8" stroke-width="1.5"/>
+                <text x="60" y="113" font-size="9" fill="#94A3B8" font-family="monospace">200 mL</text>
+                <line x1="30" y1="170" x2="55" y2="170" stroke="#94A3B8" stroke-width="1.5"/>
+                <text x="60" y="173" font-size="9" fill="#94A3B8" font-family="monospace">150 mL</text>
+                <line x1="30" y1="230" x2="55" y2="230" stroke="#94A3B8" stroke-width="1.5"/>
+                <text x="60" y="233" font-size="9" fill="#94A3B8" font-family="monospace">100 mL</text>
 
-    <path d="M 40,40 L 40,300 A 15,15 0 0,0 55,315 L 145,315 A 15,15 0 0,0 160,300 L 160,40" fill="none" stroke="#64748B" stroke-width="3"/>
-    <path d="M 25,325 C 25,315 45,315 55,315 L 145,315 C 155,315 175,315 175,325 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
-    <rect x="40" y="40" width="120" height="260" fill="url(#glassGloss)" pointer-events="none"/>
-  </svg>
-</div>
+                <rect x="32" y="100" width="176" height="198" fill="#38BDF8" fill-opacity="0.75"/>
+                <ellipse cx="120" cy="100" rx="88" ry="8" fill="#38BDF8" stroke="#0284C7" stroke-width="1.2"/>
+
+                <g id="lab2-object-group" class="object-anim" transform="translate(120, 50)">
+                  <g id="lab2-object-svg"></g>
+                </g>
+
+                <rect x="32" y="50" width="176" height="248" fill="url(#lab2GlassGloss)" pointer-events="none"/>
+              </svg>
+            </div>
 
             <div class="w-full bg-slate-100 rounded-lg py-1 px-2 flex justify-around text-xs font-mono font-bold flex-shrink-0">
               <span><strong id="lab2-tag-name" class="text-blue-700">Kayu</strong></span>
@@ -743,24 +750,34 @@
             <span class="text-[11px] font-mono font-bold text-deepBlue flex-shrink-0">Tabung Silinder (20 mL / Cairan)</span>
 
             <div class="flex-1 w-full min-h-0 flex items-center justify-center overflow-hidden">
-              <svg viewBox="0 0 200 340" preserveAspectRatio="xMidYMid meet" class="h-full w-auto overflow-visible drop-shadow">
-                <rect id="layer-madu" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#B45309" fill-opacity="0.95"/>
-                <rect id="layer-sirup" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#EF4444" fill-opacity="0.85"/>
-                <rect id="layer-air" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#38BDF8" fill-opacity="0.85"/>
-                <rect id="layer-minyak" class="liquid-anim opacity-0" x="40" y="300" width="120" height="0" fill="#FACC15" fill-opacity="0.85"/>
+              <svg viewBox="0 0 200 350" preserveAspectRatio="xMidYMid meet" class="h-full w-auto overflow-visible drop-shadow">
+                <defs>
+                  <linearGradient id="lab3GlassGloss" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+                    <stop offset="25%" stop-color="#ffffff" stop-opacity="0.05"/>
+                    <stop offset="75%" stop-color="#ffffff" stop-opacity="0.08"/>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0.35"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Lapisan dari bawah (dasar y=300) ke atas -->
+                <rect id="layer-madu" class="liquid-anim" style="opacity: 0;" x="40" y="300" width="120" height="0" fill="#B45309" fill-opacity="0.95"/>
+                <rect id="layer-sirup" class="liquid-anim" style="opacity: 0;" x="40" y="300" width="120" height="0" fill="#EF4444" fill-opacity="0.85"/>
+                <rect id="layer-air" class="liquid-anim" style="opacity: 0;" x="40" y="300" width="120" height="0" fill="#38BDF8" fill-opacity="0.85"/>
+                <rect id="layer-minyak" class="liquid-anim" style="opacity: 0;" x="40" y="300" width="120" height="0" fill="#FACC15" fill-opacity="0.85"/>
 
                 <line x1="32" y1="240" x2="48" y2="240" stroke="#475569" stroke-width="1.5"/>
-                <text x="16" y="243" font-size="9" fill="#475569" font-family="monospace">20mL</text>
+                <text x="14" y="243" font-size="9" fill="#475569" font-family="monospace">20mL</text>
                 <line x1="32" y1="180" x2="48" y2="180" stroke="#475569" stroke-width="1.5"/>
-                <text x="16" y="183" font-size="9" fill="#475569" font-family="monospace">40mL</text>
+                <text x="14" y="183" font-size="9" fill="#475569" font-family="monospace">40mL</text>
                 <line x1="32" y1="120" x2="48" y2="120" stroke="#475569" stroke-width="1.5"/>
-                <text x="16" y="123" font-size="9" fill="#475569" font-family="monospace">60mL</text>
+                <text x="14" y="123" font-size="9" fill="#475569" font-family="monospace">60mL</text>
                 <line x1="32" y1="60" x2="48" y2="60" stroke="#475569" stroke-width="1.5"/>
-                <text x="16" y="63" font-size="9" fill="#475569" font-family="monospace">80mL</text>
+                <text x="14" y="63" font-size="9" fill="#475569" font-family="monospace">80mL</text>
 
                 <path d="M 40,40 L 40,300 A 15,15 0 0,0 55,315 L 145,315 A 15,15 0 0,0 160,300 L 160,40" fill="none" stroke="#64748B" stroke-width="3"/>
                 <path d="M 25,325 C 25,315 45,315 55,315 L 145,315 C 155,315 175,315 175,325 Z" fill="#94A3B8" stroke="#475569" stroke-width="2"/>
-                <rect x="40" y="40" width="120" height="260" fill="url(#glassGloss)" pointer-events="none"/>
+                <rect x="40" y="40" width="120" height="260" fill="url(#lab3GlassGloss)" pointer-events="none"/>
               </svg>
             </div>
 
@@ -1420,7 +1437,7 @@
       liquidDensityOrder.forEach(item => {
         const el = document.getElementById(`layer-${item.key}`);
         if (el && !lab3Poured[item.key]) {
-          el.classList.add('opacity-0');
+          el.style.opacity = '0';
           el.setAttribute('height', '0');
           el.setAttribute('y', BASE_Y);
         }
@@ -1432,7 +1449,7 @@
           const targetY = BASE_Y - ((index + 1) * LAYER_HEIGHT);
           el.setAttribute('y', targetY);
           el.setAttribute('height', LAYER_HEIGHT);
-          el.classList.remove('opacity-0');
+          el.style.opacity = '1';
         }
       });
     }
@@ -1443,7 +1460,7 @@
         lab3Poured[type] = false;
         const el = document.getElementById(`layer-${type}`);
         if (el) {
-          el.classList.add('opacity-0');
+          el.style.opacity = '0';
           el.setAttribute('y', 300);
           el.setAttribute('height', '0');
         }
